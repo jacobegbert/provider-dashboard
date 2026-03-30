@@ -1,0 +1,24 @@
+{
+  "name": "Black Label Medicine — Concierge Optimization",
+  "short_name": "BL Medicine",
+  "description": "Concierge health optimization platform by Dr. Jacob Egbert",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3C3226",
+  "theme_color": "#7A8B6F",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663344768429/YCQjczTLHVIxeVLr.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663344768429/DSqbnhgWBZkkgFSe.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

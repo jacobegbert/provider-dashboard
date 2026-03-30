@@ -1,0 +1,130 @@
+{
+  "query": "SELECT id, openId, name, email, role, lastSignedIn FROM users ORDER BY lastSignedIn DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, openId, name, email, role, lastSignedIn FROM users ORDER BY lastSignedIn DESC;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "KHybWgUcciFBwpEkm2bU6g",
+      "name": "Jacob Egbert",
+      "email": "jacobegbert@gmail.com",
+      "role": "admin",
+      "lastSignedIn": "2026-03-23 17:34:17"
+    },
+    {
+      "id": "210916",
+      "openId": "gbqjQCWnx45euWCfqmLKCw",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff",
+      "lastSignedIn": "2026-03-23 17:29:07"
+    },
+    {
+      "id": "33390001",
+      "openId": "6GVbssYgrnWXoZYa3rM9iv",
+      "name": "augjanusz",
+      "email": "augjanusz@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-23 10:08:04"
+    },
+    {
+      "id": "35220001",
+      "openId": "jV9wxbeSJRhT4SnDfwxsyd",
+      "name": "augujola",
+      "email": "augujola@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-23 07:35:19"
+    },
+    {
+      "id": "31470001",
+      "openId": "hkMTC4i72iHCaEmRwu8Tpp",
+      "name": "Brittany Pearson",
+      "email": "pearsons323@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-23 02:46:23"
+    },
+    {
+      "id": "34770033",
+      "openId": "UPogQJxgcBZg4uPBRyEanT",
+      "name": "jdaveallred",
+      "email": "jdaveallred@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-20 15:07:33"
+    },
+    {
+      "id": "32160416",
+      "openId": "fZSQgk7rzAWmF7rTjxZLGA",
+      "name": "JanaLee Jacobsen",
+      "email": "jana@skiresortproperty.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-20 00:09:12"
+    },
+    {
+      "id": "32190001",
+      "openId": "FCnbLrCcDeHbyjYU6rqfzf",
+      "name": "Jason Skeesick",
+      "email": "jason@primalmountainmedical.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-19 07:18:46"
+    },
+    {
+      "id": "28920597",
+      "openId": "j54MqSQ4meCMwRSekX7jJf",
+      "name": "Samantha Buker",
+      "email": "buker.samantha@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-18 19:13:14"
+    },
+    {
+      "id": "32191921",
+      "openId": "VX8i3jpVetYTQ23A5oHKYC",
+      "name": "Peter Haglin",
+      "email": "pete.haglin@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-17 14:53:17"
+    },
+    {
+      "id": "273467",
+      "openId": "X64sFBmRTQ7pc4PB2s5UBd",
+      "name": "Jacob Egbert",
+      "email": "jacob@cellrx.bio",
+      "role": "user",
+      "lastSignedIn": "2026-03-16 19:43:52"
+    },
+    {
+      "id": "31410034",
+      "openId": "WeQYDHbeemBwEZ4FhcKw8L",
+      "name": "ryanwpearson",
+      "email": "ryanwpearson@outlook.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-15 15:01:26"
+    },
+    {
+      "id": "1020492",
+      "openId": "etuxyXKgxambn5oEMjZehs",
+      "name": "David Fajardo",
+      "email": "fajardodavid89@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-11 21:10:08"
+    },
+    {
+      "id": "272087",
+      "openId": "Ms2eeYsBHmuXKjDWjQQWCq",
+      "name": "Amelia Yokel Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-11 13:06:18"
+    },
+    {
+      "id": "4560044",
+      "openId": "7iQrB3Z4ZC2zppQqbkqW9g",
+      "name": "jason",
+      "email": "jason@networkingeveryday.com",
+      "role": "user",
+      "lastSignedIn": "2026-03-10 19:54:03"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\tlastSignedIn\n1\tKHybWgUcciFBwpEkm2bU6g\tJacob Egbert\tjacobegbert@gmail.com\tadmin\t2026-03-23 17:34:17\n210916\tgbqjQCWnx45euWCfqmLKCw\tSamantha Buker\tsamantha@cellrx.bio\tstaff\t2026-03-23 17:29:07\n33390001\t6GVbssYgrnWXoZYa3rM9iv\taugjanusz\taugjanusz@gmail.com\tuser\t2026-03-23 10:08:04\n35220001\tjV9wxbeSJRhT4SnDfwxsyd\taugujola\taugujola@gmail.com\tuser\t2026-03-23 07:35:19\n31470001\thkMTC4i72iHCaEmRwu8Tpp\tBrittany Pearson\tpearsons323@gmail.com\tuser\t2026-03-23 02:46:23\n34770033\tUPogQJxgcBZg4uPBRyEanT\tjdaveallred\tjdaveallred@gmail.com\tuser\t2026-03-20 15:07:33\n32160416\tfZSQgk7rzAWmF7rTjxZLGA\tJanaLee Jacobsen\tjana@skiresortproperty.com\tuser\t2026-03-20 00:09:12\n32190001\tFCnbLrCcDeHbyjYU6rqfzf\tJason Skeesick\tjason@primalmountainmedical.com\tuser\t2026-03-19 07:18:46\n28920597\tj54MqSQ4meCMwRSekX7jJf\tSamantha Buker\tbuker.samantha@gmail.com\tuser\t2026-03-18 19:13:14\n32191921\tVX8i3jpVetYTQ23A5oHKYC\tPeter Haglin\tpete.haglin@gmail.com\tuser\t2026-03-17 14:53:17\n273467\tX64sFBmRTQ7pc4PB2s5UBd\tJacob Egbert\tjacob@cellrx.bio\tuser\t2026-03-16 19:43:52\n31410034\tWeQYDHbeemBwEZ4FhcKw8L\tryanwpearson\tryanwpearson@outlook.com\tuser\t2026-03-15 15:01:26\n1020492\tetuxyXKgxambn5oEMjZehs\tDavid Fajardo\tfajardodavid89@gmail.com\tuser\t2026-03-11 21:10:08\n272087\tMs2eeYsBHmuXKjDWjQQWCq\tAmelia Yokel Egbert\tameliajudithyokel@gmail.com\tuser\t2026-03-11 13:06:18\n4560044\t7iQrB3Z4ZC2zppQqbkqW9g\tjason\tjason@networkingeveryday.com\tuser\t2026-03-10 19:54:03\n",
+  "stderr": "",
+  "execution_time_ms": 64
+}

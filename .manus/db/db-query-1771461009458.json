@@ -1,0 +1,90 @@
+{
+  "query": "SELECT m.id, m.patientId, m.senderId, m.receiverId, m.content, m.isRead, m.readAt, m.createdAt FROM messages m WHERE m.isRead = false ORDER BY m.createdAt DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT m.id, m.patientId, m.senderId, m.receiverId, m.content, m.isRead, m.readAt, m.createdAt FROM messages m WHERE m.isRead = false ORDER BY m.createdAt DESC LIMIT 20;",
+  "rows": [
+    {
+      "id": "90002",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "MEssage me back",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 22:59:22"
+    },
+    {
+      "id": "90001",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "lgjh",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 22:28:20"
+    },
+    {
+      "id": "60006",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "So tall",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 20:36:56"
+    },
+    {
+      "id": "60005",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "Hello",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 20:06:28"
+    },
+    {
+      "id": "60004",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "hellp",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 20:06:25"
+    },
+    {
+      "id": "60001",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "What are you doing?",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 19:49:18"
+    },
+    {
+      "id": "30004",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "content": "hi again",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 19:11:13"
+    },
+    {
+      "id": "30003",
+      "patientId": "30007",
+      "senderId": "210916",
+      "receiverId": "0",
+      "content": "yo",
+      "isRead": "0",
+      "readAt": "NULL",
+      "createdAt": "2026-02-18 19:00:14"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tpatientId\tsenderId\treceiverId\tcontent\tisRead\treadAt\tcreatedAt\n90002\t30007\t1\t210916\tMEssage me back\t0\tNULL\t2026-02-18 22:59:22\n90001\t30007\t1\t210916\tlgjh\t0\tNULL\t2026-02-18 22:28:20\n60006\t30007\t1\t210916\tSo tall\t0\tNULL\t2026-02-18 20:36:56\n60005\t30007\t1\t210916\tHello\t0\tNULL\t2026-02-18 20:06:28\n60004\t30007\t1\t210916\thellp\t0\tNULL\t2026-02-18 20:06:25\n60001\t30007\t1\t210916\tWhat are you doing?\t0\tNULL\t2026-02-18 19:49:18\n30004\t30007\t1\t210916\thi again\t0\tNULL\t2026-02-18 19:11:13\n30003\t30007\t210916\t0\tyo\t0\tNULL\t2026-02-18 19:00:14\n",
+  "stderr": "",
+  "execution_time_ms": 92
+}

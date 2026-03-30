@@ -1,0 +1,32 @@
+{
+  "query": "SELECT * FROM users ORDER BY id DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT * FROM users ORDER BY id DESC;",
+  "rows": [
+    {
+      "id": "210916",
+      "openId": "gbqjQCWnx45euWCfqmLKCw",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "loginMethod": "google",
+      "role": "user",
+      "createdAt": "2026-02-18 18:41:03",
+      "updatedAt": "2026-02-18 18:44:33",
+      "lastSignedIn": "2026-02-18 18:44:34"
+    },
+    {
+      "id": "1",
+      "openId": "KHybWgUcciFBwpEkm2bU6g",
+      "name": "Jacob Egbert",
+      "email": "jacobegbert@gmail.com",
+      "loginMethod": "google",
+      "role": "admin",
+      "createdAt": "2026-02-10 20:01:38",
+      "updatedAt": "2026-02-18 18:50:15",
+      "lastSignedIn": "2026-02-18 18:50:16"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\tloginMethod\trole\tcreatedAt\tupdatedAt\tlastSignedIn\n210916\tgbqjQCWnx45euWCfqmLKCw\tSamantha Buker\tsamantha@cellrx.bio\tgoogle\tuser\t2026-02-18 18:41:03\t2026-02-18 18:44:33\t2026-02-18 18:44:34\n1\tKHybWgUcciFBwpEkm2bU6g\tJacob Egbert\tjacobegbert@gmail.com\tgoogle\tadmin\t2026-02-10 20:01:38\t2026-02-18 18:50:15\t2026-02-18 18:50:16\n",
+  "stderr": "",
+  "execution_time_ms": 348
+}

@@ -1,0 +1,45 @@
+{
+  "query": "SELECT id, name, role FROM users ORDER BY id LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name, role FROM users ORDER BY id LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Jacob Egbert",
+      "role": "admin"
+    },
+    {
+      "id": "210916",
+      "name": "Samantha Buker",
+      "role": "staff"
+    },
+    {
+      "id": "272087",
+      "name": "Amelia Yokel Egbert",
+      "role": "user"
+    },
+    {
+      "id": "273467",
+      "name": "Jacob Egbert",
+      "role": "user"
+    },
+    {
+      "id": "1020492",
+      "name": "David Fajardo",
+      "role": "user"
+    },
+    {
+      "id": "4560044",
+      "name": "jason",
+      "role": "user"
+    },
+    {
+      "id": "28920597",
+      "name": "Samantha Buker",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\trole\n1\tJacob Egbert\tadmin\n210916\tSamantha Buker\tstaff\n272087\tAmelia Yokel Egbert\tuser\n273467\tJacob Egbert\tuser\n1020492\tDavid Fajardo\tuser\n4560044\tjason\tuser\n28920597\tSamantha Buker\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 341
+}

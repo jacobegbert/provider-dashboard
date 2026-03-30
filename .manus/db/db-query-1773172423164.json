@@ -1,0 +1,55 @@
+{
+  "query": "SELECT ps.id, ps.protocolId, ps.sortOrder, ps.title, ps.frequency, ps.timeOfDay, ps.description FROM protocol_steps ps LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT ps.id, ps.protocolId, ps.sortOrder, ps.title, ps.frequency, ps.timeOfDay, ps.description FROM protocol_steps ps LIMIT 5;",
+  "rows": [
+    {
+      "id": "60060",
+      "protocolId": "120132",
+      "sortOrder": "0",
+      "title": "Daily Carb Target — 110 g Maximum",
+      "frequency": "daily",
+      "timeOfDay": "any",
+      "description": "Track total carbohydrate intake using a food diary or app. Maximum 110 g net carbs per day. Carb sources should come exclusively from single-ingredient whole foods: sweet potatoes, white rice, berries, seasonal fruit. No bread, pasta, cereal, or packaged carbs."
+    },
+    {
+      "id": "60061",
+      "protocolId": "120132",
+      "sortOrder": "1",
+      "title": "Protein Target — 1 g per lb Lean Mass",
+      "frequency": "daily",
+      "timeOfDay": "any",
+      "description": "Prioritize animal protein from single-ingredient sources: beef, chicken, fish, eggs, organ meats, bone broth. Target minimum 1 g protein per pound of lean body mass. Each meal should center around a protein source."
+    },
+    {
+      "id": "60062",
+      "protocolId": "120132",
+      "sortOrder": "2",
+      "title": "Single-Ingredient Rule — Every Meal",
+      "frequency": "daily",
+      "timeOfDay": "any",
+      "description": "Every food item on your plate should be a single ingredient: steak, eggs, salmon, sweet potato, avocado, butter, olive oil, berries. If it has a nutrition label with multiple ingredients, do not eat it. Cook with butter, ghee, tallow, or olive oil only."
+    },
+    {
+      "id": "60063",
+      "protocolId": "120132",
+      "sortOrder": "3",
+      "title": "Electrolyte Supplementation",
+      "frequency": "daily",
+      "timeOfDay": "morning",
+      "description": "Low-carb diets increase electrolyte excretion. Supplement daily: sodium (2–3 g from salt or broth), potassium (from avocado, meat), magnesium (400 mg glycinate). Prevents headaches, cramps, and fatigue."
+    },
+    {
+      "id": "60065",
+      "protocolId": "120132",
+      "sortOrder": "4",
+      "title": "Daily Food Journal",
+      "frequency": "daily",
+      "timeOfDay": "evening",
+      "description": "Log all meals with estimated macros. Note energy levels, hunger/satiety, digestion, and any cravings. This data helps the provider fine-tune the protocol."
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tprotocolId\tsortOrder\ttitle\tfrequency\ttimeOfDay\tdescription\n60060\t120132\t0\tDaily Carb Target — 110 g Maximum\tdaily\tany\tTrack total carbohydrate intake using a food diary or app. Maximum 110 g net carbs per day. Carb sources should come exclusively from single-ingredient whole foods: sweet potatoes, white rice, berries, seasonal fruit. No bread, pasta, cereal, or packaged carbs.\n60061\t120132\t1\tProtein Target — 1 g per lb Lean Mass\tdaily\tany\tPrioritize animal protein from single-ingredient sources: beef, chicken, fish, eggs, organ meats, bone broth. Target minimum 1 g protein per pound of lean body mass. Each meal should center around a protein source.\n60062\t120132\t2\tSingle-Ingredient Rule — Every Meal\tdaily\tany\tEvery food item on your plate should be a single ingredient: steak, eggs, salmon, sweet potato, avocado, butter, olive oil, berries. If it has a nutrition label with multiple ingredients, do not eat it. Cook with butter, ghee, tallow, or olive oil only.\n60063\t120132\t3\tElectrolyte Supplementation\tdaily\tmorning\tLow-carb diets increase electrolyte excretion. Supplement daily: sodium (2–3 g from salt or broth), potassium (from avocado, meat), magnesium (400 mg glycinate). Prevents headaches, cramps, and fatigue.\n60065\t120132\t4\tDaily Food Journal\tdaily\tevening\tLog all meals with estimated macros. Note energy levels, hunger/satiety, digestion, and any cravings. This data helps the provider fine-tune the protocol.\n",
+  "stderr": "",
+  "execution_time_ms": 373
+}

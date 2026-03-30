@@ -1,0 +1,9 @@
+{
+  "query": "DELETE bcm FROM biomarker_custom_metrics bcm LEFT JOIN patients p ON bcm.patientId = p.id WHERE p.id IS NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute DELETE bcm FROM biomarker_custom_metrics bcm LEFT JOIN patients p ON bcm.patientId = p.id WHERE p.id IS NULL;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 61
+}

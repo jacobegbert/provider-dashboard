@@ -1,0 +1,498 @@
+{
+  "query": "SELECT id, firstName, lastName, email, status, createdAt FROM patients ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email, status, createdAt FROM patients ORDER BY id;",
+  "rows": [
+    {
+      "id": "2",
+      "firstName": "Amelia",
+      "lastName": "Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "status": "active",
+      "createdAt": "2026-02-18 05:16:24"
+    },
+    {
+      "id": "3",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:19:58"
+    },
+    {
+      "id": "4",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:19:58"
+    },
+    {
+      "id": "5",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:19:59"
+    },
+    {
+      "id": "6",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:55:29"
+    },
+    {
+      "id": "7",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:55:29"
+    },
+    {
+      "id": "8",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 05:55:29"
+    },
+    {
+      "id": "9",
+      "firstName": "Alex",
+      "lastName": "Test",
+      "email": "testpatient@blacklabelmedicine.com",
+      "status": "active",
+      "createdAt": "2026-02-18 06:36:53"
+    },
+    {
+      "id": "10",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 06:51:20"
+    },
+    {
+      "id": "11",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 06:51:20"
+    },
+    {
+      "id": "12",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 06:51:20"
+    },
+    {
+      "id": "13",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:43:52"
+    },
+    {
+      "id": "14",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:43:52"
+    },
+    {
+      "id": "15",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 07:43:52"
+    },
+    {
+      "id": "16",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:44:40"
+    },
+    {
+      "id": "17",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:44:40"
+    },
+    {
+      "id": "18",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 07:44:40"
+    },
+    {
+      "id": "19",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:45:06"
+    },
+    {
+      "id": "20",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 07:45:07"
+    },
+    {
+      "id": "21",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 07:45:07"
+    },
+    {
+      "id": "30001",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 16:44:52"
+    },
+    {
+      "id": "30002",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 16:44:52"
+    },
+    {
+      "id": "30003",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 16:44:52"
+    },
+    {
+      "id": "30005",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 17:36:14"
+    },
+    {
+      "id": "30007",
+      "firstName": "samantha",
+      "lastName": "Buker",
+      "email": "samantha@cellrx.bio",
+      "status": "active",
+      "createdAt": "2026-02-18 18:06:51"
+    },
+    {
+      "id": "30008",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 19:04:42"
+    },
+    {
+      "id": "30009",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:04:42"
+    },
+    {
+      "id": "30010",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:04:42"
+    },
+    {
+      "id": "30011",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:05:28"
+    },
+    {
+      "id": "30012",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:05:28"
+    },
+    {
+      "id": "30013",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 19:05:28"
+    },
+    {
+      "id": "30014",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:19:46"
+    },
+    {
+      "id": "30015",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:19:46"
+    },
+    {
+      "id": "30016",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 19:19:46"
+    },
+    {
+      "id": "60001",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:56:51"
+    },
+    {
+      "id": "60002",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 19:56:51"
+    },
+    {
+      "id": "60003",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 19:56:51"
+    },
+    {
+      "id": "60004",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:24:57"
+    },
+    {
+      "id": "60005",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:24:57"
+    },
+    {
+      "id": "60006",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 20:24:57"
+    },
+    {
+      "id": "60007",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:25:12"
+    },
+    {
+      "id": "60008",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:25:12"
+    },
+    {
+      "id": "60009",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 20:25:12"
+    },
+    {
+      "id": "60010",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:26:04"
+    },
+    {
+      "id": "60011",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:26:04"
+    },
+    {
+      "id": "60012",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 20:26:04"
+    },
+    {
+      "id": "60013",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:42:03"
+    },
+    {
+      "id": "60014",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:42:03"
+    },
+    {
+      "id": "60015",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 20:42:03"
+    },
+    {
+      "id": "60016",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:42:32"
+    },
+    {
+      "id": "60017",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 20:42:32"
+    },
+    {
+      "id": "60018",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 20:42:32"
+    },
+    {
+      "id": "60019",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 21:12:24"
+    },
+    {
+      "id": "60020",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 21:12:24"
+    },
+    {
+      "id": "60021",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 21:12:24"
+    },
+    {
+      "id": "60022",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 21:13:17"
+    },
+    {
+      "id": "60023",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 21:13:17"
+    },
+    {
+      "id": "60024",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 21:13:17"
+    },
+    {
+      "id": "60028",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 22:02:49"
+    },
+    {
+      "id": "60029",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "status": "new",
+      "createdAt": "2026-02-18 22:02:49"
+    },
+    {
+      "id": "60030",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "status": "active",
+      "createdAt": "2026-02-18 22:02:49"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\tstatus\tcreatedAt\n2\tAmelia\tEgbert\tameliajudithyokel@gmail.com\tactive\t2026-02-18 05:16:24\n3\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 05:19:58\n4\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 05:19:58\n5\tTest\tUser\ttest-elite@example.com\tnew\t2026-02-18 05:19:59\n6\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 05:55:29\n7\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 05:55:29\n8\tTest\tUser\ttest-elite@example.com\tnew\t2026-02-18 05:55:29\n9\tAlex\tTest\ttestpatient@blacklabelmedicine.com\tactive\t2026-02-18 06:36:53\n10\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 06:51:20\n11\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 06:51:20\n12\tTest\tUser\ttest-elite@example.com\tnew\t2026-02-18 06:51:20\n13\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 07:43:52\n14\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 07:43:52\n15\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 07:43:52\n16\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 07:44:40\n17\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 07:44:40\n18\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 07:44:40\n19\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 07:45:06\n20\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 07:45:07\n21\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 07:45:07\n30001\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 16:44:52\n30002\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 16:44:52\n30003\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 16:44:52\n30005\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 17:36:14\n30007\tsamantha\tBuker\tsamantha@cellrx.bio\tactive\t2026-02-18 18:06:51\n30008\tTest\tUser\ttest-standard@example.com\tactive\t2026-02-18 19:04:42\n30009\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 19:04:42\n30010\tTest\tUser\ttest-elite@example.com\tnew\t2026-02-18 19:04:42\n30011\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 19:05:28\n30012\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 19:05:28\n30013\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 19:05:28\n30014\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 19:19:46\n30015\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 19:19:46\n30016\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 19:19:46\n60001\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 19:56:51\n60002\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 19:56:51\n60003\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 19:56:51\n60004\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 20:24:57\n60005\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 20:24:57\n60006\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 20:24:57\n60007\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 20:25:12\n60008\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 20:25:12\n60009\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 20:25:12\n60010\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 20:26:04\n60011\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 20:26:04\n60012\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 20:26:04\n60013\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 20:42:03\n60014\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 20:42:03\n60015\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 20:42:03\n60016\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 20:42:32\n60017\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 20:42:32\n60018\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 20:42:32\n60019\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 21:12:24\n60020\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 21:12:24\n60021\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 21:12:24\n60022\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 21:13:17\n60023\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 21:13:17\n60024\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 21:13:17\n60028\tTest\tUser\ttest-standard@example.com\tnew\t2026-02-18 22:02:49\n60029\tTest\tUser\ttest-premium@example.com\tnew\t2026-02-18 22:02:49\n60030\tTest\tUser\ttest-elite@example.com\tactive\t2026-02-18 22:02:49\n",
+  "stderr": "",
+  "execution_time_ms": 87
+}

@@ -1,0 +1,15 @@
+{
+  "query": "SELECT id, firstName, lastName FROM patients WHERE firstName = 'Samantha';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName FROM patients WHERE firstName = 'Samantha';",
+  "rows": [
+    {
+      "id": "30007",
+      "firstName": "samantha",
+      "lastName": "Buker"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\n30007\tsamantha\tBuker\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}

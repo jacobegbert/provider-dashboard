@@ -1,0 +1,4 @@
+Screenshot findings:
+- Dashboard loads correctly, attention queue badge is no longer showing phantom "2"
+- Protocol guide page created and routed
+- All 464 tests pass

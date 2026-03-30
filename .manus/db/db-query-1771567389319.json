@@ -1,0 +1,51 @@
+{
+  "query": "SELECT id, firstName, lastName, email FROM patients ORDER BY id; SELECT id, name FROM protocols ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email FROM patients ORDER BY id; SELECT id, name FROM protocols ORDER BY id;",
+  "rows": [
+    {
+      "id": "90092",
+      "firstName": "Amelia",
+      "lastName": "Egbert",
+      "email": "ameliajudithyokel@gmail.com"
+    },
+    {
+      "id": "90108",
+      "firstName": "Jacob",
+      "lastName": "Egbert",
+      "email": "jacob@cellrx.bio"
+    },
+    {
+      "id": "150004",
+      "firstName": "David",
+      "lastName": "Fajardo",
+      "email": "fajardodavid89@gmail.com"
+    }
+  ],
+  "messages": [
+    "id\tname",
+    "120132\tLow-Carb Single-Ingredient Pseudo-Carnivore Diet",
+    "120153\tZone 2 Cardio Protocol",
+    "120154\tVO2 Max Training Protocol",
+    "120155\tTesamorelin Protocol",
+    "120164\tCore Supplement Routine",
+    "120165\tTestosterone Injection Maintenance",
+    "120166\tGHK-Cu Regenerative Protocol",
+    "120167\tMOTS-c Mitochondrial Protocol",
+    "120168\tSS-31 (Elamipretide) Mitochondrial Protocol",
+    "180003\tArchive Test Protocol",
+    "180007\tArchive Test Protocol",
+    "180011\tArchive Test Protocol",
+    "180015\tArchive Test Protocol",
+    "180019\tArchive Test Protocol",
+    "210003\tArchive Test Protocol",
+    "210007\tArchive Test Protocol",
+    "210011\tArchive Test Protocol",
+    "210015\tArchive Test Protocol",
+    "210019\tArchive Test Protocol",
+    "210023\tArchive Test Protocol",
+    "210025\tSermorelin Protocol"
+  ],
+  "stdout": "id\tfirstName\tlastName\temail\n90092\tAmelia\tEgbert\tameliajudithyokel@gmail.com\n90108\tJacob\tEgbert\tjacob@cellrx.bio\n150004\tDavid\tFajardo\tfajardodavid89@gmail.com\nid\tname\n120132\tLow-Carb Single-Ingredient Pseudo-Carnivore Diet\n120153\tZone 2 Cardio Protocol\n120154\tVO2 Max Training Protocol\n120155\tTesamorelin Protocol\n120164\tCore Supplement Routine\n120165\tTestosterone Injection Maintenance\n120166\tGHK-Cu Regenerative Protocol\n120167\tMOTS-c Mitochondrial Protocol\n120168\tSS-31 (Elamipretide) Mitochondrial Protocol\n180003\tArchive Test Protocol\n180007\tArchive Test Protocol\n180011\tArchive Test Protocol\n180015\tArchive Test Protocol\n180019\tArchive Test Protocol\n210003\tArchive Test Protocol\n210007\tArchive Test Protocol\n210011\tArchive Test Protocol\n210015\tArchive Test Protocol\n210019\tArchive Test Protocol\n210023\tArchive Test Protocol\n210025\tSermorelin Protocol\n",
+  "stderr": "",
+  "execution_time_ms": 419
+}

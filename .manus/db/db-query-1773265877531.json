@@ -1,0 +1,24 @@
+{
+  "query": "SELECT id, name, email, role, openId FROM users WHERE id = 210916 OR name LIKE '%Samantha%' OR id = 28920597;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name, email, role, openId FROM users WHERE id = 210916 OR name LIKE '%Samantha%' OR id = 28920597;",
+  "rows": [
+    {
+      "id": "210916",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff",
+      "openId": "gbqjQCWnx45euWCfqmLKCw"
+    },
+    {
+      "id": "28920597",
+      "name": "Samantha Buker",
+      "email": "buker.samantha@gmail.com",
+      "role": "user",
+      "openId": "j54MqSQ4meCMwRSekX7jJf"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\topenId\n210916\tSamantha Buker\tsamantha@cellrx.bio\tstaff\tgbqjQCWnx45euWCfqmLKCw\n28920597\tSamantha Buker\tbuker.samantha@gmail.com\tuser\tj54MqSQ4meCMwRSekX7jJf\n",
+  "stderr": "",
+  "execution_time_ms": 348
+}

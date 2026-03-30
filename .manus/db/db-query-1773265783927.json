@@ -1,0 +1,66 @@
+{
+  "query": "SELECT p.id, p.firstName, p.lastName, p.providerId, p.status, u.name as providerName FROM patients p LEFT JOIN users u ON p.providerId = u.id ORDER BY p.id DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.firstName, p.lastName, p.providerId, p.status, u.name as providerName FROM patients p LEFT JOIN users u ON p.providerId = u.id ORDER BY p.id DESC;",
+  "rows": [
+    {
+      "id": "300001",
+      "firstName": "Ryan ",
+      "lastName": "Pearson",
+      "providerId": "210916",
+      "status": "new",
+      "providerName": "Samantha Buker"
+    },
+    {
+      "id": "270001",
+      "firstName": "Samantha",
+      "lastName": "Buker",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    },
+    {
+      "id": "240001",
+      "firstName": "Jason",
+      "lastName": "Bond",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    },
+    {
+      "id": "210001",
+      "firstName": "Jordan",
+      "lastName": "Jones",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    },
+    {
+      "id": "150004",
+      "firstName": "David",
+      "lastName": "Fajardo",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    },
+    {
+      "id": "90108",
+      "firstName": "Jacob",
+      "lastName": "Egbert",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    },
+    {
+      "id": "90092",
+      "firstName": "Amelia",
+      "lastName": "Egbert",
+      "providerId": "1",
+      "status": "active",
+      "providerName": "Jacob Egbert"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\tproviderId\tstatus\tproviderName\n300001\tRyan \tPearson\t210916\tnew\tSamantha Buker\n270001\tSamantha\tBuker\t1\tactive\tJacob Egbert\n240001\tJason\tBond\t1\tactive\tJacob Egbert\n210001\tJordan\tJones\t1\tactive\tJacob Egbert\n150004\tDavid\tFajardo\t1\tactive\tJacob Egbert\n90108\tJacob\tEgbert\t1\tactive\tJacob Egbert\n90092\tAmelia\tEgbert\t1\tactive\tJacob Egbert\n",
+  "stderr": "",
+  "execution_time_ms": 384
+}

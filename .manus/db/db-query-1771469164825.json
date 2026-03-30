@@ -1,0 +1,18 @@
+{
+  "query": "SELECT ps.id, ps.protocolId, ps.sortOrder, ps.title, ps.frequency, p.name as protocolName FROM protocol_steps ps JOIN protocols p ON p.id = ps.protocolId ORDER BY ps.protocolId, ps.sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT ps.id, ps.protocolId, ps.sortOrder, ps.title, ps.frequency, p.name as protocolName FROM protocol_steps ps JOIN protocols p ON p.id = ps.protocolId ORDER BY ps.protocolId, ps.sortOrder;",
+  "rows": [
+    {
+      "id": "60015",
+      "protocolId": "120002",
+      "sortOrder": "0",
+      "title": "Intramuscular injection",
+      "frequency": "custom",
+      "protocolName": "Testosterone Cypionate (TRT)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tprotocolId\tsortOrder\ttitle\tfrequency\tprotocolName\n60015\t120002\t0\tIntramuscular injection\tcustom\tTestosterone Cypionate (TRT)\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}

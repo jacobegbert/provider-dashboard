@@ -1,0 +1,66 @@
+{
+  "query": "SELECT pa.id, pa.patientId, pa.protocolId, pa.status, p.name as protocolName FROM protocol_assignments pa JOIN protocols p ON p.id = pa.protocolId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT pa.id, pa.patientId, pa.protocolId, pa.status, p.name as protocolName FROM protocol_assignments pa JOIN protocols p ON p.id = pa.protocolId;",
+  "rows": [
+    {
+      "id": "120006",
+      "patientId": "90004",
+      "protocolId": "120002",
+      "status": "active",
+      "protocolName": "Testosterone Cypionate (TRT)"
+    },
+    {
+      "id": "120003",
+      "patientId": "30007",
+      "protocolId": "120002",
+      "status": "active",
+      "protocolName": "Testosterone Cypionate (TRT)"
+    },
+    {
+      "id": "120013",
+      "patientId": "90014",
+      "protocolId": "120022",
+      "status": "active",
+      "protocolName": "Restore Test Protocol"
+    },
+    {
+      "id": "120015",
+      "patientId": "90017",
+      "protocolId": "120026",
+      "status": "active",
+      "protocolName": "Restore Test Protocol"
+    },
+    {
+      "id": "120017",
+      "patientId": "90020",
+      "protocolId": "120030",
+      "status": "active",
+      "protocolName": "Restore Test Protocol"
+    },
+    {
+      "id": "120019",
+      "patientId": "90023",
+      "protocolId": "120034",
+      "status": "active",
+      "protocolName": "Restore Test Protocol"
+    },
+    {
+      "id": "120021",
+      "patientId": "90026",
+      "protocolId": "120038",
+      "status": "active",
+      "protocolName": "Restore Test Protocol"
+    },
+    {
+      "id": "120023",
+      "patientId": "90029",
+      "protocolId": "120039",
+      "status": "active",
+      "protocolName": "Test Ongoing Protocol"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tpatientId\tprotocolId\tstatus\tprotocolName\n120006\t90004\t120002\tactive\tTestosterone Cypionate (TRT)\n120003\t30007\t120002\tactive\tTestosterone Cypionate (TRT)\n120013\t90014\t120022\tactive\tRestore Test Protocol\n120015\t90017\t120026\tactive\tRestore Test Protocol\n120017\t90020\t120030\tactive\tRestore Test Protocol\n120019\t90023\t120034\tactive\tRestore Test Protocol\n120021\t90026\t120038\tactive\tRestore Test Protocol\n120023\t90029\t120039\tactive\tTest Ongoing Protocol\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

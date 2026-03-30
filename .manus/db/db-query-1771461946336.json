@@ -1,0 +1,31 @@
+{
+  "query": "SELECT id, title, scheduledAt, googleEventId, status FROM appointments;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, title, scheduledAt, googleEventId, status FROM appointments;",
+  "rows": [
+    {
+      "id": "5",
+      "title": "Initial Consultation",
+      "scheduledAt": "2026-02-18 15:00:00",
+      "googleEventId": "NULL",
+      "status": "cancelled"
+    },
+    {
+      "id": "30002",
+      "title": "Folow up",
+      "scheduledAt": "2026-02-18 16:00:00",
+      "googleEventId": "NULL",
+      "status": "cancelled"
+    },
+    {
+      "id": "60001",
+      "title": "Meeting",
+      "scheduledAt": "2026-02-19 02:00:00",
+      "googleEventId": "NULL",
+      "status": "scheduled"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tscheduledAt\tgoogleEventId\tstatus\n5\tInitial Consultation\t2026-02-18 15:00:00\tNULL\tcancelled\n30002\tFolow up\t2026-02-18 16:00:00\tNULL\tcancelled\n60001\tMeeting\t2026-02-19 02:00:00\tNULL\tscheduled\n",
+  "stderr": "",
+  "execution_time_ms": 67
+}

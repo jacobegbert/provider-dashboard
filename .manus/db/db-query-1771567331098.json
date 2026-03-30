@@ -1,0 +1,18 @@
+{
+  "query": "SELECT 'test_patients' as type, COUNT(*) as cnt FROM patients WHERE firstName = 'Test' AND lastName = 'User' UNION ALL SELECT 'test_protocols' as type, COUNT(*) as cnt FROM protocols WHERE name LIKE 'Test %' OR name LIKE 'Restore Test %';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT 'test_patients' as type, COUNT(*) as cnt FROM patients WHERE firstName = 'Test' AND lastName = 'User' UNION ALL SELECT 'test_protocols' as type, COUNT(*) as cnt FROM protocols WHERE name LIKE 'Test %' OR name LIKE 'Restore Test %';",
+  "rows": [
+    {
+      "type": "test_patients",
+      "cnt": "33"
+    },
+    {
+      "type": "test_protocols",
+      "cnt": "33"
+    }
+  ],
+  "messages": [],
+  "stdout": "type\tcnt\ntest_patients\t33\ntest_protocols\t33\n",
+  "stderr": "",
+  "execution_time_ms": 352
+}

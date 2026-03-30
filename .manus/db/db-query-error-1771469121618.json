@@ -1,0 +1,8 @@
+{
+  "query": "SELECT pa.id as assignmentId, pa.patientId, pa.protocolId, pa.status, p.name as protocolName, pt.name as patientName, (SELECT COUNT(*) FROM assignment_steps ast WHERE ast.assignmentId = pa.id) as assignmentStepCount, (SELECT COUNT(*) FROM protocol_steps ps WHERE ps.protocolId = pa.protocolId) as libraryStepCount FROM protocol_assignments pa JOIN protocols p ON p.id = pa.protocolId JOIN patients pt ON pt.id = pa.patientId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT pa.id as assignmentId, pa.patientId, pa.protocolId, pa.status, p.name as protocolName, pt.name as patientName, (SELECT COUNT(*) FROM assignment_steps ast WHERE ast.assignmentId = pa.id) as assignmentStepCount, (SELECT COUNT(*) FROM protocol_steps ps WHERE ps.protocolId = pa.protocolId) as libraryStepCount FROM protocol_assignments pa JOIN protocols p ON p.id = pa.protocolId JOIN patients pt ON pt.id = pa.patientId;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'pt.name' in 'field list'"
+  ]
+}

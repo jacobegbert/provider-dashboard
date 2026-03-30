@@ -1,0 +1,45 @@
+DATA ISOLATION AUDIT - Procedures that accept patientId without ownership check
+
+The approach: For patient-facing procedures, we need to verify that ctx.user is either:
+1. The admin/provider (role === "admin") — they can access any patient
+2. The patient themselves (their userId matches the patient's userId)
+
+We'll create a helper: ensurePatientAccess(ctx, patientId) that:
+- If ctx.user.role === "admin", allows access (provider can see all)
+- Otherwise, looks up the patient and checks patient.userId === ctx.user.id
+- Throws FORBIDDEN if neither condition is met
+
+PROCEDURES NEEDING OWNERSHIP CHECK:
+1. assignment.listForPatient (line 512) - accepts patientId, no check
+2. assignment.create (line 540) - accepts patientId, no check (provider-only, should be admin)
+3. task.listForAssignment (line 701) - accepts assignmentId, no check
+4. task.complete (line 707) - accepts patientId + assignmentId, no check
+5. task.uncomplete (line 721) - accepts assignmentId + stepId, no check
+6. message.listForPatient (line 741) - accepts patientId, no check
+7. message.send (line 747) - accepts patientId + receiverId, no check
+8. message.markRead (line 785) - accepts patientId, no check
+9. appointment.listForPatient (line 825) - accepts patientId, no check
+10. appointment.create (line 831) - accepts patientId, no check (provider-only)
+11. appointment.update (line 882) - accepts id, no check
+12. document.listForPatient (line 1061) - accepts patientId, no check
+13. document.delete (line 1067) - accepts id, no check
+14. clientNote.list (line 1085) - accepts patientId, no check (provider-only)
+15. clientNote.create (line 1091) - accepts patientId, no check (provider-only)
+16. clientNote.update (line 1119) - accepts id, no check (provider-only)
+17. clientNote.delete (line 1138) - accepts id, no check (provider-only)
+18. clientTask.list (line 1155) - accepts patientId, no check
+19. clientTask.create (line 1161) - accepts patientId, no check (provider-only)
+20. biomarker.listEntries (line 1587) - accepts patientId, no check
+21. biomarker.addEntry (line 1594) - accepts patientId, no check
+22. biomarker.updateEntry (line 1610) - accepts id, no check
+23. biomarker.deleteEntry (line 1627) - accepts id, no check
+24. biomarker.listCustomMetrics (line 1635) - accepts patientId, no check
+25. biomarker.addCustomMetric (line 1642) - accepts patientId, no check
+26. biomarker.deleteCustomMetric (line 1655) - accepts id, no check
+27. invite.listForPatient (line 1576) - accepts patientId, no check (provider-only)
+28. resource.listForPatient (line 1780) - accepts patientId, no check
+29. resource.markViewed (line 1787) - accepts id, no check
+
+STRATEGY:
+- Provider-only procedures (notes, tasks create, assignment create, invite): use adminProcedure
+- Patient-accessible procedures (assignments list, tasks, messages, appointments, biomarkers, documents, resources): add ensurePatientAccess helper

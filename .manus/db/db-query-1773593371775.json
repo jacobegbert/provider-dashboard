@@ -1,0 +1,28 @@
+{
+  "query": "SELECT p.id, p.firstName, p.lastName, p.email, p.status, p.userId, p.deletedAt FROM patients p WHERE p.firstName LIKE '%Jacob%' OR p.lastName LIKE '%Egbert%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.firstName, p.lastName, p.email, p.status, p.userId, p.deletedAt FROM patients p WHERE p.firstName LIKE '%Jacob%' OR p.lastName LIKE '%Egbert%';",
+  "rows": [
+    {
+      "id": "90092",
+      "firstName": "Amelia",
+      "lastName": "Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "status": "active",
+      "userId": "272087",
+      "deletedAt": "NULL"
+    },
+    {
+      "id": "90108",
+      "firstName": "Jacob",
+      "lastName": "Egbert",
+      "email": "jacob@cellrx.bio",
+      "status": "active",
+      "userId": "273467",
+      "deletedAt": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\tstatus\tuserId\tdeletedAt\n90092\tAmelia\tEgbert\tameliajudithyokel@gmail.com\tactive\t272087\tNULL\n90108\tJacob\tEgbert\tjacob@cellrx.bio\tactive\t273467\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

@@ -1,0 +1,30 @@
+{
+  "query": "SELECT u.id, u.name, u.role FROM users u; SELECT m.id, m.patientId, m.senderId, m.receiverId, m.isRead FROM messages m WHERE m.isRead = 0 ORDER BY m.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT u.id, u.name, u.role FROM users u; SELECT m.id, m.patientId, m.senderId, m.receiverId, m.isRead FROM messages m WHERE m.isRead = 0 ORDER BY m.id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Jacob Egbert",
+      "role": "admin"
+    },
+    {
+      "id": "210916",
+      "name": "Samantha Buker",
+      "role": "user"
+    }
+  ],
+  "messages": [
+    "id\tpatientId\tsenderId\treceiverId\tisRead",
+    "30003\t30007\t210916\t0\t0",
+    "30004\t30007\t1\t210916\t0",
+    "60001\t30007\t1\t210916\t0",
+    "60004\t30007\t1\t210916\t0",
+    "60005\t30007\t1\t210916\t0",
+    "60006\t30007\t1\t210916\t0",
+    "90001\t30007\t1\t210916\t0",
+    "90002\t30007\t1\t210916\t0"
+  ],
+  "stdout": "id\tname\trole\n1\tJacob Egbert\tadmin\n210916\tSamantha Buker\tuser\nid\tpatientId\tsenderId\treceiverId\tisRead\n30003\t30007\t210916\t0\t0\n30004\t30007\t1\t210916\t0\n60001\t30007\t1\t210916\t0\n60004\t30007\t1\t210916\t0\n60005\t30007\t1\t210916\t0\n60006\t30007\t1\t210916\t0\n90001\t30007\t1\t210916\t0\n90002\t30007\t1\t210916\t0\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

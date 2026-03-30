@@ -1,0 +1,22 @@
+{
+  "query": "SELECT 'patient_record' as check_type, COUNT(*) as cnt FROM patients WHERE id = 270001 UNION ALL SELECT 'patient_user_account', COUNT(*) FROM users WHERE id = 28920597 UNION ALL SELECT 'staff_account', COUNT(*) FROM users WHERE id = 210916;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT 'patient_record' as check_type, COUNT(*) as cnt FROM patients WHERE id = 270001 UNION ALL SELECT 'patient_user_account', COUNT(*) FROM users WHERE id = 28920597 UNION ALL SELECT 'staff_account', COUNT(*) FROM users WHERE id = 210916;",
+  "rows": [
+    {
+      "check_type": "staff_account",
+      "cnt": "1"
+    },
+    {
+      "check_type": "patient_user_account",
+      "cnt": "0"
+    },
+    {
+      "check_type": "patient_record",
+      "cnt": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "check_type\tcnt\nstaff_account\t1\npatient_user_account\t0\npatient_record\t0\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

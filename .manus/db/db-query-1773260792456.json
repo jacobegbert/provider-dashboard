@@ -1,0 +1,38 @@
+{
+  "query": "SELECT id, title, type, category, externalUrl FROM resources ORDER BY id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, title, type, category, externalUrl FROM resources ORDER BY id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "60003",
+      "title": "Intramuscular Injection Technique",
+      "type": "link",
+      "category": "general",
+      "externalUrl": "https://www.youtube.com/watch?v=fMEZdNodGM0"
+    },
+    {
+      "id": "60002",
+      "title": "Subcutaneous Injection Technique",
+      "type": "link",
+      "category": "general",
+      "externalUrl": "https://www.youtube.com/watch?v=wXjQHAxopzk"
+    },
+    {
+      "id": "60001",
+      "title": "How to Reconstitute Peptides",
+      "type": "link",
+      "category": "peptides",
+      "externalUrl": "https://www.youtube.com/watch?v=tcEWjyQfDLc"
+    },
+    {
+      "id": "30001",
+      "title": "Welcome to Black Label Medicine",
+      "type": "article",
+      "category": "general",
+      "externalUrl": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\ttype\tcategory\texternalUrl\n60003\tIntramuscular Injection Technique\tlink\tgeneral\thttps://www.youtube.com/watch?v=fMEZdNodGM0\n60002\tSubcutaneous Injection Technique\tlink\tgeneral\thttps://www.youtube.com/watch?v=wXjQHAxopzk\n60001\tHow to Reconstitute Peptides\tlink\tpeptides\thttps://www.youtube.com/watch?v=tcEWjyQfDLc\n30001\tWelcome to Black Label Medicine\tarticle\tgeneral\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 356
+}

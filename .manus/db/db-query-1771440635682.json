@@ -1,0 +1,90 @@
+{
+  "query": "SELECT id, firstName, lastName, email, userId, status FROM patients ORDER BY id DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email, userId, status FROM patients ORDER BY id DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "30007",
+      "firstName": "samantha",
+      "lastName": "Buker",
+      "email": "samantha@cellrx.bio",
+      "userId": "1",
+      "status": "active"
+    },
+    {
+      "id": "30006",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "userId": "NULL",
+      "status": "active"
+    },
+    {
+      "id": "30005",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "userId": "NULL",
+      "status": "new"
+    },
+    {
+      "id": "30004",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "userId": "NULL",
+      "status": "new"
+    },
+    {
+      "id": "30003",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "userId": "NULL",
+      "status": "active"
+    },
+    {
+      "id": "30002",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "userId": "NULL",
+      "status": "new"
+    },
+    {
+      "id": "30001",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "userId": "NULL",
+      "status": "new"
+    },
+    {
+      "id": "21",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com",
+      "userId": "NULL",
+      "status": "active"
+    },
+    {
+      "id": "20",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com",
+      "userId": "NULL",
+      "status": "new"
+    },
+    {
+      "id": "19",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com",
+      "userId": "NULL",
+      "status": "new"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\tuserId\tstatus\n30007\tsamantha\tBuker\tsamantha@cellrx.bio\t1\tactive\n30006\tTest\tUser\ttest-elite@example.com\tNULL\tactive\n30005\tTest\tUser\ttest-premium@example.com\tNULL\tnew\n30004\tTest\tUser\ttest-standard@example.com\tNULL\tnew\n30003\tTest\tUser\ttest-elite@example.com\tNULL\tactive\n30002\tTest\tUser\ttest-premium@example.com\tNULL\tnew\n30001\tTest\tUser\ttest-standard@example.com\tNULL\tnew\n21\tTest\tUser\ttest-elite@example.com\tNULL\tactive\n20\tTest\tUser\ttest-premium@example.com\tNULL\tnew\n19\tTest\tUser\ttest-standard@example.com\tNULL\tnew\n",
+  "stderr": "",
+  "execution_time_ms": 358
+}

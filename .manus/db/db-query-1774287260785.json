@@ -1,0 +1,22 @@
+{
+  "query": "SELECT p.id, p.firstName, p.lastName, p.email, p.userId, p.status, u.id as user_id, u.name as user_name, u.openId, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.firstName LIKE '%Samantha%' OR p.lastName LIKE '%Buker%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.firstName, p.lastName, p.email, p.userId, p.status, u.id as user_id, u.name as user_name, u.openId, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.firstName LIKE '%Samantha%' OR p.lastName LIKE '%Buker%';",
+  "rows": [
+    {
+      "id": "270001",
+      "firstName": "Samantha",
+      "lastName": "Buker",
+      "email": "buker.samantha@gmail.com",
+      "userId": "28920597",
+      "status": "active",
+      "user_id": "28920597",
+      "user_name": "Samantha Buker",
+      "openId": "j54MqSQ4meCMwRSekX7jJf",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\tuserId\tstatus\tuser_id\tuser_name\topenId\trole\n270001\tSamantha\tBuker\tbuker.samantha@gmail.com\t28920597\tactive\t28920597\tSamantha Buker\tj54MqSQ4meCMwRSekX7jJf\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

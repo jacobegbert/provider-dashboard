@@ -1,0 +1,52 @@
+{
+  "query": "SELECT tc.id, tc.stepId, tc.taskDate, tc.completedAt, ps.title as stepTitle\nFROM task_completions tc\nJOIN patients p ON tc.patientId = p.id\nJOIN users u ON p.userId = u.id\nLEFT JOIN protocol_steps ps ON tc.stepId = ps.id\nWHERE u.name LIKE '%Jacob%'\nORDER BY tc.taskDate DESC, tc.completedAt DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT tc.id, tc.stepId, tc.taskDate, tc.completedAt, ps.title as stepTitle\nFROM task_completions tc\nJOIN patients p ON tc.patientId = p.id\nJOIN users u ON p.userId = u.id\nLEFT JOIN protocol_steps ps ON tc.stepId = ps.id\nWHERE u.name LIKE '%Jacob%'\nORDER BY tc.taskDate DESC, tc.completedAt DESC;",
+  "rows": [
+    {
+      "id": "25",
+      "stepId": "28",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 07:01:47",
+      "stepTitle": "NULL"
+    },
+    {
+      "id": "24",
+      "stepId": "47",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 07:01:31",
+      "stepTitle": "NULL"
+    },
+    {
+      "id": "23",
+      "stepId": "27",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 06:37:55",
+      "stepTitle": "NULL"
+    },
+    {
+      "id": "22",
+      "stepId": "26",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 06:37:54",
+      "stepTitle": "NULL"
+    },
+    {
+      "id": "15",
+      "stepId": "25",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 06:37:15",
+      "stepTitle": "NULL"
+    },
+    {
+      "id": "14",
+      "stepId": "23",
+      "taskDate": "2026-02-19",
+      "completedAt": "2026-02-19 06:37:14",
+      "stepTitle": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tstepId\ttaskDate\tcompletedAt\tstepTitle\n25\t28\t2026-02-19\t2026-02-19 07:01:47\tNULL\n24\t47\t2026-02-19\t2026-02-19 07:01:31\tNULL\n23\t27\t2026-02-19\t2026-02-19 06:37:55\tNULL\n22\t26\t2026-02-19\t2026-02-19 06:37:54\tNULL\n15\t25\t2026-02-19\t2026-02-19 06:37:15\tNULL\n14\t23\t2026-02-19\t2026-02-19 06:37:14\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 62
+}

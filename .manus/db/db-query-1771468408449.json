@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS assignment_steps (\n  id int AUTO_INCREMENT PRIMARY KEY,\n  assignmentId int NOT NULL,\n  sourceStepId int,\n  sortOrder int NOT NULL DEFAULT 0,\n  title varchar(512) NOT NULL,\n  description text,\n  frequency enum('daily','weekly','biweekly','monthly','once','as_needed','custom') NOT NULL DEFAULT 'daily',\n  customDays json,\n  startDay int NOT NULL DEFAULT 1,\n  endDay int,\n  timeOfDay enum('morning','afternoon','evening','any') NOT NULL DEFAULT 'any',\n  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  INDEX idx_assignment_steps_assignmentId (assignmentId)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute CREATE TABLE IF NOT EXISTS assignment_steps (\n  id int AUTO_INCREMENT PRIMARY KEY,\n  assignmentId int NOT NULL,\n  sourceStepId int,\n  sortOrder int NOT NULL DEFAULT 0,\n  title varchar(512) NOT NULL,\n  description text,\n  frequency enum('daily','weekly','biweekly','monthly','once','as_needed','custom') NOT NULL DEFAULT 'daily',\n  customDays json,\n  startDay int NOT NULL DEFAULT 1,\n  endDay int,\n  timeOfDay enum('morning','afternoon','evening','any') NOT NULL DEFAULT 'any',\n  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  INDEX idx_assignment_steps_assignmentId (assignmentId)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 327
+}

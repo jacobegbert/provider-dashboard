@@ -1,0 +1,42 @@
+{
+  "query": "SELECT id, title, type, scheduledAt, durationMinutes, status FROM appointments ORDER BY scheduledAt DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, title, type, scheduledAt, durationMinutes, status FROM appointments ORDER BY scheduledAt DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "4",
+      "title": "Week 6 Review",
+      "type": "follow_up",
+      "scheduledAt": "2026-02-28 06:45:21",
+      "durationMinutes": "30",
+      "status": "scheduled"
+    },
+    {
+      "id": "3",
+      "title": "Lab Work — Comprehensive Panel",
+      "type": "lab_work",
+      "scheduledAt": "2026-02-21 06:45:21",
+      "durationMinutes": "15",
+      "status": "scheduled"
+    },
+    {
+      "id": "2",
+      "title": "Week 2 Check-in",
+      "type": "follow_up",
+      "scheduledAt": "2026-02-11 06:45:21",
+      "durationMinutes": "30",
+      "status": "completed"
+    },
+    {
+      "id": "1",
+      "title": "Initial Consultation",
+      "type": "initial",
+      "scheduledAt": "2026-01-28 06:45:21",
+      "durationMinutes": "60",
+      "status": "completed"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\ttype\tscheduledAt\tdurationMinutes\tstatus\n4\tWeek 6 Review\tfollow_up\t2026-02-28 06:45:21\t30\tscheduled\n3\tLab Work — Comprehensive Panel\tlab_work\t2026-02-21 06:45:21\t15\tscheduled\n2\tWeek 2 Check-in\tfollow_up\t2026-02-11 06:45:21\t30\tcompleted\n1\tInitial Consultation\tinitial\t2026-01-28 06:45:21\t60\tcompleted\n",
+  "stderr": "",
+  "execution_time_ms": 868
+}

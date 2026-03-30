@@ -1,0 +1,461 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Source Sans 3", sans-serif;
+  --font-mono: "DM Mono", monospace;
+  /* The Row editorial fonts */
+  --font-editorial: "Playfair Display", Georgia, serif;
+  --font-editorial-body: "Inter", system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* ─── The Row Quiet Luxury Palette ─── */
+  --color-row-ivory: oklch(0.967 0.007 89);       /* #F6F4EF Warm Ivory */
+  --color-row-bone: oklch(0.937 0.010 88);         /* #EDEAE3 Bone */
+  --color-row-sand: oklch(0.871 0.017 88);         /* #D9D4C8 Soft Sand */
+  --color-row-taupe: oklch(0.763 0.020 83);        /* #B8B1A4 Taupe */
+  --color-row-stone: oklch(0.682 0.020 83);        /* #9F988B Warm Stone */
+  --color-row-charcoal: oklch(0.301 0.000 0);      /* #2E2E2E Charcoal */
+  --color-row-black: oklch(0.226 0.000 0);         /* #1C1C1C Soft Black */
+  --color-row-rose: oklch(0.843 0.020 33);         /* #D8C7C3 Dusty Rose */
+  --color-row-gold: oklch(0.787 0.039 83);         /* #C6B89E Antique Gold */
+  --color-row-olive: oklch(0.629 0.030 103);       /* #8C8A75 Faded Olive */
+  /* ─── Masculine Medical Palette ─── */
+  --color-navy: oklch(0.20 0.03 245);
+  --color-navy-light: oklch(0.28 0.025 245);
+  --color-navy-dark: oklch(0.15 0.03 245);
+  --color-steel: oklch(0.52 0.10 250);
+  --color-steel-light: oklch(0.60 0.08 250);
+  --color-steel-dark: oklch(0.44 0.10 250);
+  --color-steel-muted: oklch(0.48 0.05 250);
+  --color-charcoal: oklch(0.28 0.005 260);
+  --color-charcoal-light: oklch(0.38 0.005 260);
+  --color-charcoal-mid: oklch(0.45 0.005 260);
+  --color-slate-cool: oklch(0.55 0.01 260);
+  --color-slate-warm: oklch(0.50 0.01 260);
+  --color-medical-white: oklch(0.98 0.002 260);
+  --color-medical-gray: oklch(0.95 0.003 260);
+  /* ─── Legacy gold aliases (provider dashboard) ─── */
+  --color-gold: var(--gold-base);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-gold-muted: var(--gold-muted);
+  --color-brass: oklch(0.50 0.08 250);
+  --color-sage: oklch(0.50 0.08 160);
+  --color-sage-light: oklch(0.60 0.06 160);
+  --color-sage-dark: oklch(0.40 0.08 160);
+  --color-terracotta: var(--terracotta-base);
+  --color-terracotta-light: var(--terracotta-light-val);
+  --color-onyx: oklch(0.20 0.005 260);
+  --color-ivory: oklch(0.96 0.01 85);
+  --color-ivory-muted: oklch(0.88 0.01 85);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* ─── Masculine Medical Light Theme ─── */
+  /* Deep Medical Navy: #0F1F2E | Medical White: #F7F8F9 | Charcoal: #2E3135 | Slate: #6B7280 | Steel Blue: #4A6FA5 */
+  --background: oklch(0.98 0.002 260);
+  --foreground: oklch(0.20 0.03 245);
+  --card: oklch(1.00 0 0);
+  --card-foreground: oklch(0.28 0.005 260);
+  --popover: oklch(1.00 0 0);
+  --popover-foreground: oklch(0.28 0.005 260);
+  --primary: oklch(0.52 0.10 250);                 /* Steel Blue #4A6FA5 */
+  --primary-foreground: oklch(1.00 0 0);
+  --secondary: oklch(0.96 0.003 260);
+  --secondary-foreground: oklch(0.28 0.005 260);
+  --muted: oklch(0.96 0.003 260);
+  --muted-foreground: oklch(0.55 0.01 260);
+  --accent: oklch(0.95 0.005 250);
+  --accent-foreground: oklch(0.52 0.10 250);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(1.00 0 0);
+  --border: oklch(0.91 0.003 260);
+  --input: oklch(0.91 0.003 260);
+  --ring: oklch(0.52 0.10 250);                    /* Steel Blue ring */
+  --chart-1: oklch(0.52 0.10 250);                 /* Steel Blue */
+  --chart-2: oklch(0.50 0.08 160);                 /* Sage */
+  --chart-3: oklch(0.55 0.14 40);                  /* Terracotta */
+  --chart-4: oklch(0.44 0.10 250);                 /* Dark Steel */
+  --chart-5: oklch(0.60 0.08 250);                 /* Light Steel */
+  --sidebar: oklch(0.98 0.002 260);
+  --sidebar-foreground: oklch(0.20 0.03 245);
+  --sidebar-primary: oklch(0.52 0.10 250);         /* Steel Blue */
+  --sidebar-primary-foreground: oklch(1.00 0 0);
+  --sidebar-accent: oklch(0.95 0.005 250);
+  --sidebar-accent-foreground: oklch(0.52 0.10 250);
+  --sidebar-border: oklch(0.92 0.003 260);
+  --sidebar-ring: oklch(0.52 0.10 250);
+
+  /* ─── Indirection layer for gold/terracotta (default = masculine palette) ─── */
+  --gold-base: oklch(0.52 0.10 250);               /* Steel Blue — primary brand */
+  --gold-light: oklch(0.60 0.08 250);              /* Lighter steel */
+  --gold-dark: oklch(0.44 0.10 250);               /* Dark steel */
+  --gold-muted: oklch(0.48 0.05 250);              /* Muted steel */
+  --terracotta-base: oklch(0.55 0.14 40);          /* Terracotta accent */
+  --terracotta-light-val: oklch(0.65 0.12 40);     /* Light terracotta */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-family: "Source Sans 3", sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Outfit", sans-serif;
+  }
+  .font-serif {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  }
+  .font-mono {
+    font-family: "DM Mono", monospace;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1440px;
+    }
+  }
+
+  /* ─── Grain texture overlay ─── */
+  .grain-overlay {
+    position: relative;
+  }
+  .grain-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+  .grain-overlay > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── Hero accent text (brighter blue for dark backgrounds) ─── */
+  .text-hero-accent {
+    color: oklch(0.71 0.112 254);                    /* Bright Steel Blue highlight */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 8px rgba(111, 164, 230, 0.15);
+    font-weight: 600;
+  }
+  .text-hero-accent\/60 {
+    color: oklch(0.71 0.112 254 / 0.6);
+  }
+
+  /* ─── Steel Blue accent utilities (resolves via --gold-base indirection) ─── */
+  .text-gold {
+    color: var(--color-gold);
+  }
+  .text-gold-muted {
+    color: var(--color-gold-muted);
+  }
+  .bg-gold {
+    background-color: var(--color-gold);
+  }
+  .bg-gold\/5 {
+    background-color: color-mix(in oklch, var(--color-gold) 5%, transparent);
+  }
+  .bg-gold\/8 {
+    background-color: color-mix(in oklch, var(--color-gold) 8%, transparent);
+  }
+  .bg-gold\/10 {
+    background-color: color-mix(in oklch, var(--color-gold) 10%, transparent);
+  }
+  .bg-gold\/15 {
+    background-color: color-mix(in oklch, var(--color-gold) 15%, transparent);
+  }
+  .border-gold {
+    border-color: var(--color-gold);
+  }
+  .border-gold\/10 {
+    border-color: color-mix(in oklch, var(--color-gold) 10%, transparent);
+  }
+  .border-gold\/15 {
+    border-color: color-mix(in oklch, var(--color-gold) 15%, transparent);
+  }
+  .border-gold\/20 {
+    border-color: color-mix(in oklch, var(--color-gold) 20%, transparent);
+  }
+  .border-gold\/30 {
+    border-color: color-mix(in oklch, var(--color-gold) 30%, transparent);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     THE ROW — Quiet Luxury Feminine Theme
+     Inspired by The Row by Mary-Kate & Ashley Olsen
+     Editorial, timeless, understated luxury
+     Palette: Warm Ivory / Bone / Charcoal / Dusty Rose / Antique Gold
+     ═══════════════════════════════════════════════════════════════════ */
+
+  .theme-feminine {
+    /* ── Semantic tokens — The Row palette ── */
+    --background: oklch(0.967 0.007 89);            /* Warm Ivory #F6F4EF */
+    --foreground: oklch(0.301 0.000 0);             /* Charcoal #2E2E2E */
+    --card: oklch(0.937 0.010 88);                  /* Bone #EDEAE3 */
+    --card-foreground: oklch(0.301 0.000 0);        /* Charcoal */
+    --popover: oklch(0.937 0.010 88);               /* Bone */
+    --popover-foreground: oklch(0.226 0.000 0);     /* Soft Black */
+    --primary: oklch(0.301 0.000 0);                /* Charcoal — primary actions */
+    --primary-foreground: oklch(0.967 0.007 89);    /* Warm Ivory */
+    --secondary: oklch(0.937 0.010 88);             /* Bone */
+    --secondary-foreground: oklch(0.301 0.000 0);   /* Charcoal */
+    --muted: oklch(0.871 0.017 88);                 /* Soft Sand #D9D4C8 */
+    --muted-foreground: oklch(0.682 0.020 83);      /* Warm Stone #9F988B */
+    --accent: oklch(0.871 0.017 88);                /* Soft Sand */
+    --accent-foreground: oklch(0.301 0.000 0);      /* Charcoal */
+    --border: oklch(0.871 0.017 88);                /* Soft Sand — thin warm grey lines */
+    --input: oklch(0.871 0.017 88);                 /* Soft Sand */
+    --ring: oklch(0.787 0.039 83);                  /* Antique Gold ring */
+    --destructive: oklch(0.55 0.12 25);             /* Muted red */
+    --destructive-foreground: oklch(0.967 0.007 89);
+    --chart-1: oklch(0.763 0.020 83);               /* Taupe */
+    --chart-2: oklch(0.787 0.039 83);               /* Antique Gold */
+    --chart-3: oklch(0.843 0.020 33);               /* Dusty Rose */
+    --chart-4: oklch(0.629 0.030 103);              /* Faded Olive */
+    --chart-5: oklch(0.682 0.020 83);               /* Warm Stone */
+    --sidebar: oklch(0.967 0.007 89);               /* Warm Ivory */
+    --sidebar-foreground: oklch(0.301 0 0);         /* Charcoal */
+    --sidebar-primary: oklch(0.301 0.000 0);        /* Charcoal */
+    --sidebar-primary-foreground: oklch(0.967 0.007 89); /* Warm Ivory */
+    --sidebar-accent: oklch(0.937 0.010 88);         /* Bone */
+    --sidebar-accent-foreground: oklch(0.301 0.000 0); /* Charcoal */
+    --sidebar-border: oklch(0.871 0.017 88);         /* Soft Sand */
+    --sidebar-ring: oklch(0.787 0.039 83);           /* Antique Gold */
+
+    /* ── Override the indirection layer — The Row quiet luxury ── */
+    --gold-base: oklch(0.787 0.039 83);              /* Antique Gold — primary accent */
+    --gold-light: oklch(0.843 0.020 33);             /* Dusty Rose */
+    --gold-dark: oklch(0.682 0.020 83);              /* Warm Stone */
+    --gold-muted: oklch(0.763 0.020 83);             /* Taupe */
+    --terracotta-base: oklch(0.843 0.020 33);        /* Dusty Rose */
+    --terracotta-light-val: oklch(0.871 0.017 88);   /* Soft Sand */
+
+    /* ── Override @theme color tokens for Tailwind classes ── */
+    --color-gold: oklch(0.787 0.039 83);             /* Antique Gold */
+    --color-gold-light: oklch(0.843 0.020 33);       /* Dusty Rose */
+    --color-gold-dark: oklch(0.682 0.020 83);        /* Warm Stone */
+    --color-gold-muted: oklch(0.763 0.020 83);       /* Taupe */
+    --color-steel: oklch(0.763 0.020 83);            /* Taupe */
+    --color-steel-light: oklch(0.843 0.020 33);      /* Dusty Rose */
+    --color-steel-dark: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-steel-muted: oklch(0.763 0.020 83);      /* Taupe */
+    --color-brass: oklch(0.787 0.039 83);            /* Antique Gold */
+    --color-navy: oklch(0.301 0.000 0);              /* Charcoal */
+    --color-navy-light: oklch(0.400 0.005 83);       /* Warm mid-grey */
+    --color-navy-dark: oklch(0.226 0.000 0);         /* Soft Black */
+    --color-sage: oklch(0.629 0.030 103);            /* Faded Olive */
+    --color-sage-light: oklch(0.720 0.020 103);      /* Light Olive */
+    --color-sage-dark: oklch(0.540 0.030 103);       /* Dark Olive */
+    --color-terracotta: oklch(0.843 0.020 33);       /* Dusty Rose */
+    --color-terracotta-light: oklch(0.900 0.012 33); /* Pale Rose */
+    --color-charcoal: oklch(0.301 0.000 0);          /* Charcoal #2E2E2E */
+    --color-charcoal-light: oklch(0.400 0.005 83);   /* Warm mid-grey */
+    --color-charcoal-mid: oklch(0.500 0.005 83);     /* Warm grey */
+    --color-slate-cool: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-slate-warm: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-medical-white: oklch(0.967 0.007 89);    /* Warm Ivory */
+    --color-medical-gray: oklch(0.937 0.010 88);     /* Bone */
+    --color-onyx: oklch(0.226 0.000 0);              /* Soft Black */
+    --color-ivory: oklch(0.967 0.007 89);            /* Warm Ivory */
+    --color-ivory-muted: oklch(0.937 0.010 88);      /* Bone */
+
+    /* ── Typography override: editorial fonts ── */
+    font-family: "Inter", system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    --radius: 0.25rem;                               /* Very subtle corners, not bubble-like */
+  }
+
+  /* Editorial heading typography */
+  .theme-feminine h1,
+  .theme-feminine h2,
+  .theme-feminine h3,
+  .theme-feminine h4,
+  .theme-feminine h5,
+  .theme-feminine h6 {
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+  .theme-feminine .font-heading {
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+  .theme-feminine .font-body {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  /* The Row hero accent — antique gold on dark backgrounds */
+  .theme-feminine .text-hero-accent {
+    color: oklch(0.787 0.039 83);                    /* Antique Gold */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .theme-feminine .text-hero-accent\/60 {
+    color: oklch(0.787 0.039 83 / 0.6);
+  }
+
+  /* Glass card — bone tinted, matte */
+  .theme-feminine .glass-card {
+    background: oklch(0.937 0.010 88 / 0.92);
+    border-color: oklch(0.871 0.017 88 / 0.4);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Scrollbar — warm stone */
+  .theme-feminine ::-webkit-scrollbar-thumb {
+    background: oklch(0.871 0.017 88);
+  }
+  .theme-feminine ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.763 0.020 83);
+  }
+
+  /* Luxury divider — thin warm grey line */
+  .theme-feminine .luxury-divider {
+    background: linear-gradient(90deg, transparent, oklch(0.871 0.017 88 / 0.6), transparent);
+  }
+
+  /* Dusty Rose accent utilities */
+  .theme-feminine .text-warm-rose {
+    color: oklch(0.843 0.020 33);                    /* Dusty Rose */
+  }
+  .theme-feminine .bg-warm-rose {
+    background-color: oklch(0.843 0.020 33);
+  }
+
+  /* Antique Gold accent utilities */
+  .theme-feminine .text-soft-gold {
+    color: oklch(0.787 0.039 83);                    /* Antique Gold */
+  }
+  .theme-feminine .bg-soft-gold {
+    background-color: oklch(0.787 0.039 83);
+  }
+
+  /* Faded Olive — subtle accent */
+  .theme-feminine .text-sage-wellness {
+    color: oklch(0.629 0.030 103);                   /* Faded Olive */
+  }
+  .theme-feminine .bg-sage-wellness {
+    background-color: oklch(0.629 0.030 103);
+  }
+
+  /* ─── Glass card utility ─── */
+  .glass-card {
+    background: oklch(1.00 0 0 / 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid oklch(0.91 0.003 260 / 0.5);
+  }
+
+  /* ─── Accent divider ─── */
+  .luxury-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, oklch(0.52 0.10 250 / 0.3), transparent);
+  }
+
+  /* Hide scrollbar for mobile bottom nav */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ─── Custom scrollbar ─── */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.82 0.003 260);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.65 0.005 260);
+  }
+}

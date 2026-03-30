@@ -1,0 +1,13 @@
+{
+  "query": "SELECT CONCAT('KEEP_ID=', id) AS info FROM protocols WHERE name LIKE '%Testosterone Cypionate%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT CONCAT('KEEP_ID=', id) AS info FROM protocols WHERE name LIKE '%Testosterone Cypionate%';",
+  "rows": [
+    {
+      "info": "KEEP_ID=120002"
+    }
+  ],
+  "messages": [],
+  "stdout": "info\nKEEP_ID=120002\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

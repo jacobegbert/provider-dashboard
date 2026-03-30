@@ -1,0 +1,54 @@
+{
+  "query": "SELECT id, name FROM protocols ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name FROM protocols ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Peptides"
+    },
+    {
+      "id": "30001",
+      "name": "TETSOTERONE"
+    },
+    {
+      "id": "30002",
+      "name": "Hi"
+    },
+    {
+      "id": "30003",
+      "name": "Gut Restoration — 12 Week"
+    },
+    {
+      "id": "90016",
+      "name": "Restore Test Protocol"
+    },
+    {
+      "id": "90040",
+      "name": "Restore Test Protocol"
+    },
+    {
+      "id": "120002",
+      "name": "Testosterone Cypionate (TRT)"
+    },
+    {
+      "id": "120003",
+      "name": "Test Ongoing Protocol"
+    },
+    {
+      "id": "120004",
+      "name": "Test Fixed Protocol"
+    },
+    {
+      "id": "120005",
+      "name": "Archive Test Protocol"
+    },
+    {
+      "id": "120006",
+      "name": "Restore Test Protocol"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\n1\tPeptides\n30001\tTETSOTERONE\n30002\tHi\n30003\tGut Restoration — 12 Week\n90016\tRestore Test Protocol\n90040\tRestore Test Protocol\n120002\tTestosterone Cypionate (TRT)\n120003\tTest Ongoing Protocol\n120004\tTest Fixed Protocol\n120005\tArchive Test Protocol\n120006\tRestore Test Protocol\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

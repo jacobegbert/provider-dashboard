@@ -1,0 +1,2 @@
+ALTER TABLE `protocol_steps` MODIFY COLUMN `frequency` enum('daily','weekly','biweekly','monthly','once','as_needed','custom') NOT NULL DEFAULT 'daily';--> statement-breakpoint
+ALTER TABLE `protocol_steps` ADD `customDays` json;

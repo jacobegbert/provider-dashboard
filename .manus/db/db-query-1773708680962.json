@@ -1,0 +1,24 @@
+{
+  "query": "SELECT p.id, p.firstName, p.lastName, p.email, p.status, p.subscriptionTier, COUNT(pa.id) as assignedProtocols FROM patients p LEFT JOIN protocol_assignments pa ON pa.patientId = p.id WHERE p.id = 390003 GROUP BY p.id; SELECT pa.id, pr.name as protocolName, pa.status, (SELECT COUNT(*) FROM protocol_steps ps WHERE ps.protocolId = pr.id) as stepCount FROM protocol_assignments pa JOIN protocols pr ON pr.id = pa.protocolId WHERE pa.patientId = 390003;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.firstName, p.lastName, p.email, p.status, p.subscriptionTier, COUNT(pa.id) as assignedProtocols FROM patients p LEFT JOIN protocol_assignments pa ON pa.patientId = p.id WHERE p.id = 390003 GROUP BY p.id; SELECT pa.id, pr.name as protocolName, pa.status, (SELECT COUNT(*) FROM protocol_steps ps WHERE ps.protocolId = pr.id) as stepCount FROM protocol_assignments pa JOIN protocols pr ON pr.id = pa.protocolId WHERE pa.patientId = 390003;",
+  "rows": [
+    {
+      "id": "390003",
+      "firstName": "Danny",
+      "lastName": "Augustyn",
+      "email": "dannyaugustyn@gmail.com",
+      "status": "active",
+      "subscriptionTier": "elite",
+      "assignedProtocols": "3"
+    }
+  ],
+  "messages": [
+    "id\tprotocolName\tstatus\tstepCount",
+    "870010\tPharmacologic & Supplement Protocol\tactive\t8",
+    "870012\tLifestyle & Monitoring Protocol\tactive\t7",
+    "870011\tNutrition & Exercise Protocol\tactive\t7"
+  ],
+  "stdout": "id\tfirstName\tlastName\temail\tstatus\tsubscriptionTier\tassignedProtocols\n390003\tDanny\tAugustyn\tdannyaugustyn@gmail.com\tactive\telite\t3\nid\tprotocolName\tstatus\tstepCount\n870010\tPharmacologic & Supplement Protocol\tactive\t8\n870012\tLifestyle & Monitoring Protocol\tactive\t7\n870011\tNutrition & Exercise Protocol\tactive\t7\n",
+  "stderr": "",
+  "execution_time_ms": 466
+}

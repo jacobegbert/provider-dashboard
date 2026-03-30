@@ -1,0 +1,52 @@
+{
+  "query": "SELECT COUNT(*) as patient_count FROM patients; SELECT COUNT(*) as protocol_count FROM protocols; SELECT id, name FROM protocols ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT COUNT(*) as patient_count FROM patients; SELECT COUNT(*) as protocol_count FROM protocols; SELECT id, name FROM protocols ORDER BY id;",
+  "rows": [
+    {
+      "patient_count": "3"
+    },
+    {
+      "patient_count": "protocol_count"
+    },
+    {
+      "patient_count": "10"
+    },
+    {
+      "patient_count": "id\tname"
+    },
+    {
+      "patient_count": "120132\tLow-Carb Single-Ingredient Pseudo-Carnivore Diet"
+    },
+    {
+      "patient_count": "120153\tZone 2 Cardio Protocol"
+    },
+    {
+      "patient_count": "120154\tVO2 Max Training Protocol"
+    },
+    {
+      "patient_count": "120155\tTesamorelin Protocol"
+    },
+    {
+      "patient_count": "120164\tCore Supplement Routine"
+    },
+    {
+      "patient_count": "120165\tTestosterone Injection Maintenance"
+    },
+    {
+      "patient_count": "120166\tGHK-Cu Regenerative Protocol"
+    },
+    {
+      "patient_count": "120167\tMOTS-c Mitochondrial Protocol"
+    },
+    {
+      "patient_count": "120168\tSS-31 (Elamipretide) Mitochondrial Protocol"
+    },
+    {
+      "patient_count": "210025\tSermorelin Protocol"
+    }
+  ],
+  "messages": [],
+  "stdout": "patient_count\n3\nprotocol_count\n10\nid\tname\n120132\tLow-Carb Single-Ingredient Pseudo-Carnivore Diet\n120153\tZone 2 Cardio Protocol\n120154\tVO2 Max Training Protocol\n120155\tTesamorelin Protocol\n120164\tCore Supplement Routine\n120165\tTestosterone Injection Maintenance\n120166\tGHK-Cu Regenerative Protocol\n120167\tMOTS-c Mitochondrial Protocol\n120168\tSS-31 (Elamipretide) Mitochondrial Protocol\n210025\tSermorelin Protocol\n",
+  "stderr": "",
+  "execution_time_ms": 477
+}

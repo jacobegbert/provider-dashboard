@@ -1,0 +1,9 @@
+{
+  "query": "SELECT pa.id, pa.patientId, pa.startDate, pa.endDate, pa.createdAt, p.name as protocolName FROM protocol_assignments pa JOIN protocols p ON pa.protocolId = p.id WHERE pa.patientId = 1 ORDER BY pa.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT pa.id, pa.patientId, pa.startDate, pa.endDate, pa.createdAt, p.name as protocolName FROM protocol_assignments pa JOIN protocols p ON pa.protocolId = p.id WHERE pa.patientId = 1 ORDER BY pa.id;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 351
+}

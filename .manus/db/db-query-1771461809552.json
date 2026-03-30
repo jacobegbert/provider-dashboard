@@ -1,0 +1,64 @@
+{
+  "query": "SELECT id, firstName, lastName, userId FROM patients WHERE firstName = 'Test' AND lastName = 'User';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, userId FROM patients WHERE firstName = 'Test' AND lastName = 'User';",
+  "rows": [
+    {
+      "id": "90005",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90006",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90007",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90008",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90009",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90010",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90011",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90012",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    },
+    {
+      "id": "90013",
+      "firstName": "Test",
+      "lastName": "User",
+      "userId": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\tuserId\n90005\tTest\tUser\tNULL\n90006\tTest\tUser\tNULL\n90007\tTest\tUser\tNULL\n90008\tTest\tUser\tNULL\n90009\tTest\tUser\tNULL\n90010\tTest\tUser\tNULL\n90011\tTest\tUser\tNULL\n90012\tTest\tUser\tNULL\n90013\tTest\tUser\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 81
+}

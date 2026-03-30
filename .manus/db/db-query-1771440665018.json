@@ -1,0 +1,31 @@
+{
+  "query": "SELECT * FROM patients WHERE firstName LIKE '%Sam%' OR lastName LIKE '%Buker%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT * FROM patients WHERE firstName LIKE '%Sam%' OR lastName LIKE '%Buker%';",
+  "rows": [
+    {
+      "id": "30007",
+      "userId": "1",
+      "providerId": "1",
+      "firstName": "samantha",
+      "lastName": "Buker",
+      "email": "samantha@cellrx.bio",
+      "phone": "8018821090",
+      "dateOfBirth": "1996-10-08",
+      "status": "active",
+      "subscriptionTier": "elite",
+      "subscriptionExpiresAt": "NULL",
+      "healthGoals": "NULL",
+      "conditions": "NULL",
+      "notes": "Hi",
+      "avatarUrl": "NULL",
+      "lastProviderInteraction": "2026-02-18 18:43:57",
+      "nextRequiredAction": "NULL",
+      "createdAt": "2026-02-18 18:06:51",
+      "updatedAt": "2026-02-18 18:43:56"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tproviderId\tfirstName\tlastName\temail\tphone\tdateOfBirth\tstatus\tsubscriptionTier\tsubscriptionExpiresAt\thealthGoals\tconditions\tnotes\tavatarUrl\tlastProviderInteraction\tnextRequiredAction\tcreatedAt\tupdatedAt\n30007\t1\t1\tsamantha\tBuker\tsamantha@cellrx.bio\t8018821090\t1996-10-08\tactive\telite\tNULL\tNULL\tNULL\tHi\tNULL\t2026-02-18 18:43:57\tNULL\t2026-02-18 18:06:51\t2026-02-18 18:43:56\n",
+  "stderr": "",
+  "execution_time_ms": 356
+}

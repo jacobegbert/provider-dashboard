@@ -1,0 +1,8 @@
+{
+  "query": "SELECT p.id, p.name, p.email, p.userId, p.status, u.id as user_id, u.name as user_name, u.openId, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.name LIKE '%Samantha%' OR p.name LIKE '%Buker%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.name, p.email, p.userId, p.status, u.id as user_id, u.name as user_name, u.openId, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.name LIKE '%Samantha%' OR p.name LIKE '%Buker%';",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'p.name' in 'where clause'"
+  ]
+}

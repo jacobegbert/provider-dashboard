@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, name, email, role FROM users ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name, email, role FROM users ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Jacob Egbert",
+      "email": "jacobegbert@gmail.com",
+      "role": "admin"
+    },
+    {
+      "id": "210916",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff"
+    },
+    {
+      "id": "272087",
+      "name": "Amelia Yokel Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "role": "user"
+    },
+    {
+      "id": "273467",
+      "name": "Jacob Egbert",
+      "email": "jacob@cellrx.bio",
+      "role": "user"
+    },
+    {
+      "id": "1020492",
+      "name": "David Fajardo",
+      "email": "fajardodavid89@gmail.com",
+      "role": "user"
+    },
+    {
+      "id": "4560044",
+      "name": "jason",
+      "email": "jason@networkingeveryday.com",
+      "role": "user"
+    },
+    {
+      "id": "28920597",
+      "name": "Samantha Buker",
+      "email": "buker.samantha@gmail.com",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\n1\tJacob Egbert\tjacobegbert@gmail.com\tadmin\n210916\tSamantha Buker\tsamantha@cellrx.bio\tstaff\n272087\tAmelia Yokel Egbert\tameliajudithyokel@gmail.com\tuser\n273467\tJacob Egbert\tjacob@cellrx.bio\tuser\n1020492\tDavid Fajardo\tfajardodavid89@gmail.com\tuser\n4560044\tjason\tjason@networkingeveryday.com\tuser\n28920597\tSamantha Buker\tbuker.samantha@gmail.com\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 348
+}

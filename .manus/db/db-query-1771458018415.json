@@ -1,0 +1,43 @@
+{
+  "query": "SELECT CONCAT(id, ' | ', name) AS protocol_info FROM protocols ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT CONCAT(id, ' | ', name) AS protocol_info FROM protocols ORDER BY id;",
+  "rows": [
+    {
+      "protocol_info": "1 | Peptides"
+    },
+    {
+      "protocol_info": "30001 | TETSOTERONE"
+    },
+    {
+      "protocol_info": "30002 | Hi"
+    },
+    {
+      "protocol_info": "30003 | Gut Restoration — 12 Week"
+    },
+    {
+      "protocol_info": "90016 | Restore Test Protocol"
+    },
+    {
+      "protocol_info": "90040 | Restore Test Protocol"
+    },
+    {
+      "protocol_info": "120002 | Testosterone Cypionate (TRT)"
+    },
+    {
+      "protocol_info": "120003 | Test Ongoing Protocol"
+    },
+    {
+      "protocol_info": "120004 | Test Fixed Protocol"
+    },
+    {
+      "protocol_info": "120005 | Archive Test Protocol"
+    },
+    {
+      "protocol_info": "120006 | Restore Test Protocol"
+    }
+  ],
+  "messages": [],
+  "stdout": "protocol_info\n1 | Peptides\n30001 | TETSOTERONE\n30002 | Hi\n30003 | Gut Restoration — 12 Week\n90016 | Restore Test Protocol\n90040 | Restore Test Protocol\n120002 | Testosterone Cypionate (TRT)\n120003 | Test Ongoing Protocol\n120004 | Test Fixed Protocol\n120005 | Archive Test Protocol\n120006 | Restore Test Protocol\n",
+  "stderr": "",
+  "execution_time_ms": 50
+}

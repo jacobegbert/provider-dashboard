@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, firstName, lastName, email FROM patients WHERE firstName = 'Test' AND lastName = 'User' LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email FROM patients WHERE firstName = 'Test' AND lastName = 'User' LIMIT 5;",
+  "rows": [
+    {
+      "id": "150001",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com"
+    },
+    {
+      "id": "150002",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com"
+    },
+    {
+      "id": "150003",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-elite@example.com"
+    },
+    {
+      "id": "150005",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-standard@example.com"
+    },
+    {
+      "id": "150006",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test-premium@example.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\n150001\tTest\tUser\ttest-standard@example.com\n150002\tTest\tUser\ttest-premium@example.com\n150003\tTest\tUser\ttest-elite@example.com\n150005\tTest\tUser\ttest-standard@example.com\n150006\tTest\tUser\ttest-premium@example.com\n",
+  "stderr": "",
+  "execution_time_ms": 346
+}

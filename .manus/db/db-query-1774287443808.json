@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, name, email, role, lastSignedIn FROM users WHERE id = 210916;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name, email, role, lastSignedIn FROM users WHERE id = 210916;",
+  "rows": [
+    {
+      "id": "210916",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff",
+      "lastSignedIn": "2026-03-23 17:29:07"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\tlastSignedIn\n210916\tSamantha Buker\tsamantha@cellrx.bio\tstaff\t2026-03-23 17:29:07\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

@@ -1,0 +1,21 @@
+{
+  "query": "SELECT p.id, p.firstName, p.lastName, p.status, p.userId, p.email, u.id as uid, u.name, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.firstName LIKE '%Samantha%' OR p.lastName LIKE '%Buker%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.firstName, p.lastName, p.status, p.userId, p.email, u.id as uid, u.name, u.role FROM patients p LEFT JOIN users u ON p.userId = u.id WHERE p.firstName LIKE '%Samantha%' OR p.lastName LIKE '%Buker%';",
+  "rows": [
+    {
+      "id": "270001",
+      "firstName": "Samantha",
+      "lastName": "Buker",
+      "status": "active",
+      "userId": "28920597",
+      "email": "buker.samantha@gmail.com",
+      "uid": "28920597",
+      "name": "Samantha Buker",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\tstatus\tuserId\temail\tuid\tname\trole\n270001\tSamantha\tBuker\tactive\t28920597\tbuker.samantha@gmail.com\t28920597\tSamantha Buker\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 416
+}

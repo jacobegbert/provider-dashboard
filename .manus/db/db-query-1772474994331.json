@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, openId, name, email, role FROM users;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, openId, name, email, role FROM users;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "KHybWgUcciFBwpEkm2bU6g",
+      "name": "Jacob Egbert",
+      "email": "jacobegbert@gmail.com",
+      "role": "admin"
+    },
+    {
+      "id": "210916",
+      "openId": "gbqjQCWnx45euWCfqmLKCw",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff"
+    },
+    {
+      "id": "272087",
+      "openId": "Ms2eeYsBHmuXKjDWjQQWCq",
+      "name": "Amelia Yokel Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "role": "user"
+    },
+    {
+      "id": "273467",
+      "openId": "X64sFBmRTQ7pc4PB2s5UBd",
+      "name": "Jacob Egbert",
+      "email": "jacob@cellrx.bio",
+      "role": "user"
+    },
+    {
+      "id": "1020492",
+      "openId": "etuxyXKgxambn5oEMjZehs",
+      "name": "David Fajardo",
+      "email": "fajardodavid89@gmail.com",
+      "role": "user"
+    },
+    {
+      "id": "4560044",
+      "openId": "7iQrB3Z4ZC2zppQqbkqW9g",
+      "name": "jason",
+      "email": "jason@networkingeveryday.com",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\n1\tKHybWgUcciFBwpEkm2bU6g\tJacob Egbert\tjacobegbert@gmail.com\tadmin\n210916\tgbqjQCWnx45euWCfqmLKCw\tSamantha Buker\tsamantha@cellrx.bio\tstaff\n272087\tMs2eeYsBHmuXKjDWjQQWCq\tAmelia Yokel Egbert\tameliajudithyokel@gmail.com\tuser\n273467\tX64sFBmRTQ7pc4PB2s5UBd\tJacob Egbert\tjacob@cellrx.bio\tuser\n1020492\tetuxyXKgxambn5oEMjZehs\tDavid Fajardo\tfajardodavid89@gmail.com\tuser\n4560044\t7iQrB3Z4ZC2zppQqbkqW9g\tjason\tjason@networkingeveryday.com\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 353
+}

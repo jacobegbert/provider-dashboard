@@ -1,0 +1,90 @@
+{
+  "query": "SELECT m.id, m.patientId, m.senderId, m.receiverId, m.isRead, m.content, u_sender.name as senderName, u_receiver.name as receiverName FROM messages m LEFT JOIN users u_sender ON m.senderId = u_sender.id LEFT JOIN users u_receiver ON m.receiverId = u_receiver.id WHERE m.isRead = false ORDER BY m.createdAt DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT m.id, m.patientId, m.senderId, m.receiverId, m.isRead, m.content, u_sender.name as senderName, u_receiver.name as receiverName FROM messages m LEFT JOIN users u_sender ON m.senderId = u_sender.id LEFT JOIN users u_receiver ON m.receiverId = u_receiver.id WHERE m.isRead = false ORDER BY m.createdAt DESC;",
+  "rows": [
+    {
+      "id": "90002",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "MEssage me back",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "90001",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "lgjh",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "60006",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "So tall",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "60005",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "Hello",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "60004",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "hellp",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "60001",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "What are you doing?",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "30004",
+      "patientId": "30007",
+      "senderId": "1",
+      "receiverId": "210916",
+      "isRead": "0",
+      "content": "hi again",
+      "senderName": "Jacob Egbert",
+      "receiverName": "Samantha Buker"
+    },
+    {
+      "id": "30003",
+      "patientId": "30007",
+      "senderId": "210916",
+      "receiverId": "0",
+      "isRead": "0",
+      "content": "yo",
+      "senderName": "Samantha Buker",
+      "receiverName": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tpatientId\tsenderId\treceiverId\tisRead\tcontent\tsenderName\treceiverName\n90002\t30007\t1\t210916\t0\tMEssage me back\tJacob Egbert\tSamantha Buker\n90001\t30007\t1\t210916\t0\tlgjh\tJacob Egbert\tSamantha Buker\n60006\t30007\t1\t210916\t0\tSo tall\tJacob Egbert\tSamantha Buker\n60005\t30007\t1\t210916\t0\tHello\tJacob Egbert\tSamantha Buker\n60004\t30007\t1\t210916\t0\thellp\tJacob Egbert\tSamantha Buker\n60001\t30007\t1\t210916\t0\tWhat are you doing?\tJacob Egbert\tSamantha Buker\n30004\t30007\t1\t210916\t0\thi again\tJacob Egbert\tSamantha Buker\n30003\t30007\t210916\t0\t0\tyo\tSamantha Buker\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 63
+}

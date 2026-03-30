@@ -1,0 +1,31 @@
+{
+  "query": "SELECT p.id, p.name, p.category, p.durationDays, COUNT(ps.id) as stepCount FROM protocols p LEFT JOIN protocol_steps ps ON ps.protocolId = p.id WHERE p.name LIKE '%Visceral Fat%' GROUP BY p.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT p.id, p.name, p.category, p.durationDays, COUNT(ps.id) as stepCount FROM protocols p LEFT JOIN protocol_steps ps ON ps.protocolId = p.id WHERE p.name LIKE '%Visceral Fat%' GROUP BY p.id;",
+  "rows": [
+    {
+      "id": "330001",
+      "name": "Visceral Fat Reduction — Pharmacologic & Supplements",
+      "category": "supplement",
+      "durationDays": "NULL",
+      "stepCount": "7"
+    },
+    {
+      "id": "330002",
+      "name": "Visceral Fat Reduction — Nutrition & Exercise",
+      "category": "nutrition",
+      "durationDays": "NULL",
+      "stepCount": "7"
+    },
+    {
+      "id": "330003",
+      "name": "Visceral Fat Reduction — Lifestyle & Monitoring",
+      "category": "lifestyle",
+      "durationDays": "NULL",
+      "stepCount": "9"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategory\tdurationDays\tstepCount\n330001\tVisceral Fat Reduction — Pharmacologic & Supplements\tsupplement\tNULL\t7\n330002\tVisceral Fat Reduction — Nutrition & Exercise\tnutrition\tNULL\t7\n330003\tVisceral Fat Reduction — Lifestyle & Monitoring\tlifestyle\tNULL\t9\n",
+  "stderr": "",
+  "execution_time_ms": 103
+}

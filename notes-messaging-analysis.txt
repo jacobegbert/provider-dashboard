@@ -1,0 +1,18 @@
+Messaging Attachment Analysis:
+- Attachments are stored as regular messages with content format: 📎 [fileName](url)
+- No separate attachments table - the attachment info is embedded in message content
+- Both provider (Messages.tsx) and patient (PatientMessages.tsx) pages parse this format
+- parseAttachment() regex: /^📎 \[(.*?)\]\((.*?)\)$/
+- Images: .jpg, .jpeg, .png, .gif, .webp
+- Files: .pdf, .doc, .docx
+- Upload goes to /api/upload/attachment which stores in S3
+
+Approach for deletion:
+- Since attachments are just messages, "deleting an attachment" = deleting or clearing the message
+- Best approach: add a deleteMessage procedure that either:
+  a) Hard deletes the message row, OR
+  b) Replaces content with "[Attachment deleted]" (soft approach, preserves conversation flow)
+- Option (b) is better UX - shows that something was there but was removed
+- Only the sender should be able to delete their own messages/attachments
+- Need to add a deleteMessage procedure to the message router
+- Need to add delete button overlay on attachment bubbles in both Messages.tsx and PatientMessages.tsx

@@ -1,0 +1,2 @@
+ALTER TABLE `protocols` MODIFY COLUMN `category` enum('nutrition','supplement','lifestyle','lab_work','exercise','sleep','stress','peptides','hormone','other') NOT NULL DEFAULT 'other';--> statement-breakpoint
+ALTER TABLE `resources` MODIFY COLUMN `category` enum('nutrition','exercise','supplement','lifestyle','hormone','peptides','lab_education','recovery','mental_health','general') NOT NULL DEFAULT 'general';

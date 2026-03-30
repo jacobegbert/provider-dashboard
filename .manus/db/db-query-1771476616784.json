@@ -1,0 +1,365 @@
+{
+  "query": "SELECT id, name, category FROM protocols WHERE name LIKE '%Test%' OR name LIKE '%Restore%' ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, name, category FROM protocols WHERE name LIKE '%Test%' OR name LIKE '%Restore%' ORDER BY id;",
+  "rows": [
+    {
+      "id": "120002",
+      "name": "Testosterone Cypionate (TRT)",
+      "category": "hormone"
+    },
+    {
+      "id": "120008",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120009",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120010",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120012",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120013",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120014",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120016",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120017",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120018",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120020",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120021",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120022",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120024",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120025",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120026",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120028",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120029",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120030",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120032",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120033",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120034",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120036",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120037",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120038",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120040",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120041",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120042",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120044",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120045",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120046",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120047",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120048",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120049",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120050",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120051",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120052",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120053",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120054",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120055",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120056",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120057",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120058",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120059",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120060",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120061",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120062",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120063",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120064",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120065",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120066",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120067",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120068",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120069",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120070",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120071",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120072",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120073",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120074",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120075",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120076",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120077",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120078",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120079",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120080",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120081",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120082",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120083",
+      "name": "Test Ongoing Protocol",
+      "category": "nutrition"
+    },
+    {
+      "id": "120084",
+      "name": "Test Fixed Protocol",
+      "category": "hormone"
+    },
+    {
+      "id": "120085",
+      "name": "Archive Test Protocol",
+      "category": "gut_health"
+    },
+    {
+      "id": "120086",
+      "name": "Restore Test Protocol",
+      "category": "gut_health"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategory\n120002\tTestosterone Cypionate (TRT)\thormone\n120008\tTest Fixed Protocol\thormone\n120009\tArchive Test Protocol\tgut_health\n120010\tRestore Test Protocol\tgut_health\n120012\tTest Fixed Protocol\thormone\n120013\tArchive Test Protocol\tgut_health\n120014\tRestore Test Protocol\tgut_health\n120016\tTest Fixed Protocol\thormone\n120017\tArchive Test Protocol\tgut_health\n120018\tRestore Test Protocol\tgut_health\n120020\tTest Fixed Protocol\thormone\n120021\tArchive Test Protocol\tgut_health\n120022\tRestore Test Protocol\tgut_health\n120024\tTest Fixed Protocol\thormone\n120025\tArchive Test Protocol\tgut_health\n120026\tRestore Test Protocol\tgut_health\n120028\tTest Fixed Protocol\thormone\n120029\tArchive Test Protocol\tgut_health\n120030\tRestore Test Protocol\tgut_health\n120032\tTest Fixed Protocol\thormone\n120033\tArchive Test Protocol\tgut_health\n120034\tRestore Test Protocol\tgut_health\n120036\tTest Fixed Protocol\thormone\n120037\tArchive Test Protocol\tgut_health\n120038\tRestore Test Protocol\tgut_health\n120040\tTest Fixed Protocol\thormone\n120041\tArchive Test Protocol\tgut_health\n120042\tRestore Test Protocol\tgut_health\n120044\tTest Fixed Protocol\thormone\n120045\tArchive Test Protocol\tgut_health\n120046\tRestore Test Protocol\tgut_health\n120047\tTest Ongoing Protocol\tnutrition\n120048\tTest Fixed Protocol\thormone\n120049\tArchive Test Protocol\tgut_health\n120050\tRestore Test Protocol\tgut_health\n120051\tTest Ongoing Protocol\tnutrition\n120052\tTest Fixed Protocol\thormone\n120053\tArchive Test Protocol\tgut_health\n120054\tRestore Test Protocol\tgut_health\n120055\tTest Ongoing Protocol\tnutrition\n120056\tTest Fixed Protocol\thormone\n120057\tArchive Test Protocol\tgut_health\n120058\tRestore Test Protocol\tgut_health\n120059\tTest Ongoing Protocol\tnutrition\n120060\tTest Fixed Protocol\thormone\n120061\tArchive Test Protocol\tgut_health\n120062\tRestore Test Protocol\tgut_health\n120063\tTest Ongoing Protocol\tnutrition\n120064\tTest Fixed Protocol\thormone\n120065\tArchive Test Protocol\tgut_health\n120066\tRestore Test Protocol\tgut_health\n120067\tTest Ongoing Protocol\tnutrition\n120068\tTest Fixed Protocol\thormone\n120069\tArchive Test Protocol\tgut_health\n120070\tRestore Test Protocol\tgut_health\n120071\tTest Ongoing Protocol\tnutrition\n120072\tTest Fixed Protocol\thormone\n120073\tArchive Test Protocol\tgut_health\n120074\tRestore Test Protocol\tgut_health\n120075\tTest Ongoing Protocol\tnutrition\n120076\tTest Fixed Protocol\thormone\n120077\tArchive Test Protocol\tgut_health\n120078\tRestore Test Protocol\tgut_health\n120079\tTest Ongoing Protocol\tnutrition\n120080\tTest Fixed Protocol\thormone\n120081\tArchive Test Protocol\tgut_health\n120082\tRestore Test Protocol\tgut_health\n120083\tTest Ongoing Protocol\tnutrition\n120084\tTest Fixed Protocol\thormone\n120085\tArchive Test Protocol\tgut_health\n120086\tRestore Test Protocol\tgut_health\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

@@ -1,0 +1,58 @@
+{
+  "query": "SELECT id, openId, name, email, role, createdAt FROM users ORDER BY createdAt;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, openId, name, email, role, createdAt FROM users ORDER BY createdAt;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "KHybWgUcciFBwpEkm2bU6g",
+      "name": "Jacob Egbert",
+      "email": "jacobegbert@gmail.com",
+      "role": "admin",
+      "createdAt": "2026-02-10 20:01:38"
+    },
+    {
+      "id": "210916",
+      "openId": "gbqjQCWnx45euWCfqmLKCw",
+      "name": "Samantha Buker",
+      "email": "samantha@cellrx.bio",
+      "role": "staff",
+      "createdAt": "2026-02-18 18:41:03"
+    },
+    {
+      "id": "272087",
+      "openId": "Ms2eeYsBHmuXKjDWjQQWCq",
+      "name": "Amelia Yokel Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "role": "user",
+      "createdAt": "2026-02-19 03:26:04"
+    },
+    {
+      "id": "273467",
+      "openId": "X64sFBmRTQ7pc4PB2s5UBd",
+      "name": "Jacob Egbert",
+      "email": "jacob@cellrx.bio",
+      "role": "user",
+      "createdAt": "2026-02-19 06:33:15"
+    },
+    {
+      "id": "1020492",
+      "openId": "etuxyXKgxambn5oEMjZehs",
+      "name": "David Fajardo",
+      "email": "fajardodavid89@gmail.com",
+      "role": "user",
+      "createdAt": "2026-02-19 21:23:03"
+    },
+    {
+      "id": "4560044",
+      "openId": "7iQrB3Z4ZC2zppQqbkqW9g",
+      "name": "jason",
+      "email": "jason@networkingeveryday.com",
+      "role": "user",
+      "createdAt": "2026-02-22 20:44:02"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\tcreatedAt\n1\tKHybWgUcciFBwpEkm2bU6g\tJacob Egbert\tjacobegbert@gmail.com\tadmin\t2026-02-10 20:01:38\n210916\tgbqjQCWnx45euWCfqmLKCw\tSamantha Buker\tsamantha@cellrx.bio\tstaff\t2026-02-18 18:41:03\n272087\tMs2eeYsBHmuXKjDWjQQWCq\tAmelia Yokel Egbert\tameliajudithyokel@gmail.com\tuser\t2026-02-19 03:26:04\n273467\tX64sFBmRTQ7pc4PB2s5UBd\tJacob Egbert\tjacob@cellrx.bio\tuser\t2026-02-19 06:33:15\n1020492\tetuxyXKgxambn5oEMjZehs\tDavid Fajardo\tfajardodavid89@gmail.com\tuser\t2026-02-19 21:23:03\n4560044\t7iQrB3Z4ZC2zppQqbkqW9g\tjason\tjason@networkingeveryday.com\tuser\t2026-02-22 20:44:02\n",
+  "stderr": "",
+  "execution_time_ms": 423
+}

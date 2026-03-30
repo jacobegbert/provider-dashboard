@@ -1,0 +1,9 @@
+{
+  "query": "DELETE FROM task_completions WHERE patientId = 270001; DELETE FROM assignment_steps WHERE assignmentId = 630007; DELETE FROM protocol_assignments WHERE patientId = 270001; DELETE FROM messages WHERE patientId = 270001; DELETE FROM notifications WHERE userId = 28920597; DELETE FROM intake_forms WHERE patientId = 270001; DELETE FROM patient_invites WHERE patientId = 270001; DELETE FROM patients WHERE id = 270001; DELETE FROM users WHERE id = 28920597;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute DELETE FROM task_completions WHERE patientId = 270001; DELETE FROM assignment_steps WHERE assignmentId = 630007; DELETE FROM protocol_assignments WHERE patientId = 270001; DELETE FROM messages WHERE patientId = 270001; DELETE FROM notifications WHERE userId = 28920597; DELETE FROM intake_forms WHERE patientId = 270001; DELETE FROM patient_invites WHERE patientId = 270001; DELETE FROM patients WHERE id = 270001; DELETE FROM users WHERE id = 28920597;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 213
+}

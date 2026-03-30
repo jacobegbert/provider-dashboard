@@ -1,0 +1,54 @@
+{
+  "query": "SELECT id, firstName, lastName, email, phone, status, providerId, userId, deletedAt FROM patients ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email, phone, status, providerId, userId, deletedAt FROM patients ORDER BY id;",
+  "rows": [
+    {
+      "id": "90092",
+      "firstName": "Amelia",
+      "lastName": "Egbert",
+      "email": "ameliajudithyokel@gmail.com",
+      "phone": "5094294894",
+      "status": "active",
+      "providerId": "1",
+      "userId": "272087",
+      "deletedAt": "NULL"
+    },
+    {
+      "id": "90108",
+      "firstName": "Jacob",
+      "lastName": "Egbert",
+      "email": "jacob@cellrx.bio",
+      "phone": "4359388657",
+      "status": "active",
+      "providerId": "1",
+      "userId": "273467",
+      "deletedAt": "NULL"
+    },
+    {
+      "id": "150004",
+      "firstName": "David",
+      "lastName": "Fajardo",
+      "email": "fajardodavid89@gmail.com",
+      "phone": "7025750356",
+      "status": "active",
+      "providerId": "1",
+      "userId": "1020492",
+      "deletedAt": "NULL"
+    },
+    {
+      "id": "210001",
+      "firstName": "Jordan",
+      "lastName": "Jones",
+      "email": "NULL",
+      "phone": "8016886538",
+      "status": "active",
+      "providerId": "1",
+      "userId": "NULL",
+      "deletedAt": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirstName\tlastName\temail\tphone\tstatus\tproviderId\tuserId\tdeletedAt\n90092\tAmelia\tEgbert\tameliajudithyokel@gmail.com\t5094294894\tactive\t1\t272087\tNULL\n90108\tJacob\tEgbert\tjacob@cellrx.bio\t4359388657\tactive\t1\t273467\tNULL\n150004\tDavid\tFajardo\tfajardodavid89@gmail.com\t7025750356\tactive\t1\t1020492\tNULL\n210001\tJordan\tJones\tNULL\t8016886538\tactive\t1\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 368
+}

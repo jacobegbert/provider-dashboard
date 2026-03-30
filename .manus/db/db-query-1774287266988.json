@@ -1,0 +1,20 @@
+{
+  "query": "SELECT * FROM patient_invites WHERE patientId = 270001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT * FROM patient_invites WHERE patientId = 270001;",
+  "rows": [
+    {
+      "id": "180001",
+      "token": "7634337294d84c79918ecf417520e191",
+      "patientId": "270001",
+      "createdByUserId": "1",
+      "expiresAt": "2026-04-09 19:40:59",
+      "usedAt": "2026-03-10 19:43:56",
+      "usedByUserId": "28920597",
+      "createdAt": "2026-03-10 19:40:59"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttoken\tpatientId\tcreatedByUserId\texpiresAt\tusedAt\tusedByUserId\tcreatedAt\n180001\t7634337294d84c79918ecf417520e191\t270001\t1\t2026-04-09 19:40:59\t2026-03-10 19:43:56\t28920597\t2026-03-10 19:40:59\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

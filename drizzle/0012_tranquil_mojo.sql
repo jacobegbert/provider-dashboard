@@ -1,0 +1,1 @@
+ALTER TABLE `patients` MODIFY COLUMN `status` enum('active','paused','completed','new','inactive','prospective') NOT NULL DEFAULT 'new';

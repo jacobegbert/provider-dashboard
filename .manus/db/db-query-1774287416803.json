@@ -1,0 +1,70 @@
+{
+  "query": "SELECT 'task_completions' as tbl, COUNT(*) as cnt FROM task_completions WHERE patientId = 270001 UNION ALL SELECT 'protocol_assignments', COUNT(*) FROM protocol_assignments WHERE patientId = 270001 UNION ALL SELECT 'messages', COUNT(*) FROM messages WHERE patientId = 270001 UNION ALL SELECT 'appointments', COUNT(*) FROM appointments WHERE patientId = 270001 UNION ALL SELECT 'notifications_user', COUNT(*) FROM notifications WHERE userId = 28920597 UNION ALL SELECT 'documents', COUNT(*) FROM documents WHERE patientId = 270001 UNION ALL SELECT 'client_notes', COUNT(*) FROM client_notes WHERE patientId = 270001 UNION ALL SELECT 'client_tasks', COUNT(*) FROM client_tasks WHERE patientId = 270001 UNION ALL SELECT 'biomarker_entries', COUNT(*) FROM biomarker_entries WHERE patientId = 270001 UNION ALL SELECT 'biomarker_custom_metrics', COUNT(*) FROM biomarker_custom_metrics WHERE patientId = 270001 UNION ALL SELECT 'resource_shares', COUNT(*) FROM resource_shares WHERE patientId = 270001 UNION ALL SELECT 'intake_forms', COUNT(*) FROM intake_forms WHERE patientId = 270001 UNION ALL SELECT 'patient_invites', COUNT(*) FROM patient_invites WHERE patientId = 270001 UNION ALL SELECT 'push_subscriptions', COUNT(*) FROM push_subscriptions WHERE userId = 28920597 UNION ALL SELECT 'attention_dismissals', COUNT(*) FROM attention_dismissals WHERE userId = 28920597;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT 'task_completions' as tbl, COUNT(*) as cnt FROM task_completions WHERE patientId = 270001 UNION ALL SELECT 'protocol_assignments', COUNT(*) FROM protocol_assignments WHERE patientId = 270001 UNION ALL SELECT 'messages', COUNT(*) FROM messages WHERE patientId = 270001 UNION ALL SELECT 'appointments', COUNT(*) FROM appointments WHERE patientId = 270001 UNION ALL SELECT 'notifications_user', COUNT(*) FROM notifications WHERE userId = 28920597 UNION ALL SELECT 'documents', COUNT(*) FROM documents WHERE patientId = 270001 UNION ALL SELECT 'client_notes', COUNT(*) FROM client_notes WHERE patientId = 270001 UNION ALL SELECT 'client_tasks', COUNT(*) FROM client_tasks WHERE patientId = 270001 UNION ALL SELECT 'biomarker_entries', COUNT(*) FROM biomarker_entries WHERE patientId = 270001 UNION ALL SELECT 'biomarker_custom_metrics', COUNT(*) FROM biomarker_custom_metrics WHERE patientId = 270001 UNION ALL SELECT 'resource_shares', COUNT(*) FROM resource_shares WHERE patientId = 270001 UNION ALL SELECT 'intake_forms', COUNT(*) FROM intake_forms WHERE patientId = 270001 UNION ALL SELECT 'patient_invites', COUNT(*) FROM patient_invites WHERE patientId = 270001 UNION ALL SELECT 'push_subscriptions', COUNT(*) FROM push_subscriptions WHERE userId = 28920597 UNION ALL SELECT 'attention_dismissals', COUNT(*) FROM attention_dismissals WHERE userId = 28920597;",
+  "rows": [
+    {
+      "tbl": "messages",
+      "cnt": "4"
+    },
+    {
+      "tbl": "protocol_assignments",
+      "cnt": "1"
+    },
+    {
+      "tbl": "task_completions",
+      "cnt": "8"
+    },
+    {
+      "tbl": "appointments",
+      "cnt": "0"
+    },
+    {
+      "tbl": "notifications_user",
+      "cnt": "2"
+    },
+    {
+      "tbl": "client_notes",
+      "cnt": "0"
+    },
+    {
+      "tbl": "documents",
+      "cnt": "0"
+    },
+    {
+      "tbl": "biomarker_entries",
+      "cnt": "0"
+    },
+    {
+      "tbl": "intake_forms",
+      "cnt": "1"
+    },
+    {
+      "tbl": "resource_shares",
+      "cnt": "0"
+    },
+    {
+      "tbl": "patient_invites",
+      "cnt": "1"
+    },
+    {
+      "tbl": "attention_dismissals",
+      "cnt": "0"
+    },
+    {
+      "tbl": "push_subscriptions",
+      "cnt": "0"
+    },
+    {
+      "tbl": "biomarker_custom_metrics",
+      "cnt": "0"
+    },
+    {
+      "tbl": "client_tasks",
+      "cnt": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\nmessages\t4\nprotocol_assignments\t1\ntask_completions\t8\nappointments\t0\nnotifications_user\t2\nclient_notes\t0\ndocuments\t0\nbiomarker_entries\t0\nintake_forms\t1\nresource_shares\t0\npatient_invites\t1\nattention_dismissals\t0\npush_subscriptions\t0\nbiomarker_custom_metrics\t0\nclient_tasks\t0\n",
+  "stderr": "",
+  "execution_time_ms": 68
+}

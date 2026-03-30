@@ -1,0 +1,18 @@
+{
+  "query": "SELECT 'patients' as tbl, COUNT(*) as cnt FROM patients UNION ALL SELECT 'protocols', COUNT(*) FROM protocols;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT 'patients' as tbl, COUNT(*) as cnt FROM patients UNION ALL SELECT 'protocols', COUNT(*) FROM protocols;",
+  "rows": [
+    {
+      "tbl": "protocols",
+      "cnt": "4"
+    },
+    {
+      "tbl": "patients",
+      "cnt": "2"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\nprotocols\t4\npatients\t2\n",
+  "stderr": "",
+  "execution_time_ms": 103
+}

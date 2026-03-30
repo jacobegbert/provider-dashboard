@@ -1,0 +1,65 @@
+{
+  "query": "SELECT pa.id, pa.patientId, pa.protocolId FROM protocol_assignments pa LEFT JOIN patients p ON pa.patientId = p.id WHERE p.id IS NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT pa.id, pa.patientId, pa.protocolId FROM protocol_assignments pa LEFT JOIN patients p ON pa.patientId = p.id WHERE p.id IS NULL;",
+  "rows": [
+    {
+      "id": "120069",
+      "patientId": "90089",
+      "protocolId": "120128"
+    },
+    {
+      "id": "120070",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120073",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120075",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120076",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120079",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120081",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120085",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "120087",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "180002",
+      "patientId": "1",
+      "protocolId": "1"
+    },
+    {
+      "id": "180004",
+      "patientId": "1",
+      "protocolId": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tpatientId\tprotocolId\n120069\t90089\t120128\n120070\t1\t1\n120073\t1\t1\n120075\t1\t1\n120076\t1\t1\n120079\t1\t1\n120081\t1\t1\n120085\t1\t1\n120087\t1\t1\n180002\t1\t1\n180004\t1\t1\n",
+  "stderr": "",
+  "execution_time_ms": 104
+}

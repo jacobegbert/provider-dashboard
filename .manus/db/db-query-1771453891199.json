@@ -1,0 +1,29 @@
+{
+  "query": "SELECT id, firstName, lastName, email, status FROM patients WHERE firstName = 'Samantha' AND lastName = 'Buker'; SELECT id, firstName, lastName FROM patients WHERE NOT (firstName = 'Samantha' AND lastName = 'Buker') ORDER BY id LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, firstName, lastName, email, status FROM patients WHERE firstName = 'Samantha' AND lastName = 'Buker'; SELECT id, firstName, lastName FROM patients WHERE NOT (firstName = 'Samantha' AND lastName = 'Buker') ORDER BY id LIMIT 10;",
+  "rows": [
+    {
+      "id": "30007",
+      "firstName": "samantha",
+      "lastName": "Buker",
+      "email": "samantha@cellrx.bio",
+      "status": "active"
+    }
+  ],
+  "messages": [
+    "id\tfirstName\tlastName",
+    "2\tAmelia\tEgbert",
+    "3\tTest\tUser",
+    "4\tTest\tUser",
+    "5\tTest\tUser",
+    "6\tTest\tUser",
+    "7\tTest\tUser",
+    "8\tTest\tUser",
+    "9\tAlex\tTest",
+    "10\tTest\tUser",
+    "11\tTest\tUser"
+  ],
+  "stdout": "id\tfirstName\tlastName\temail\tstatus\n30007\tsamantha\tBuker\tsamantha@cellrx.bio\tactive\nid\tfirstName\tlastName\n2\tAmelia\tEgbert\n3\tTest\tUser\n4\tTest\tUser\n5\tTest\tUser\n6\tTest\tUser\n7\tTest\tUser\n8\tTest\tUser\n9\tAlex\tTest\n10\tTest\tUser\n11\tTest\tUser\n",
+  "stderr": "",
+  "execution_time_ms": 72
+}

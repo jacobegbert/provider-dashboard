@@ -1,0 +1,100 @@
+{
+  "query": "SELECT id, patientId, protocolId, status, startDate, endDate, createdAt FROM protocol_assignments LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Loc9eiqTeCpHbm.bfc0203d8e87 --database 2VRczM8SEoMgkRv9pxV2Z3 --execute SELECT id, patientId, protocolId, status, startDate, endDate, createdAt FROM protocol_assignments LIMIT 10;",
+  "rows": [
+    {
+      "id": "120082",
+      "patientId": "90108",
+      "protocolId": "120132",
+      "status": "active",
+      "startDate": "2026-02-19 00:00:00",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 06:35:27"
+    },
+    {
+      "id": "120083",
+      "patientId": "90108",
+      "protocolId": "120155",
+      "status": "active",
+      "startDate": "2026-02-19 00:00:00",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 06:36:09"
+    },
+    {
+      "id": "150001",
+      "patientId": "90108",
+      "protocolId": "120165",
+      "status": "active",
+      "startDate": "2026-02-19 00:00:00",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 14:33:18"
+    },
+    {
+      "id": "210003",
+      "patientId": "90108",
+      "protocolId": "120153",
+      "status": "active",
+      "startDate": "2026-02-19 00:00:00",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:15:24"
+    },
+    {
+      "id": "210004",
+      "patientId": "90092",
+      "protocolId": "120132",
+      "status": "active",
+      "startDate": "2026-02-19 00:00:00",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:15:34"
+    },
+    {
+      "id": "210005",
+      "patientId": "150004",
+      "protocolId": "120165",
+      "status": "active",
+      "startDate": "2026-02-19 21:23:06",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:23:06"
+    },
+    {
+      "id": "210006",
+      "patientId": "150004",
+      "protocolId": "120154",
+      "status": "active",
+      "startDate": "2026-02-19 21:23:25",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:23:24"
+    },
+    {
+      "id": "210007",
+      "patientId": "150004",
+      "protocolId": "120132",
+      "status": "active",
+      "startDate": "2026-02-19 21:23:37",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:23:36"
+    },
+    {
+      "id": "210008",
+      "patientId": "150004",
+      "protocolId": "120167",
+      "status": "active",
+      "startDate": "2026-02-19 21:23:51",
+      "endDate": "NULL",
+      "createdAt": "2026-02-19 21:23:50"
+    },
+    {
+      "id": "240014",
+      "patientId": "90108",
+      "protocolId": "120164",
+      "status": "active",
+      "startDate": "2026-02-20 05:54:41",
+      "endDate": "NULL",
+      "createdAt": "2026-02-20 05:54:41"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tpatientId\tprotocolId\tstatus\tstartDate\tendDate\tcreatedAt\n120082\t90108\t120132\tactive\t2026-02-19 00:00:00\tNULL\t2026-02-19 06:35:27\n120083\t90108\t120155\tactive\t2026-02-19 00:00:00\tNULL\t2026-02-19 06:36:09\n150001\t90108\t120165\tactive\t2026-02-19 00:00:00\tNULL\t2026-02-19 14:33:18\n210003\t90108\t120153\tactive\t2026-02-19 00:00:00\tNULL\t2026-02-19 21:15:24\n210004\t90092\t120132\tactive\t2026-02-19 00:00:00\tNULL\t2026-02-19 21:15:34\n210005\t150004\t120165\tactive\t2026-02-19 21:23:06\tNULL\t2026-02-19 21:23:06\n210006\t150004\t120154\tactive\t2026-02-19 21:23:25\tNULL\t2026-02-19 21:23:24\n210007\t150004\t120132\tactive\t2026-02-19 21:23:37\tNULL\t2026-02-19 21:23:36\n210008\t150004\t120167\tactive\t2026-02-19 21:23:51\tNULL\t2026-02-19 21:23:50\n240014\t90108\t120164\tactive\t2026-02-20 05:54:41\tNULL\t2026-02-20 05:54:41\n",
+  "stderr": "",
+  "execution_time_ms": 458
+}
