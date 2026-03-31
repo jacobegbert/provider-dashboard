@@ -18,6 +18,7 @@ export default function Analytics() {
   const protocolsQuery = trpc.protocol.list.useQuery();
   const appointmentsQuery = trpc.appointment.listForProvider.useQuery();
   const statsQuery = trpc.attention.stats.useQuery();
+  const trendsQuery = trpc.assignment.getComplianceTrends.useQuery();
 
   const patients = patientsQuery.data || [];
   const protocols = protocolsQuery.data || [];
@@ -283,6 +284,31 @@ export default function Analytics() {
                   <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: "#4A3228" }} width={120} />
                   <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid #E8DFD6", fontSize: "12px" }} />
                   <Bar dataKey="steps" fill="#5B8A72" radius={[0, 4, 4, 0]} barSize={16} name="Steps" />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Compliance Trends */}
+        <Card className="border-border/60 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="font-heading text-base font-semibold flex items-center gap-2">
+              <Activity className="h-4 w-4 text-gold" />
+              Weekly Task Completions (Last 12 Weeks)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {(trendsQuery.data?.length ?? 0) === 0 ? (
+              <div className="flex items-center justify-center h-[220px] text-sm text-muted-foreground">No compliance data yet</div>
+            ) : (
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={trendsQuery.data} margin={{ left: -10, right: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E8DFD6" />
+                  <XAxis dataKey="week" tick={{ fontSize: 11, fill: "#8B8178" }} />
+                  <YAxis tick={{ fontSize: 11, fill: "#8B8178" }} />
+                  <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid #E8DFD6", fontSize: "12px" }} />
+                  <Bar dataKey="completions" fill="#5B8A72" radius={[4, 4, 0, 0]} barSize={20} name="Task Completions" />
                 </BarChart>
               </ResponsiveContainer>
             )}

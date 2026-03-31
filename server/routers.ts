@@ -76,8 +76,10 @@ async function resolvePatientForUser(ctx: { user: { id: number; email?: string |
     }
   }
 
-  // 3. Name match (for admin accounts with different email)
-  if (ctx.user.name) {
+  // 3. Name match — last resort only (admin preview / legacy accounts without email match).
+  // NOTE: name-based matching can collide if two patients share the same name.
+  // Only use when no email match is found and only for non-patient roles if possible.
+  if (ctx.user.name && (ctx.user.role === "admin" || ctx.user.role === "staff")) {
     const nameParts = ctx.user.name.trim().split(/\s+/);
     if (nameParts.length >= 2) {
       const firstName = nameParts[0];
@@ -459,7 +461,7 @@ const protocolRouter = router({
               protocolName: protocol?.name || "Your protocol",
               changeDescription: "Your provider has updated the steps and details of this protocol. Please review the latest version in your portal.",
               portalUrl: "https://www.blacklabelmedicine.com/patient/protocols",
-            }).catch((err) => console.error("[Notify] Protocol update notification failed:", err));
+            }).catch((err) => { console.error("[Notify] Protocol update notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_update", entityId: 0, metadata: { error: err?.message || String(err), type: "protocol_update" } }).catch(() => {}); });
           }
         }
       } catch (e) {
@@ -785,7 +787,7 @@ const assignmentRouter = router({
           protocolDescription: protocol?.description || undefined,
           stepCount: steps.length,
           portalUrl,
-        }).catch((err) => console.error("[Notify] Protocol assigned notification failed:", err));
+        }).catch((err) => { console.error("[Notify] Protocol assigned notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, metadata: { error: err?.message || String(err), type: "protocol_assigned" } }).catch(() => {}); });
       }
       await db.logAudit({
         userId: ctx.user.id,
@@ -854,7 +856,7 @@ const assignmentRouter = router({
             protocolDescription: protocol?.description || undefined,
             stepCount: steps.length,
             portalUrl,
-          }).catch((err) => console.error("[Notify] Bulk assign notification failed:", err));
+          }).catch((err) => { console.error("[Notify] Bulk assign notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, metadata: { error: err?.message || String(err), type: "bulk_assign" } }).catch(() => {}); });
         }
         await db.logAudit({
           userId: ctx.user.id,
@@ -974,6 +976,35 @@ const assignmentRouter = router({
         entityId: input.id,
       });
     }),
+
+  /** Weekly compliance trends — last 12 weeks of task completion activity across all patients */
+  getComplianceTrends: adminProcedure.query(async ({ ctx }) => {
+    const dbInstance = await import("./db");
+    const { sql } = await import("drizzle-orm");
+    const { getDb } = await import("./db");
+    const db = await getDb();
+    if (!db) return [];
+
+    // Get weekly completion counts for this provider's patients over last 12 weeks
+    const rows = await db.execute(sql`
+      SELECT
+        YEARWEEK(tc.taskDate, 1) AS weekKey,
+        DATE_FORMAT(MIN(tc.taskDate), '%b %d') AS weekLabel,
+        COUNT(*) AS completions
+      FROM task_completions tc
+      INNER JOIN patients p ON tc.patientId = p.id
+      WHERE p.providerId = ${ctx.ownerId}
+        AND tc.taskDate >= DATE_SUB(CURDATE(), INTERVAL 12 WEEK)
+        AND p.deletedAt IS NULL
+      GROUP BY YEARWEEK(tc.taskDate, 1)
+      ORDER BY weekKey ASC
+    `);
+
+    return (rows as any[]).map((r: any) => ({
+      week: String(r.weekLabel || r.weekLabel),
+      completions: Number(r.completions),
+    }));
+  }),
 });
 
 // ─── TASK COMPLETION ROUTER ───────────────────
@@ -1829,6 +1860,30 @@ const googleCalendarRouter = router({
   }),
 });
 
+// ─── AI RATE LIMITER ────────────────────────
+// In-memory per-user rate limiting for AI endpoints to prevent runaway API costs.
+const aiRateLimiter = new Map<number, { count: number; resetAt: number }>();
+const AI_RATE_LIMIT_PROVIDER = 50; // calls per hour for providers
+const AI_RATE_LIMIT_PATIENT = 20;  // calls per hour for patients
+const AI_RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkAiRateLimit(userId: number, isProvider: boolean): void {
+  const limit = isProvider ? AI_RATE_LIMIT_PROVIDER : AI_RATE_LIMIT_PATIENT;
+  const now = Date.now();
+  const entry = aiRateLimiter.get(userId);
+  if (!entry || now > entry.resetAt) {
+    aiRateLimiter.set(userId, { count: 1, resetAt: now + AI_RATE_WINDOW_MS });
+    return;
+  }
+  if (entry.count >= limit) {
+    throw new TRPCError({
+      code: "TOO_MANY_REQUESTS",
+      message: `AI rate limit reached. You can send up to ${limit} messages per hour. Please try again later.`,
+    });
+  }
+  entry.count++;
+}
+
 // ─── AI ADVISOR ROUTER ──────────────────────
 
 const aiRouter = router({
@@ -1854,6 +1909,7 @@ const aiRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      checkAiRateLimit(ctx.user.id, true);
       const { invokeLLM } = await import("./_core/llm");
 
       // Build context about the provider's practice
@@ -1891,9 +1947,11 @@ Important guidelines:
 - Format responses with clear headings and bullet points when appropriate
 ${contextInfo}`;
 
+      // Throttle conversation history to last 10 messages to keep context focused and costs low
+      const recentMessages = input.messages.filter(m => m.role !== "system").slice(-10);
       const llmMessages = [
         { role: "system" as const, content: systemPrompt },
-        ...input.messages.filter(m => m.role !== "system"),
+        ...recentMessages,
       ];
 
       const result = await invokeLLM({ messages: llmMessages });
@@ -1924,6 +1982,7 @@ ${contextInfo}`;
       })
     )
     .mutation(async ({ ctx, input }) => {
+      checkAiRateLimit(ctx.user.id, false);
       const { invokeLLM } = await import("./_core/llm");
 
       // Get patient context
@@ -1953,9 +2012,11 @@ Important guidelines:
 - Be concise and practical in your advice
 ${patientContext}`;
 
+      // Throttle conversation history to last 10 messages to keep context focused and costs low
+      const recentMessages = input.messages.filter(m => m.role !== "system").slice(-10);
       const llmMessages = [
         { role: "system" as const, content: systemPrompt },
-        ...input.messages.filter(m => m.role !== "system"),
+        ...recentMessages,
       ];
 
       const result = await invokeLLM({ messages: llmMessages });

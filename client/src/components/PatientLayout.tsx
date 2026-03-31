@@ -65,20 +65,23 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
         <aside className="w-60 bg-background border-r border-border/40 flex flex-col shrink-0 sticky top-0 h-screen">
           {/* Brand — spaced letterforms, editorial */}
           <div className="px-6 pt-8 pb-6">
-            <div>
-              <span className="text-[14px] font-heading tracking-[0.25em] uppercase text-foreground leading-none">Black Label</span>
-              <span className="block text-[9px] tracking-[0.4em] uppercase text-muted-foreground leading-tight mt-1">Medicine</span>
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded bg-foreground flex items-center justify-center text-[11px] font-bold text-gold shrink-0" style={{ fontFamily: "'Cormorant Garamond', serif" }}>BL</div>
+              <div>
+                <span className="text-[13px] font-semibold tracking-[0.15em] uppercase text-foreground leading-none">Black Label</span>
+                <span className="block text-[9px] tracking-[0.35em] uppercase text-muted-foreground leading-tight mt-0.5">Medicine</span>
+              </div>
             </div>
           </div>
 
           {/* Patient info — understated */}
           <div className="px-6 pb-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
                 {myRecordQuery.isLoading ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />
                 ) : (
-                  <span className="text-foreground text-[11px] font-medium tracking-wide">{initials}</span>
+                  <span className="text-gold text-[11px] font-semibold tracking-wide" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>
                 )}
               </div>
               <div>
@@ -100,8 +103,8 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                   <div
                     className={`flex items-center gap-3 px-3 py-2.5 rounded transition-all duration-300 cursor-pointer ${
                       active
-                        ? "bg-muted/50 text-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                        ? "bg-gold/8 text-foreground border-l-2 border-gold pl-[10px]"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/30 border-l-2 border-transparent pl-[10px]"
                     }`}
                   >
                     <Icon className="w-[16px] h-[16px]" strokeWidth={active ? 1.8 : 1.4} />

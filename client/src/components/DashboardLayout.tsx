@@ -113,19 +113,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar */}
       <aside
-        className={`relative flex flex-col border-r border-border/50 bg-sidebar transition-all duration-300 ease-in-out ${
+        className={`relative flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300 ease-in-out ${
           collapsed ? "w-[72px]" : "w-[260px]"
         }`}
       >
         {/* Logo area */}
-        <div className="flex h-16 items-center border-b border-border/50 px-5">
+        <div className="flex h-16 items-center border-b border-sidebar-border px-5">
           <Link href="/">
             {collapsed ? (
-              <span className="text-lg font-bold tracking-wide text-foreground cursor-pointer">BL</span>
+              <div className="w-8 h-8 rounded-md bg-sidebar-primary flex items-center justify-center text-[12px] font-bold cursor-pointer" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#0A0A0A' }}>BL</div>
             ) : (
-              <div className="cursor-pointer">
-                <span className="text-[15px] font-semibold tracking-[0.2em] uppercase text-foreground leading-none">Black Label</span>
-                <span className="block text-[10px] font-medium tracking-[0.35em] uppercase text-muted-foreground leading-tight mt-0.5">Medicine</span>
+              <div className="cursor-pointer flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-md bg-sidebar-primary flex items-center justify-center text-[11px] font-bold text-sidebar-background shrink-0" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#0A0A0A' }}>BL</div>
+                <div>
+                  <span className="text-[13px] font-semibold tracking-[0.15em] uppercase text-sidebar-foreground leading-none">Black Label</span>
+                  <span className="block text-[9px] font-medium tracking-[0.3em] uppercase text-sidebar-accent-foreground leading-tight mt-0.5">Medicine</span>
+                </div>
               </div>
             )}
           </Link>
@@ -142,13 +145,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <div
                     className={`group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                       isActive
-                        ? "bg-gold/10 text-gold border border-gold/15"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground border border-transparent"
+                        ? "bg-sidebar-primary/15 text-sidebar-primary border border-sidebar-primary/20"
+                        : "text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
                     }`}
                   >
                     <item.icon
                       className={`h-[18px] w-[18px] shrink-0 ${
-                        isActive ? "text-gold" : "text-muted-foreground group-hover:text-foreground"
+                        isActive ? "text-sidebar-primary" : "text-sidebar-accent-foreground group-hover:text-sidebar-foreground"
                       }`}
                     />
                     {!collapsed && (
@@ -159,8 +162,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             variant="secondary"
                             className={`h-5 min-w-5 px-1.5 text-[11px] font-semibold border-0 ${
                               item.label === "Messages" || item.label === "Attention Queue"
-                                ? "bg-red-500/10 text-red-600"
-                                : "bg-gold/10 text-gold"
+                                ? "bg-red-500/15 text-red-400"
+                                : "bg-sidebar-primary/20 text-sidebar-primary"
                             }`}
                           >
                             {item.badge}
@@ -169,7 +172,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       </>
                     )}
                     {collapsed && item.badge != null && item.badge > 0 && (
-                      <span className="absolute right-2 top-1 h-2 w-2 rounded-full bg-gold" />
+                      <span className="absolute right-2 top-1 h-2 w-2 rounded-full bg-sidebar-primary" />
                     )}
                   </div>
                 </Link>
@@ -179,10 +182,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* Settings at bottom */}
-        <div className="border-t border-border/50 p-2">
+        <div className="border-t border-sidebar-border p-2">
           <Link href="/provider/settings">
-            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-200">
-              <Settings className="h-[18px] w-[18px] shrink-0" />
+            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200">
+              <Settings className="h-[18px] w-[18px] shrink-0 text-sidebar-accent-foreground" />
               {!collapsed && <span>Settings</span>}
             </div>
           </Link>
@@ -191,7 +194,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md hover:bg-secondary hover:text-gold transition-colors"
+          className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-md hover:bg-sidebar-accent hover:text-sidebar-primary transition-colors z-10"
         >
           {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
         </button>
@@ -200,7 +203,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-16 items-center justify-between border-b border-border/50 bg-card/50 backdrop-blur-sm px-6">
+        <header className="flex h-16 items-center justify-between border-b border-border bg-background px-6">
           <div className="relative w-80" ref={searchRef}>
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -273,9 +276,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div className="flex items-center gap-3">
             <NotificationBell />
-            <div className="flex items-center gap-2.5 rounded-lg bg-secondary/50 border border-border/50 px-3 py-1.5">
-              <div className="h-7 w-7 rounded-full bg-gold/10 flex items-center justify-center border border-gold/20">
-                <span className="text-xs font-semibold text-gold font-heading">JE</span>
+            <div className="flex items-center gap-2.5 rounded-lg bg-card border border-border px-3 py-1.5 shadow-sm">
+              <div className="h-7 w-7 rounded-full bg-gold/15 flex items-center justify-center border border-gold/25">
+                <span className="text-xs font-semibold text-gold" style={{ fontFamily: "'Cormorant Garamond', serif" }}>JE</span>
               </div>
               <span className="text-sm font-medium text-foreground">Dr. Egbert</span>
             </div>

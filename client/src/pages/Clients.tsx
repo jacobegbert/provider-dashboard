@@ -142,6 +142,28 @@ const docCategoryLabels: Record<string, string> = {
   other: "Other",
 };
 
+function exportPatientsToCSV(patients: any[]) {
+  const headers = ["First Name", "Last Name", "Email", "Phone", "Status", "Tier", "Date Added", "Last Active"];
+  const rows = patients.map(p => [
+    p.firstName,
+    p.lastName,
+    p.email || "",
+    p.phone || "",
+    p.status,
+    p.subscriptionTier || "standard",
+    p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "",
+    p.lastActive ? new Date(p.lastActive).toLocaleDateString() : "",
+  ]);
+  const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `black-label-medicine-clients-${new Date().toISOString().split("T")[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function Clients() {
   const [, navigate] = useLocation();
   const [search, setSearch] = useState("");
@@ -815,6 +837,17 @@ export default function Clients() {
                   <X className="h-3 w-3" /> Reset
                 </button>
               )}
+
+              {/* Export CSV Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => exportPatientsToCSV(patients)}
+                className="gap-2 ml-auto"
+              >
+                <Download className="h-4 w-4" />
+                Export CSV
+              </Button>
             </div>
           )}
         </div>

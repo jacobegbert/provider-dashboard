@@ -5,7 +5,7 @@
 
 @theme inline {
   --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-heading: "Outfit", sans-serif;
+  --font-heading: "Cormorant Garamond", "Outfit", Georgia, serif;
   --font-body: "Source Sans 3", sans-serif;
   --font-mono: "DM Mono", monospace;
   /* The Row editorial fonts */
@@ -93,9 +93,9 @@
   --radius: 0.5rem;
   /* ─── Masculine Medical Light Theme ─── */
   /* Deep Medical Navy: #0F1F2E | Medical White: #F7F8F9 | Charcoal: #2E3135 | Slate: #6B7280 | Steel Blue: #4A6FA5 */
-  --background: oklch(0.98 0.002 260);
+  --background: oklch(0.968 0.009 85);             /* Warm cream #F7F4EE */
   --foreground: oklch(0.20 0.03 245);
-  --card: oklch(1.00 0 0);
+  --card: oklch(1.00 0 0);                         /* Pure white cards */
   --card-foreground: oklch(0.28 0.005 260);
   --popover: oklch(1.00 0 0);
   --popover-foreground: oklch(0.28 0.005 260);
@@ -109,28 +109,28 @@
   --accent-foreground: oklch(0.52 0.10 250);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1.00 0 0);
-  --border: oklch(0.91 0.003 260);
-  --input: oklch(0.91 0.003 260);
+  --border: oklch(0.90 0.008 80);                  /* Warm border #E6E2D8 */
+  --input: oklch(0.90 0.008 80);
   --ring: oklch(0.52 0.10 250);                    /* Steel Blue ring */
   --chart-1: oklch(0.52 0.10 250);                 /* Steel Blue */
   --chart-2: oklch(0.50 0.08 160);                 /* Sage */
   --chart-3: oklch(0.55 0.14 40);                  /* Terracotta */
   --chart-4: oklch(0.44 0.10 250);                 /* Dark Steel */
   --chart-5: oklch(0.60 0.08 250);                 /* Light Steel */
-  --sidebar: oklch(0.98 0.002 260);
-  --sidebar-foreground: oklch(0.20 0.03 245);
-  --sidebar-primary: oklch(0.52 0.10 250);         /* Steel Blue */
-  --sidebar-primary-foreground: oklch(1.00 0 0);
-  --sidebar-accent: oklch(0.95 0.005 250);
-  --sidebar-accent-foreground: oklch(0.52 0.10 250);
-  --sidebar-border: oklch(0.92 0.003 260);
-  --sidebar-ring: oklch(0.52 0.10 250);
+  --sidebar: oklch(0.07 0.003 260);                /* Near black #0A0A0A */
+  --sidebar-foreground: oklch(0.92 0 0);           /* Near white text */
+  --sidebar-primary: oklch(0.70 0.10 72);          /* Warm gold #C4993A */
+  --sidebar-primary-foreground: oklch(0.07 0.003 260); /* Near black */
+  --sidebar-accent: oklch(0.12 0.003 260);         /* Slightly lighter dark for hovers */
+  --sidebar-accent-foreground: oklch(0.65 0.003 260); /* Muted white for inactive */
+  --sidebar-border: oklch(0.16 0.003 260);         /* Dark dividers */
+  --sidebar-ring: oklch(0.70 0.10 72);             /* Gold ring */
 
-  /* ─── Indirection layer for gold/terracotta (default = masculine palette) ─── */
-  --gold-base: oklch(0.52 0.10 250);               /* Steel Blue — primary brand */
-  --gold-light: oklch(0.60 0.08 250);              /* Lighter steel */
-  --gold-dark: oklch(0.44 0.10 250);               /* Dark steel */
-  --gold-muted: oklch(0.48 0.05 250);              /* Muted steel */
+  /* ─── Indirection layer for gold/terracotta (default = warm gold palette) ─── */
+  --gold-base: oklch(0.70 0.10 72);                /* Warm gold #C4993A */
+  --gold-light: oklch(0.78 0.09 72);               /* Lighter gold #D4AF5A */
+  --gold-dark: oklch(0.58 0.10 72);                /* Darker gold */
+  --gold-muted: oklch(0.62 0.07 72);               /* Muted gold */
   --terracotta-base: oklch(0.55 0.14 40);          /* Terracotta accent */
   --terracotta-light-val: oklch(0.65 0.12 40);     /* Light terracotta */
 }
@@ -144,7 +144,8 @@
     font-family: "Source Sans 3", sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Outfit", sans-serif;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
   }
   .font-serif {
     font-family: "Cormorant Garamond", Georgia, serif;
