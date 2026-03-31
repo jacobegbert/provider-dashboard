@@ -14,6 +14,7 @@
 import "dotenv/config";
 import { createHash } from "crypto";
 import { drizzle } from "drizzle-orm/mysql2";
+import { sql } from "drizzle-orm";
 import { createInterface } from "readline";
 import { nanoid } from "nanoid";
 
@@ -45,15 +46,15 @@ async function main() {
   const openId = nanoid();
 
   // Upsert user by email
-  await db.execute(`
+  await db.execute(sql`
     INSERT INTO users (openId, name, email, passwordHash, loginMethod, role, lastSignedIn)
-    VALUES (?, ?, ?, ?, 'email', 'admin', NOW())
+    VALUES (${openId}, ${name.trim()}, ${email.trim().toLowerCase()}, ${passwordHash}, 'email', 'admin', NOW())
     ON DUPLICATE KEY UPDATE
       name = VALUES(name),
       passwordHash = VALUES(passwordHash),
       role = 'admin',
       lastSignedIn = NOW()
-  `, [openId, name.trim(), email.trim().toLowerCase(), passwordHash]);
+  `);
 
   console.log(`\n✅  Admin account set for ${email}`);
   console.log("   You can now log in at /login with these credentials.\n");
