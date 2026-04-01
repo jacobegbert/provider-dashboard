@@ -52,6 +52,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
   // Gender-based theming: The Row quiet luxury for female patients, masculine (steel blue) is default
   const isFeminine = myRecord?.sex === "female";
 
+  const isMessagesPage = location === "/patient/messages";
   const isActive = (path: string) => {
     if (path === "/patient") return location === "/patient";
     return location.startsWith(path);
@@ -154,8 +155,8 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
           </div>
         </header>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto pb-20 px-5 py-6">
+        {/* Main content — messages page manages its own scroll/padding */}
+        <main className={`flex-1 ${isMessagesPage ? "overflow-hidden pb-[env(safe-area-inset-bottom)]" : "overflow-y-auto pb-20 px-5 py-6"}`}>
           {children}
         </main>
 

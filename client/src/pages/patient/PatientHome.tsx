@@ -3,10 +3,19 @@
 // Uses REAL tRPC data — no mock data
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { CheckCircle2, Circle, Calendar, TrendingUp, ClipboardCheck, ArrowRight, Sparkles, Loader2, FileText, ChevronRight } from "lucide-react";
+import { CheckCircle2, Circle, Calendar, TrendingUp, ClipboardCheck, ArrowRight, Sparkles, Loader2, FileText, ChevronRight, Clock, CheckCheck } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { useViewAs } from "@/contexts/ViewAsContext";
+import { Button } from "@/components/ui/button";
+
+function getLocalDateStr(date: Date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
 const PATIENT_HERO_MASCULINE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663344768429/2VRczM8SEoMgkRv9pxV2Z3/hero-mountains-banner-LwuKoYLPzkmmCGpcpVvH3a.webp";
 const PATIENT_HERO_FEMININE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663344768429/2VRczM8SEoMgkRv9pxV2Z3/floral-banner-therow-VaQdNMgymgTS8As8AKAXiq.webp";
@@ -39,6 +48,24 @@ export default function PatientHome() {
     { enabled: !!patientId }
   );
 
+  // Task completion mutations for dashboard checklist
+  const utils = trpc.useUtils();
+  const completeMutation = trpc.task.complete.useMutation({
+    onSuccess: () => { if (patientId) utils.assignment.listForPatient.invalidate({ patientId }); },
+    onError: (err) => toast.error(err.message),
+  });
+  const uncompleteMutation = trpc.task.uncomplete.useMutation({
+    onSuccess: () => { if (patientId) utils.assignment.listForPatient.invalidate({ patientId }); },
+    onError: (err) => toast.error(err.message),
+  });
+  const completeAllMutation = trpc.task.completeAll.useMutation({
+    onSuccess: () => {
+      if (patientId) utils.assignment.listForPatient.invalidate({ patientId });
+      toast.success("All steps completed!");
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   // Intake form query — always call at top level (Rules of Hooks)
   const intakeQuery = trpc.intake.mine.useQuery();
   const intake = intakeQuery.data;
@@ -51,6 +78,50 @@ export default function PatientHome() {
   const assignments = assignmentsQuery.data || [];
   const appointmentsRaw = appointmentsQuery.data || [];
   const tasks = tasksQuery.data || [];
+
+  // Build today's unified checklist from all active protocols
+  const todayStr = getLocalDateStr();
+  const localDayOfWeek = new Date().getDay();
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const shortDayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+  const todayChecklist: { step: any; assignment: any; protocol: any; isCompleted: boolean }[] = [];
+  const todayCompletedStepIds = new Set<number>();
+
+  for (const row of assignments) {
+    const a = row.assignment;
+    const proto = row.protocol;
+    const steps = (row as any).steps || [];
+    const completions = (row as any).completions || [];
+    if (a.status !== "active") continue;
+
+    const todayCompletions = completions.filter((c: any) => c.taskDate === todayStr);
+    const completedIds = new Set(todayCompletions.map((c: any) => c.stepId));
+
+    for (const step of steps) {
+      // Filter by frequency
+      let isToday = false;
+      if (step.frequency === "daily" || step.frequency === "once") isToday = true;
+      else if (step.frequency === "weekly") isToday = localDayOfWeek === 1;
+      else if (step.frequency === "custom" && step.customDays) {
+        const days = typeof step.customDays === "string" ? JSON.parse(step.customDays) : step.customDays;
+        isToday = days.some((d: string) =>
+          d.toLowerCase() === dayNames[localDayOfWeek].toLowerCase() ||
+          d.toLowerCase() === shortDayNames[localDayOfWeek]
+        );
+      } else isToday = true;
+
+      if (isToday) {
+        const done = completedIds.has(step.id);
+        todayChecklist.push({ step, assignment: a, protocol: proto, isCompleted: done });
+        if (done) todayCompletedStepIds.add(step.id);
+      }
+    }
+  }
+
+  const todayDone = todayChecklist.filter(t => t.isCompleted).length;
+  const todayTotal = todayChecklist.length;
+  const todayProgress = todayTotal > 0 ? Math.round((todayDone / todayTotal) * 100) : 0;
 
   // Compute stats
   const completedTasks = tasks.filter((t: any) => t.status === "completed").length;
@@ -114,7 +185,9 @@ export default function PatientHome() {
           <p className="text-white/50 text-[11px] tracking-[0.3em] uppercase">{dateStr}</p>
           <h1 className="font-heading text-2xl md:text-3xl font-normal text-white mt-2 tracking-tight">{greeting}, {firstName}</h1>
           <p className="text-white/60 text-sm mt-1.5 tracking-wide">
-            {completedTasks} of {totalTasks} tasks completed
+            {todayTotal > 0
+              ? `${todayDone} of ${todayTotal} steps completed today`
+              : `${completedTasks} of ${totalTasks} tasks completed`}
           </p>
         </div>
       </motion.div>
@@ -208,45 +281,151 @@ export default function PatientHome() {
             </motion.div>
           )}
 
-          {/* Active protocols */}
+          {/* Today's Checklist — interactive protocol steps */}
           <motion.div custom={6} variants={fadeUp} initial="hidden" animate="visible">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-lg md:text-xl text-foreground">My Protocols</h2>
-              <Link href="/patient/protocols">
-                <span className="text-xs text-muted-foreground font-medium flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors tracking-wider uppercase">
-                  View all <ArrowRight className="w-3 h-3" strokeWidth={1.4} />
-                </span>
-              </Link>
+              <div>
+                <h2 className="font-heading text-lg md:text-xl text-foreground">Today's Checklist</h2>
+                {todayTotal > 0 && (
+                  <p className="text-xs text-muted-foreground mt-0.5">{todayDone}/{todayTotal} completed</p>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {todayTotal > 0 && todayDone < todayTotal && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2.5 text-xs gap-1.5 text-gold hover:text-gold hover:bg-gold/10"
+                    disabled={completeAllMutation.isPending}
+                    onClick={() => {
+                      const uncompleted: { assignmentId: number; stepIds: number[] }[] = [];
+                      for (const item of todayChecklist) {
+                        if (!item.isCompleted) {
+                          const existing = uncompleted.find(u => u.assignmentId === item.assignment.id);
+                          if (existing) existing.stepIds.push(item.step.id);
+                          else uncompleted.push({ assignmentId: item.assignment.id, stepIds: [item.step.id] });
+                        }
+                      }
+                      // Complete all for first assignment group (bulk API is per-assignment)
+                      for (const group of uncompleted) {
+                        completeAllMutation.mutate({
+                          assignmentId: group.assignmentId,
+                          patientId: patientId!,
+                          taskDate: todayStr,
+                          stepIds: group.stepIds,
+                        });
+                      }
+                    }}
+                  >
+                    {completeAllMutation.isPending ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <CheckCheck className="w-3.5 h-3.5" />
+                    )}
+                    Complete All
+                  </Button>
+                )}
+                <Link href="/patient/protocols">
+                  <span className="text-xs text-muted-foreground font-medium flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors tracking-wider uppercase">
+                    All protocols <ArrowRight className="w-3 h-3" strokeWidth={1.4} />
+                  </span>
+                </Link>
+              </div>
             </div>
-            {assignments.length === 0 ? (
+
+            {/* Progress bar */}
+            {todayTotal > 0 && (
+              <div className="mb-4">
+                <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                  <motion.div
+                    className={`h-full rounded-full ${todayProgress === 100 ? "bg-gold" : "bg-gold/70"}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${todayProgress}%` }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {todayTotal === 0 ? (
               <div className="bg-card rounded-sm p-8 border border-border/40 text-center">
-                <p className="text-sm text-muted-foreground leading-relaxed">No protocols assigned yet. Dr. Egbert will add your personalized plan soon.</p>
+                <ClipboardCheck className="w-8 h-8 text-muted-foreground/30 mx-auto mb-3" strokeWidth={1.4} />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {assignments.length === 0
+                    ? "No protocols assigned yet. Dr. Egbert will add your personalized plan soon."
+                    : "No steps scheduled for today. Enjoy your rest day."}
+                </p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {assignments.slice(0, 3).map((row: any) => {
-                  const a = row.assignment;
-                  const proto = row.protocol;
+              <div className="space-y-1.5">
+                {todayChecklist.map((item) => {
+                  const { step, assignment, protocol, isCompleted } = item;
+                  const isToggling =
+                    (completeMutation.isPending && completeMutation.variables?.stepId === step.id) ||
+                    (uncompleteMutation.isPending && uncompleteMutation.variables?.stepId === step.id);
+
                   return (
-                    <Link key={a.id} href="/patient/protocols">
-                      <div className="bg-card rounded-sm p-4 md:p-5 border border-border/40 cursor-pointer hover:border-border transition-colors duration-300">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <h3 className="font-heading text-sm md:text-base text-foreground">
-                            {proto?.name || "Protocol"}
-                          </h3>
-                          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
-                            a.status === "active" ? "bg-muted text-foreground" :
-                            a.status === "completed" ? "bg-muted text-muted-foreground" :
-                            "bg-muted text-muted-foreground"
-                          }`}>
-                            {a.status}
+                    <button
+                      key={`${assignment.id}-${step.id}`}
+                      onClick={() => {
+                        if (isToggling) return;
+                        if (isCompleted) {
+                          uncompleteMutation.mutate({
+                            assignmentId: assignment.id,
+                            stepId: step.id,
+                            taskDate: todayStr,
+                          });
+                        } else {
+                          completeMutation.mutate({
+                            assignmentId: assignment.id,
+                            stepId: step.id,
+                            patientId: patientId!,
+                            taskDate: todayStr,
+                          });
+                        }
+                      }}
+                      className={`w-full flex items-start gap-3 p-3 md:p-3.5 rounded-sm border text-left transition-all duration-300 ${
+                        isCompleted
+                          ? "bg-gold/5 border-gold/20 hover:bg-gold/10"
+                          : "bg-card border-border/40 hover:border-border"
+                      }`}
+                    >
+                      <div className="shrink-0 mt-0.5">
+                        {isToggling ? (
+                          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                        ) : isCompleted ? (
+                          <CheckCircle2 className="w-5 h-5 text-gold" />
+                        ) : (
+                          <Circle className="w-5 h-5 text-muted-foreground/40" strokeWidth={1.4} />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium break-words ${isCompleted ? "text-gold line-through" : "text-foreground"}`}>
+                          {step.title}
+                        </p>
+                        {step.description && (
+                          <p className="text-xs text-muted-foreground mt-0.5 break-words line-clamp-1">{step.description}</p>
+                        )}
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                          {(step.dosageAmount || step.dosageUnit) && (
+                            <span className="text-[10px] text-gold font-medium">
+                              {[step.dosageAmount, step.dosageUnit].filter(Boolean).join(" ")}
+                            </span>
+                          )}
+                          {step.route && (
+                            <span className="text-[10px] text-muted-foreground capitalize">{step.route}</span>
+                          )}
+                          {step.timeOfDay && step.timeOfDay !== "any" && (
+                            <span className="text-[10px] text-muted-foreground capitalize flex items-center gap-0.5">
+                              <Clock className="w-2.5 h-2.5" /> {step.timeOfDay}
+                            </span>
+                          )}
+                          <span className="text-[10px] text-muted-foreground/60">
+                            {protocol?.name}
                           </span>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          {proto?.category?.replace("_", " ") || "Health"} &middot; Started {new Date(a.startDate || a.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                        </p>
                       </div>
-                    </Link>
+                    </button>
                   );
                 })}
               </div>

@@ -332,11 +332,11 @@ export default function PatientProtocols() {
                                       {step.description && (
                                         <p className="text-xs text-muted-foreground mt-0.5 break-words">{step.description}</p>
                                       )}
-                                      {step.dosage && (
-                                        <p className="text-xs text-gold mt-0.5 font-medium">{step.dosage}</p>
+                                      {(step.dosageAmount || step.dosageUnit) && (
+                                        <p className="text-xs text-gold mt-0.5 font-medium">{[step.dosageAmount, step.dosageUnit].filter(Boolean).join(" ")}</p>
                                       )}
-                                      {step.administrationRoute && (
-                                        <p className="text-[10px] text-muted-foreground mt-0.5">Route: {step.administrationRoute}</p>
+                                      {step.route && (
+                                        <p className="text-[10px] text-muted-foreground mt-0.5 capitalize">Route: {step.route}</p>
                                       )}
                                       <div className="flex items-center gap-3 mt-1 flex-wrap">
                                         {step.timeOfDay && step.timeOfDay !== "any" && (

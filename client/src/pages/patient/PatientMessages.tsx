@@ -206,7 +206,7 @@ export default function PatientMessages() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] md:h-screen">
+    <div className="flex flex-col h-full md:h-screen">
       {/* Hidden file input */}
       <input
         ref={fileInputRef}
@@ -217,7 +217,7 @@ export default function PatientMessages() {
       />
 
       {/* Chat header */}
-      <div className="px-5 md:px-8 py-3 md:py-4 border-b border-border flex items-center gap-3">
+      <div className="px-5 md:px-8 py-3 md:py-4 border-b border-border flex items-center gap-3 shrink-0">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gold/10 flex items-center justify-center border border-gold/15">
           <span className="text-gold text-sm md:text-base font-semibold">BL</span>
         </div>
@@ -350,7 +350,7 @@ export default function PatientMessages() {
 
       {/* Attachment preview bar */}
       {attachmentPreview && (
-        <div className="px-4 md:px-8 py-2 border-t border-border bg-muted/30">
+        <div className="px-4 md:px-8 py-2 border-t border-border bg-muted/30 shrink-0">
           <div className="max-w-3xl mx-auto flex items-center gap-3">
             {attachmentPreview.isImage && attachmentPreview.previewUrl ? (
               <img src={attachmentPreview.previewUrl} alt="Preview" className="h-14 w-14 rounded-lg object-cover" />
@@ -375,8 +375,8 @@ export default function PatientMessages() {
         </div>
       )}
 
-      {/* Message input */}
-      <div className="px-4 md:px-8 py-3 md:py-4 border-t border-border bg-white">
+      {/* Message input — on mobile, pad bottom to clear fixed nav */}
+      <div className="px-4 md:px-8 py-3 md:py-4 pb-[calc(0.75rem+60px)] md:pb-4 border-t border-border bg-white shrink-0">
         <div className="max-w-3xl mx-auto flex items-center gap-2 md:gap-3">
           {/* Attachment button */}
           <button
