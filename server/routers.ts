@@ -3247,6 +3247,80 @@ export const appRouter = router({
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
       return { success: true } as const;
     }),
+    forgotPassword: publicProcedure
+      .input(z.object({ email: z.string().email() }))
+      .mutation(async ({ input, ctx }) => {
+        // Always return success to avoid email enumeration
+        const user = await db.getUserByEmail(input.email);
+        if (!user) return { success: true };
+
+        const { randomBytes, createHash } = await import("crypto");
+        const token = randomBytes(32).toString("hex");
+        const tokenHash = createHash("sha256").update(token).digest("hex");
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+        const database = await getDb();
+        if (!database) return { success: true };
+
+        const { passwordResetTokens } = await import("../drizzle/schema");
+        await database.insert(passwordResetTokens).values({
+          userId: user.id,
+          tokenHash,
+          expiresAt,
+        });
+
+        const origin = ctx.req.headers.origin || "https://app.blacklabelmedicine.com";
+        const resetUrl = `${origin}/reset-password?token=${token}`;
+
+        const { sendEmail, passwordResetEmailHtml } = await import("./email");
+        await sendEmail({
+          to: input.email,
+          subject: "Reset your password — Black Label Medicine",
+          html: passwordResetEmailHtml({ resetUrl }),
+        });
+
+        return { success: true };
+      }),
+    resetPassword: publicProcedure
+      .input(z.object({ token: z.string().min(1), password: z.string().min(6) }))
+      .mutation(async ({ input }) => {
+        const { createHash } = await import("crypto");
+        const tokenHash = createHash("sha256").update(input.token).digest("hex");
+
+        const database = await getDb();
+        if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        const { passwordResetTokens } = await import("../drizzle/schema");
+        const rows = await database
+          .select()
+          .from(passwordResetTokens)
+          .where(eq(passwordResetTokens.tokenHash, tokenHash))
+          .limit(1);
+
+        if (rows.length === 0) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid or expired reset link" });
+        }
+        const resetToken = rows[0];
+        if (resetToken.usedAt || resetToken.expiresAt < new Date()) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "This reset link has expired. Please request a new one." });
+        }
+
+        // Find the user and update their password
+        const user = await database.select().from(users).where(eq(users.id, resetToken.userId)).limit(1);
+        if (user.length === 0) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "User not found" });
+        }
+
+        await db.setUserPassword(user[0].openId, input.password);
+
+        // Mark token as used
+        await database
+          .update(passwordResetTokens)
+          .set({ usedAt: new Date() })
+          .where(eq(passwordResetTokens.id, resetToken.id));
+
+        return { success: true };
+      }),
   }),
 
   patient: patientRouter,

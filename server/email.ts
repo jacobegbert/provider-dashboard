@@ -233,3 +233,17 @@ export function protocolUpdatedEmailHtml(params: {
     </p>
   `);
 }
+
+export function passwordResetEmailHtml(params: {
+  resetUrl: string;
+}): string {
+  return baseTemplate(`
+    <p>We received a request to reset your password.</p>
+    <p style="text-align: center; margin: 24px 0;">
+      <a href="${params.resetUrl}" class="btn">Reset Password</a>
+    </p>
+    <p style="font-size: 13px; color: #666;">This link expires in 1 hour. If you didn't request this, you can safely ignore this email.</p>
+    <p style="font-size: 13px; color: #666;">If the button doesn't work, copy and paste this link:<br>
+    <a href="${params.resetUrl}" style="color: ${BRAND_COLOR}; word-break: break-all;">${params.resetUrl}</a></p>
+  `);
+}

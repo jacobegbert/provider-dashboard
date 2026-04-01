@@ -30,6 +30,18 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 // ─────────────────────────────────────────────
+// 1a. PASSWORD RESET TOKENS
+// ─────────────────────────────────────────────
+export const passwordResetTokens = mysqlTable("password_reset_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  tokenHash: varchar("tokenHash", { length: 128 }).notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  usedAt: timestamp("usedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─────────────────────────────────────────────
 // 1b. PROVIDER PROFILE (extended profile info)
 // ─────────────────────────────────────────────
 export const providerProfiles = mysqlTable("provider_profiles", {

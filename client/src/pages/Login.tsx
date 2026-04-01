@@ -2,7 +2,7 @@
  * Login — Email + password authentication page for Black Label Medicine.
  */
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,6 +94,12 @@ export default function Login() {
                   {error}
                 </p>
               )}
+
+              <div className="text-right">
+                <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground">
+                  Forgot password?
+                </Link>
+              </div>
 
               <Button
                 type="submit"

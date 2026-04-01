@@ -49,6 +49,8 @@ import Billing from "./pages/Billing";
 import PatientBilling from "./pages/patient/PatientBilling";
 import Plans from "./pages/Plans";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 
@@ -176,6 +178,8 @@ function AppRouter() {
     <Switch>
       <Route path="/" component={PortalSwitcher} />
       <Route path="/login" component={Login} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       <Route path="/invite" component={InviteLanding} />
       <Route path="/staff-invite" component={StaffInviteLanding} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
