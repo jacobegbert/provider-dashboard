@@ -5,9 +5,11 @@ export const ENV = {
   isProduction: process.env.NODE_ENV === "production",
   // AI
   anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
-  // Legacy — leave empty; features using these will fail gracefully if unset
-  forgeApiUrl: "",
-  forgeApiKey: "",
+  // AWS S3 file storage
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "",
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "",
+  awsRegion: process.env.AWS_REGION ?? "us-east-1",
+  s3BucketName: process.env.S3_BUCKET_NAME ?? "black-label-medicine",
   // Google
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
