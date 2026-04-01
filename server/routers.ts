@@ -21,7 +21,7 @@ import { createDatabaseBackup, listBackups, addToManifest, getBackupDownloadUrl,
 import { notifyOwner } from "./_core/notification";
 import { generateIntakePdf } from "./intakePdfGenerator";
 import Stripe from "stripe";
-import { invoices, stripeCustomers, patientPlans, patients } from "../drizzle/schema";
+import { invoices, stripeCustomers, patientPlans, patients, users } from "../drizzle/schema";
 import { getDb } from "./db";
 import { sql as drizzleSql } from "drizzle-orm";
 
