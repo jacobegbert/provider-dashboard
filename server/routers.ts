@@ -185,6 +185,7 @@ const patientRouter = router({
         conditions: z.array(z.string()).optional(),
         notes: z.string().optional().nullable(),
         nextRequiredAction: z.string().optional().nullable(),
+        smsOptIn: z.boolean().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {

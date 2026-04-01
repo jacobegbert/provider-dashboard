@@ -571,6 +571,7 @@ export default function Clients() {
     notes: "",
     healthGoals: "",
     conditions: "",
+    smsOptIn: false,
   });
 
   const [newNote, setNewNote] = useState({ content: "", category: "general" });
@@ -614,6 +615,7 @@ export default function Clients() {
       notes: editClient.notes || null,
       healthGoals: editClient.healthGoals ? editClient.healthGoals.split(",").map((s) => s.trim()).filter(Boolean) : [],
       conditions: editClient.conditions ? editClient.conditions.split(",").map((s) => s.trim()).filter(Boolean) : [],
+      smsOptIn: editClient.smsOptIn,
     });
   }, [editClient, selectedPatient, updatePatient]);
 
@@ -630,6 +632,7 @@ export default function Clients() {
       notes: selectedPatient.notes || "",
       healthGoals: selectedPatient.healthGoals?.join(", ") || "",
       conditions: selectedPatient.conditions?.join(", ") || "",
+      smsOptIn: selectedPatient.smsOptIn === true,
     });
     setShowEditDialog(true);
   }, [selectedPatient]);
@@ -1866,6 +1869,21 @@ export default function Clients() {
             <div>
               <Label className="text-xs">Phone</Label>
               <Input value={editClient.phone} onChange={(e) => setEditClient({ ...editClient, phone: e.target.value })} className="mt-1" />
+            </div>
+            <div className="flex items-center justify-between rounded-md border px-3 py-2">
+              <div>
+                <Label className="text-xs font-medium">SMS Notifications</Label>
+                <p className="text-xs text-muted-foreground">Send text message alerts to this client</p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={editClient.smsOptIn}
+                onClick={() => setEditClient({ ...editClient, smsOptIn: !editClient.smsOptIn })}
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${editClient.smsOptIn ? "bg-gold" : "bg-muted"}`}
+              >
+                <span className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform ${editClient.smsOptIn ? "translate-x-4" : "translate-x-0"}`} />
+              </button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>

@@ -196,6 +196,7 @@ export async function listPatients(providerId: number) {
       avatarUrl: patients.avatarUrl,
       lastProviderInteraction: patients.lastProviderInteraction,
       nextRequiredAction: patients.nextRequiredAction,
+      smsOptIn: patients.smsOptIn,
       createdAt: patients.createdAt,
       updatedAt: patients.updatedAt,
       lastActive: users.lastSignedIn,
