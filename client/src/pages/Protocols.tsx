@@ -8,7 +8,7 @@ import { useLocation } from "wouter";
 import {
   ClipboardList, Search, Plus, Users, Clock, ChevronDown, ChevronUp,
   Apple, Dumbbell, Pill, Brain, Heart, FlaskConical, Moon, Beaker, Syringe,
-  Edit, Archive, X, ArchiveRestore, Infinity, Loader2, Copy, BookOpen, Download, Check, ArrowLeft, Flag,
+  Edit, Archive, X, ArchiveRestore, Infinity, Loader2, Copy, BookOpen, Download, Check, ArrowLeft, Flag, Trash2,
 } from "lucide-react";
 import { PROTOCOL_TEMPLATES, type ProtocolTemplate } from "@shared/protocolTemplates";
 import { Card, CardContent } from "@/components/ui/card";
@@ -205,6 +205,17 @@ export default function Protocols() {
       utils.protocol.list.invalidate();
       setShowDelete(null);
       toast.success(variables.isArchived ? "Protocol archived" : "Protocol restored");
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const [showPermanentDelete, setShowPermanentDelete] = useState<number | null>(null);
+  const deleteMutation = trpc.protocol.delete.useMutation({
+    onSuccess: () => {
+      utils.protocol.listAll.invalidate();
+      utils.protocol.list.invalidate();
+      setShowPermanentDelete(null);
+      toast.success("Protocol permanently deleted");
     },
     onError: (e) => toast.error(e.message),
   });
@@ -488,7 +499,15 @@ export default function Protocols() {
                       onClick={() => archiveMutation.mutate({ id: protocol.id, isArchived: false })}
                       disabled={archiveMutation.isPending}
                     >
-                      <ArchiveRestore className="h-3 w-3" /> Restore Protocol
+                      <ArchiveRestore className="h-3 w-3" /> Restore
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs h-7 gap-1 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={(e) => { e.stopPropagation(); setShowPermanentDelete(protocol.id); }}
+                    >
+                      <Trash2 className="h-3 w-3" /> Delete
                     </Button>
                   </>
                 )}
@@ -1202,6 +1221,28 @@ export default function Protocols() {
               disabled={archiveMutation.isPending}
             >
               {archiveMutation.isPending ? "Archiving..." : "Archive Protocol"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Permanent Delete Confirmation Dialog ────────── */}
+      <Dialog open={showPermanentDelete !== null} onOpenChange={() => setShowPermanentDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-heading text-destructive">Permanently Delete Protocol</DialogTitle>
+            <DialogDescription>
+              This will permanently delete this protocol, all its steps, and any historical assignment data. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPermanentDelete(null)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              onClick={() => showPermanentDelete && deleteMutation.mutate({ id: showPermanentDelete })}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete Permanently"}
             </Button>
           </DialogFooter>
         </DialogContent>

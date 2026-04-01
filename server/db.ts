@@ -340,6 +340,34 @@ export async function deleteProtocolStep(id: number) {
   await db.delete(protocolSteps).where(eq(protocolSteps.id, id));
 }
 
+export async function deleteProtocol(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Check for active assignments — block deletion if any exist
+  const active = await db
+    .select({ id: protocolAssignments.id })
+    .from(protocolAssignments)
+    .where(and(eq(protocolAssignments.protocolId, id), eq(protocolAssignments.status, "active")))
+    .limit(1);
+  if (active.length > 0) {
+    throw new Error("Cannot delete a protocol with active assignments. Cancel or complete them first.");
+  }
+  // Delete completed/cancelled/paused assignments and their data
+  const allAssignments = await db
+    .select({ id: protocolAssignments.id })
+    .from(protocolAssignments)
+    .where(eq(protocolAssignments.protocolId, id));
+  for (const a of allAssignments) {
+    await db.delete(taskCompletions).where(eq(taskCompletions.assignmentId, a.id));
+    await db.delete(assignmentSteps).where(eq(assignmentSteps.assignmentId, a.id));
+  }
+  await db.delete(protocolAssignments).where(eq(protocolAssignments.protocolId, id));
+  // Delete protocol steps
+  await db.delete(protocolSteps).where(eq(protocolSteps.protocolId, id));
+  // Delete protocol
+  await db.delete(protocols).where(eq(protocols.id, id));
+}
+
 // ─── PROTOCOL ASSIGNMENTS ─────────────────────
 
 export async function listAssignmentsForPatient(patientId: number) {

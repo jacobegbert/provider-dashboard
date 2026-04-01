@@ -637,6 +637,19 @@ const protocolRouter = router({
       await db.deleteProtocolStep(input.id);
     }),
 
+  /** Delete an archived protocol and all its related data */
+  delete: adminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      // Verify it exists and is archived
+      const protocol = await db.getProtocol(input.id);
+      if (!protocol) throw new TRPCError({ code: "NOT_FOUND", message: "Protocol not found" });
+      if (!protocol.isArchived) throw new TRPCError({ code: "BAD_REQUEST", message: "Only archived protocols can be deleted" });
+      await db.deleteProtocol(input.id);
+      await db.createAuditEntry({ userId: ctx.user.id, action: "protocol.delete", details: `Deleted archived protocol: ${protocol.name}` });
+      return { success: true };
+    }),
+
   /** Patient creates their own protocol (blank form) */
   patientCreate: protectedProcedure
     .input(
