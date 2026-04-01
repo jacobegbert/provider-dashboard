@@ -71,6 +71,9 @@ export const patients = mysqlTable("patients", {
   healthGoals: json("healthGoals").$type<string[]>(),
   /** Medical conditions — stored as JSON array of strings */
   conditions: json("conditions").$type<string[]>(),
+  /** SMS opt-in consent — null means never asked, true/false means explicit choice */
+  smsOptIn: boolean("smsOptIn"),
+  smsOptInAt: timestamp("smsOptInAt"),
   notes: text("notes"),
   avatarUrl: text("avatarUrl"),
   lastProviderInteraction: timestamp("lastProviderInteraction"),

@@ -3,6 +3,7 @@
  * Shows account info, login method, and security details.
  * Design: Warm Scandinavian — sage green, terracotta, stone palette
  */
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
@@ -18,6 +19,7 @@ import {
   ShieldCheck,
   Loader2,
   ExternalLink,
+  MessageSquare,
 } from "lucide-react";
 
 export default function PatientPrivacy() {
@@ -135,6 +137,11 @@ export default function PatientPrivacy() {
         </div>
       </div>
 
+      {/* SMS Notifications */}
+      {myRecord?.phone && (
+        <SmsConsentSection smsOptIn={myRecord.smsOptIn ?? null} />
+      )}
+
       {/* Data privacy */}
       <div className="bg-card rounded-xl border border-border p-4 md:p-5">
         <div className="flex items-start gap-3">
@@ -152,6 +159,54 @@ export default function PatientPrivacy() {
               If you have questions about your data or wish to request data deletion, please contact your provider directly.
             </p>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SmsConsentSection({ smsOptIn }: { smsOptIn: boolean | null }) {
+  const [optimistic, setOptimistic] = useState<boolean | null>(smsOptIn);
+  const utils = trpc.useUtils();
+  const mutation = trpc.patient.updateSmsConsent.useMutation({
+    onSuccess: (data) => {
+      setOptimistic(data.smsOptIn);
+      utils.patient.myRecord.invalidate();
+    },
+  });
+
+  const isOptedIn = optimistic === true;
+
+  return (
+    <div className="bg-card rounded-xl border border-border overflow-hidden">
+      <div className="px-4 md:px-5 py-3 md:py-4 border-b border-border">
+        <h2 className="font-heading text-sm md:text-base font-semibold text-foreground">SMS Notifications</h2>
+      </div>
+      <div className="px-4 md:px-5 py-3 md:py-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
+            <MessageSquare className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-foreground">Text message notifications</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Receive appointment reminders, new messages, and protocol updates via SMS.
+              Msg & data rates may apply. Reply STOP to unsubscribe at any time.
+            </p>
+          </div>
+          <button
+            onClick={() => mutation.mutate({ optIn: !isOptedIn })}
+            disabled={mutation.isPending}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+              isOptedIn ? "bg-gold" : "bg-muted-foreground/30"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                isOptedIn ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
         </div>
       </div>
     </div>

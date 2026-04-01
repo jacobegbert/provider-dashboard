@@ -14,7 +14,18 @@ export interface NotifyResult {
 }
 
 /**
+ * Returns the phone number only if the patient has explicitly opted in to SMS.
+ * Invites are exempt — they're the initial outreach to get consent.
+ */
+function consentedPhone(phone: string | null | undefined, smsOptIn: boolean | null | undefined): string | null {
+  if (!phone) return null;
+  if (smsOptIn !== true) return null;
+  return phone;
+}
+
+/**
  * Notify a patient about a new invite.
+ * Invites are exempt from SMS consent — this IS the initial outreach.
  */
 export async function notifyPatientInvite(params: {
   email: string;
@@ -51,10 +62,12 @@ export async function notifyPatientInvite(params: {
 export async function notifyPatientNewMessage(params: {
   email?: string | null;
   phone?: string | null;
+  smsOptIn?: boolean | null;
   providerName: string;
   messagePreview: string;
   portalUrl: string;
 }): Promise<NotifyResult> {
+  const smsPhone = consentedPhone(params.phone, params.smsOptIn);
   const [emailSent, smsSent] = await Promise.all([
     params.email
       ? sendEmail({
@@ -67,9 +80,9 @@ export async function notifyPatientNewMessage(params: {
           }),
         })
       : Promise.resolve(false),
-    params.phone
+    smsPhone
       ? sendSms({
-          to: params.phone,
+          to: smsPhone,
           body: newMessageSmsBody({
             providerName: params.providerName,
             messagePreview: params.messagePreview,
@@ -87,6 +100,7 @@ export async function notifyPatientNewMessage(params: {
 export async function notifyPatientAppointment(params: {
   email?: string | null;
   phone?: string | null;
+  smsOptIn?: boolean | null;
   providerName: string;
   providerEmail?: string;
   patientName?: string;
@@ -117,6 +131,7 @@ export async function notifyPatientAppointment(params: {
   const gcalDetails = encodeURIComponent(`Appointment with ${params.providerName} at Black Label Medicine.`);
   const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${gcalTitle}&dates=${gcalStart}/${gcalEnd}&details=${gcalDetails}`;
 
+  const smsPhone = consentedPhone(params.phone, params.smsOptIn);
   const [emailSent, smsSent] = await Promise.all([
     params.email
       ? sendEmail({
@@ -140,9 +155,9 @@ export async function notifyPatientAppointment(params: {
           ],
         })
       : Promise.resolve(false),
-    params.phone
+    smsPhone
       ? sendSms({
-          to: params.phone,
+          to: smsPhone,
           body: appointmentReminderSmsBody({
             providerName: params.providerName,
             appointmentDate: params.appointmentDate,
@@ -167,10 +182,12 @@ function formatGcalDate(d: Date): string {
 export async function notifyPatientGeneric(params: {
   email?: string | null;
   phone?: string | null;
+  smsOptIn?: boolean | null;
   title: string;
   body: string;
   portalUrl: string;
 }): Promise<NotifyResult> {
+  const smsPhone = consentedPhone(params.phone, params.smsOptIn);
   const [emailSent, smsSent] = await Promise.all([
     params.email
       ? sendEmail({
@@ -183,9 +200,9 @@ export async function notifyPatientGeneric(params: {
           }),
         })
       : Promise.resolve(false),
-    params.phone
+    smsPhone
       ? sendSms({
-          to: params.phone,
+          to: smsPhone,
           body: genericNotificationSmsBody({
             title: params.title,
             body: params.body,
@@ -203,12 +220,14 @@ export async function notifyPatientGeneric(params: {
 export async function notifyPatientProtocolAssigned(params: {
   email?: string | null;
   phone?: string | null;
+  smsOptIn?: boolean | null;
   providerName: string;
   protocolName: string;
   protocolDescription?: string;
   stepCount: number;
   portalUrl: string;
 }): Promise<NotifyResult> {
+  const smsPhone = consentedPhone(params.phone, params.smsOptIn);
   const [emailSent, smsSent] = await Promise.all([
     params.email
       ? sendEmail({
@@ -223,9 +242,9 @@ export async function notifyPatientProtocolAssigned(params: {
           }),
         })
       : Promise.resolve(false),
-    params.phone
+    smsPhone
       ? sendSms({
-          to: params.phone,
+          to: smsPhone,
           body: protocolAssignedSmsBody({
             providerName: params.providerName,
             protocolName: params.protocolName,
@@ -243,11 +262,13 @@ export async function notifyPatientProtocolAssigned(params: {
 export async function notifyPatientProtocolUpdated(params: {
   email?: string | null;
   phone?: string | null;
+  smsOptIn?: boolean | null;
   providerName: string;
   protocolName: string;
   changeDescription: string;
   portalUrl: string;
 }): Promise<NotifyResult> {
+  const smsPhone = consentedPhone(params.phone, params.smsOptIn);
   const [emailSent, smsSent] = await Promise.all([
     params.email
       ? sendEmail({
@@ -261,9 +282,9 @@ export async function notifyPatientProtocolUpdated(params: {
           }),
         })
       : Promise.resolve(false),
-    params.phone
+    smsPhone
       ? sendSms({
-          to: params.phone,
+          to: smsPhone,
           body: protocolUpdatedSmsBody({
             providerName: params.providerName,
             protocolName: params.protocolName,

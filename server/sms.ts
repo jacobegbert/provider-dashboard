@@ -89,7 +89,7 @@ export async function sendSms(opts: SendSmsOptions): Promise<boolean> {
 // ─── SMS Templates ────────────────────────────────────────
 
 const BRAND = "Black Label Medicine";
-const PORTAL_URL = "https://www.blacklabelmedicine.com";
+const PORTAL_URL = "https://app.blacklabelmedicine.com";
 
 export function inviteSmsBody(params: {
   providerName: string;

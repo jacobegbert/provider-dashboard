@@ -21,7 +21,7 @@ import { createDatabaseBackup, listBackups, addToManifest, getBackupDownloadUrl,
 import { notifyOwner } from "./_core/notification";
 import { generateIntakePdf } from "./intakePdfGenerator";
 import Stripe from "stripe";
-import { invoices, stripeCustomers, patientPlans } from "../drizzle/schema";
+import { invoices, stripeCustomers, patientPlans, patients } from "../drizzle/schema";
 import { getDb } from "./db";
 import { sql as drizzleSql } from "drizzle-orm";
 
@@ -257,6 +257,27 @@ const patientRouter = router({
       }
       return resolvePatientForUser(ctx);
     }),
+
+  /** Update SMS opt-in consent for the current patient */
+  updateSmsConsent: protectedProcedure
+    .input(z.object({ optIn: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const patient = await resolvePatientForUser(ctx);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "No patient record found" });
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      await database
+        .update(patients)
+        .set({ smsOptIn: input.optIn, smsOptInAt: new Date() })
+        .where(eq(patients.id, patient.id));
+      await db.logAudit({
+        userId: ctx.user.id,
+        action: input.optIn ? "sms.optIn" : "sms.optOut",
+        entityType: "patient",
+        entityId: patient.id,
+      });
+      return { success: true, smsOptIn: input.optIn };
+    }),
 });
 
 const protocolRouter = router({
@@ -461,6 +482,7 @@ const protocolRouter = router({
             notifyPatientProtocolUpdated({
               email: user?.email || patient.email || null,
               phone: patient.phone || null,
+              smsOptIn: patient.smsOptIn,
               providerName,
               protocolName: protocol?.name || "Your protocol",
               changeDescription: "Your provider has updated the steps and details of this protocol. Please review the latest version in your portal.",
@@ -786,6 +808,7 @@ const assignmentRouter = router({
         notifyPatientProtocolAssigned({
           email: user?.email || assignedPatient.email || null,
           phone: assignedPatient.phone || null,
+          smsOptIn: assignedPatient.smsOptIn,
           providerName,
           protocolName: protocol?.name || "New Protocol",
           protocolDescription: protocol?.description || undefined,
@@ -855,6 +878,7 @@ const assignmentRouter = router({
           notifyPatientProtocolAssigned({
             email: user?.email || patient.email || null,
             phone: patient.phone || null,
+            smsOptIn: patient.smsOptIn,
             providerName,
             protocolName: protocol?.name || "New Protocol",
             protocolDescription: protocol?.description || undefined,
@@ -1187,6 +1211,7 @@ const messageRouter = router({
               await notifyPatientNewMessage({
                 email: patient.email,
                 phone: patient.phone,
+                smsOptIn: patient.smsOptIn,
                 providerName: senderName,
                 messagePreview: input.content,
                 portalUrl: `${input.origin || ""}/patient/messages`,
@@ -1287,6 +1312,7 @@ const messageRouter = router({
             await notifyPatientNewMessage({
               email: patient.email,
               phone: patient.phone,
+              smsOptIn: patient.smsOptIn,
               providerName: senderName,
               messagePreview: input.content,
               portalUrl: `${input.origin || ""}/patient/messages`,
@@ -1372,6 +1398,7 @@ const appointmentRouter = router({
           await notifyPatientAppointment({
             email: user?.email || patient.email,
             phone: patient.phone,
+            smsOptIn: patient.smsOptIn,
             providerName,
             providerEmail: "notifications@blacklabelmedicine.com",
             patientName: `${patient.firstName} ${patient.lastName}`,

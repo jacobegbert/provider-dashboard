@@ -111,6 +111,37 @@ export async function incomingSmsHandler(req: Request, res: Response) {
     const patient = patientRows[0];
     console.log(`[Twilio Webhook] Matched patient: ${patient.firstName} ${patient.lastName} (id: ${patient.id})`);
 
+    // Handle STOP / START / HELP keywords (TCPA compliance)
+    const keyword = body.trim().toUpperCase();
+    if (keyword === "STOP" || keyword === "UNSUBSCRIBE" || keyword === "CANCEL" || keyword === "QUIT") {
+      await db
+        .update(patients)
+        .set({ smsOptIn: false, smsOptInAt: new Date() })
+        .where(eq(patients.id, patient.id));
+      console.log(`[Twilio Webhook] Patient ${patient.id} opted out of SMS`);
+      const twiml = new twilio.twiml.MessagingResponse();
+      twiml.message("Black Label Medicine: You have been unsubscribed from SMS notifications. Reply START to re-subscribe.");
+      res.type("text/xml").send(twiml.toString());
+      return;
+    }
+    if (keyword === "START" || keyword === "SUBSCRIBE" || keyword === "YES") {
+      await db
+        .update(patients)
+        .set({ smsOptIn: true, smsOptInAt: new Date() })
+        .where(eq(patients.id, patient.id));
+      console.log(`[Twilio Webhook] Patient ${patient.id} opted back in to SMS`);
+      const twiml = new twilio.twiml.MessagingResponse();
+      twiml.message("Black Label Medicine: You have been re-subscribed to SMS notifications. Reply STOP to unsubscribe. Msg & data rates may apply.");
+      res.type("text/xml").send(twiml.toString());
+      return;
+    }
+    if (keyword === "HELP" || keyword === "INFO") {
+      const twiml = new twilio.twiml.MessagingResponse();
+      twiml.message("Black Label Medicine: For help, visit https://app.blacklabelmedicine.com or call your provider. Reply STOP to unsubscribe from SMS.");
+      res.type("text/xml").send(twiml.toString());
+      return;
+    }
+
     // Determine the sender user ID (patient's linked user account)
     // and the receiver (the provider)
     const senderId = patient.userId;
@@ -156,7 +187,8 @@ export async function incomingSmsHandler(req: Request, res: Response) {
           type: "message",
           title: `SMS reply from ${patient.firstName} ${patient.lastName}`,
           body: body.length > 100 ? body.substring(0, 100) + "…" : body,
-          link: `/provider/messages?patient=${patient.id}`,
+          relatedEntityType: "message",
+          relatedEntityId: patient.id,
         });
       }
     } catch (notifErr) {
