@@ -343,16 +343,7 @@ export async function deleteProtocolStep(id: number) {
 export async function deleteProtocol(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  // Check for active assignments — block deletion if any exist
-  const active = await db
-    .select({ id: protocolAssignments.id })
-    .from(protocolAssignments)
-    .where(and(eq(protocolAssignments.protocolId, id), eq(protocolAssignments.status, "active")))
-    .limit(1);
-  if (active.length > 0) {
-    throw new Error("Cannot delete a protocol with active assignments. Cancel or complete them first.");
-  }
-  // Delete completed/cancelled/paused assignments and their data
+  // Delete ALL assignments and their related data (cascade)
   const allAssignments = await db
     .select({ id: protocolAssignments.id })
     .from(protocolAssignments)

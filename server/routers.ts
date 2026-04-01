@@ -646,7 +646,7 @@ const protocolRouter = router({
       if (!protocol) throw new TRPCError({ code: "NOT_FOUND", message: "Protocol not found" });
       if (!protocol.isArchived) throw new TRPCError({ code: "BAD_REQUEST", message: "Only archived protocols can be deleted" });
       await db.deleteProtocol(input.id);
-      await db.createAuditEntry({ userId: ctx.user.id, action: "protocol.delete", details: `Deleted archived protocol: ${protocol.name}` });
+      await db.logAudit({ userId: ctx.user.id, action: "protocol.delete", details: `Deleted archived protocol: ${protocol.name}` });
       return { success: true };
     }),
 
