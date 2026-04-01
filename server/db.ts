@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { eq, and, desc, asc, sql, or, inArray, isNull, ne, lte, gte, gt, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
@@ -117,7 +118,7 @@ export async function getUserByEmail(email: string) {
 
 /** Hash a password with a random 16-byte salt. Returns 96-char hex string (32 salt + 64 digest). */
 export function hashPassword(password: string): string {
-  const { createHash, randomBytes } = require("crypto");
+  const { createHash, randomBytes } = crypto;
   const salt = randomBytes(16).toString("hex"); // 32 hex chars
   const digest = createHash("sha256").update(salt + password).digest("hex");
   return salt + digest;
