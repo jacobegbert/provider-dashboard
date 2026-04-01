@@ -33,7 +33,6 @@ import PatientNotifications from "./pages/patient/PatientNotifications";
 import PatientPrivacy from "./pages/patient/PatientPrivacy";
 import InviteLanding from "./pages/InviteLanding";
 import StaffInviteLanding from "./pages/StaffInviteLanding";
-import PatientCreateProtocol from "./pages/patient/PatientCreateProtocol";
 import PatientIntake from "./pages/patient/PatientIntake";
 import PatientServiceAgreement from "./pages/patient/PatientServiceAgreement";
 import PatientBiomarkerGuide from "./pages/patient/PatientBiomarkerGuide";
@@ -137,7 +136,6 @@ function PatientPages() {
     <PatientLayout>
       <Switch>
         <Route path="/patient" component={PatientHome} />
-        <Route path="/patient/protocols/create" component={PatientCreateProtocol} />
         <Route path="/patient/protocols" component={PatientProtocols} />
         <Route path="/patient/documents" component={PatientDocuments} />
         <Route path="/patient/messages" component={PatientMessages} />

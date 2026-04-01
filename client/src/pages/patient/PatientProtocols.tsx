@@ -22,9 +22,8 @@ import {
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { PenLine, FileText, CheckCheck } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import { useViewAs } from "@/contexts/ViewAsContext";
 
 const categoryConfig: Record<string, { icon: typeof Leaf; color: string; bg: string }> = {
@@ -103,20 +102,10 @@ export default function PatientProtocols() {
 
   return (
     <div className="px-5 md:px-8 py-5 md:py-8 space-y-5 md:space-y-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground">My Protocols</h1>
-          <p className="text-sm md:text-base text-muted-foreground mt-1">Your personalized health optimization plans</p>
-        </div>
-        <Link href="/patient/protocols/create">
-          <Button size="sm" className="bg-gold hover:bg-gold-light text-black shrink-0">
-            <PenLine className="w-4 h-4 mr-1.5" /> Create Protocol
-          </Button>
-        </Link>
+      <div>
+        <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground">My Protocols</h1>
+        <p className="text-sm md:text-base text-muted-foreground mt-1">Your personalized health optimization plans</p>
       </div>
-
-      {/* My Created Protocols */}
-      <MyCreatedProtocols />
 
       {assignments.length === 0 ? (
         <div className="bg-card rounded-xl p-8 border border-border text-center">
@@ -444,44 +433,3 @@ export default function PatientProtocols() {
   );
 }
 
-function MyCreatedProtocols() {
-  const { data: myProtocols, isLoading } = trpc.protocol.listMyCreated.useQuery();
-
-  if (isLoading || !myProtocols || myProtocols.length === 0) return null;
-
-  return (
-    <div className="bg-card rounded-xl border border-border p-4 md:p-5">
-      <div className="flex items-center gap-2 mb-3">
-        <FileText className="w-4 h-4 text-gold" />
-        <h2 className="font-heading text-sm font-semibold text-foreground">
-          My Created Protocols ({myProtocols.length})
-        </h2>
-      </div>
-      <div className="space-y-2">
-        {myProtocols.map((p: any) => {
-          const cat = categoryConfig[p.category] || categoryConfig.other;
-          const CatIcon = cat.icon;
-          return (
-            <div
-              key={p.id}
-              className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/30 border border-border/50"
-            >
-              <div className={`w-8 h-8 rounded-lg ${cat.bg} flex items-center justify-center shrink-0`}>
-                <CatIcon className={`w-4 h-4 ${cat.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{p.name}</p>
-                {p.description && (
-                  <p className="text-xs text-muted-foreground truncate">{p.description}</p>
-                )}
-              </div>
-              <span className="text-[10px] text-muted-foreground shrink-0">
-                {new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
