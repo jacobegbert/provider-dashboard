@@ -1345,4 +1345,105 @@ export const PROTOCOL_TEMPLATES: ProtocolTemplate[] = [
     tags: ["supplements", "creatine", "vitamin D", "magnesium", "zinc", "omega-3", "IM8", "daily stack"],
     summary: "90-day core supplement routine — creatine, D3/K2, mag glycinate, zinc, omega-3s, and IM8 daily",
   },
+
+  // ─── COLD & HEAT STRESS PROTOCOL ─────────────
+  {
+    key: "cold-heat-stress",
+    name: "Cold & Heat Stress Protocol",
+    description:
+      "Deliberate cold exposure and sauna-based heat stress protocol following the Søberg Principle — end on cold. Cold exposure drives a 200–300% sustained increase in dopamine and norepinephrine, activates brown adipose tissue, and improves insulin sensitivity. Sauna heat stress increases growth hormone up to 16x (when fasted), improves cardiovascular compliance, and activates heat shock proteins for cellular repair. Combined, this protocol is one of the highest-ROI interventions for metabolic health, mood, resilience, and longevity.",
+    category: "lifestyle",
+    durationDays: 60,
+    milestones: [
+      { day: 7, label: "Week 1 — Establish baseline tolerance, log durations and subjective mood" },
+      { day: 14, label: "Week 2 — Begin extending cold exposure toward 2 min" },
+      { day: 30, label: "4-week check — evaluate mood, energy, cold tolerance, resting HR changes" },
+      { day: 60, label: "8-week completion — assess HRV trends, body composition, subjective well-being" },
+    ],
+    labCheckpoints: [
+      { day: 1, label: "Baseline: fasting glucose, insulin, HbA1c, hs-CRP, lipid panel, thyroid (TSH, fT3, fT4), cortisol AM" },
+      { day: 60, label: "Follow-up: fasting glucose, insulin, hs-CRP, lipid panel, thyroid panel, cortisol AM" },
+    ],
+    steps: [
+      {
+        title: "Cold Plunge — Deliberate Cold Exposure",
+        description:
+          "Immerse in cold water (38–55°F / 3–13°C) for 1–3 minutes. Begin at the warmer end and progress to colder temps as tolerance builds. Focus on slow nasal breathing — do not hyperventilate. Shiver is the goal: it drives the metabolic cascade. Do NOT warm up with a hot shower after — let the body reheat naturally (Søberg Principle). If no plunge is available, use a 2–3 min cold shower finishing cold.",
+        frequency: "custom",
+        customDays: ["mon", "wed", "fri", "sat"],
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: "1-3",
+        dosageUnit: "min",
+        route: null,
+      },
+      {
+        title: "Sauna Session — Dry or Infrared Heat Stress",
+        description:
+          "Sit in a sauna at 176–212°F (80–100°C) for 15–20 minutes per session. For maximum growth hormone response, use fasted (before eating). Do 1–2 rounds separated by a 5-min cool-down. Stay hydrated with electrolytes. On days you do both sauna and cold, do sauna first, then cold — always end on cold.",
+        frequency: "custom",
+        customDays: ["mon", "wed", "fri"],
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: "15-20",
+        dosageUnit: "min",
+        route: null,
+      },
+      {
+        title: "Post-Exposure — Natural Rewarming",
+        description:
+          "After cold exposure, resist the urge to jump in a hot shower or put on heavy layers. Allow your body to shiver and reheat itself for 10–15 minutes. This is where the metabolic benefit happens — shivering activates succinate release from muscle, converting white fat to metabolically active brown/beige fat. Light movement (walking) is fine.",
+        frequency: "custom",
+        customDays: ["mon", "wed", "fri", "sat"],
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: null,
+        dosageUnit: null,
+        route: null,
+      },
+      {
+        title: "Log Session — Duration, Temp & Mood",
+        description:
+          "After each session, briefly log: water temperature (or sauna temp), total time in cold, total time in heat, subjective mood rating 1–10, and any notes (sleep quality, energy, focus). Tracking drives compliance and reveals patterns. Use a notes app or journal.",
+        frequency: "custom",
+        customDays: ["mon", "wed", "fri", "sat"],
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: null,
+        dosageUnit: null,
+        route: null,
+      },
+      {
+        title: "Electrolyte Replenishment",
+        description:
+          "Drink an electrolyte mix (sodium, potassium, magnesium) before or after sauna sessions to offset mineral loss from sweating. LMNT, Drip Drop, or a simple mix of 1/4 tsp salt + squeeze of lemon in 16 oz water. Critical for preventing lightheadedness and supporting cardiovascular function during heat stress.",
+        frequency: "custom",
+        customDays: ["mon", "wed", "fri"],
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: "1",
+        dosageUnit: "serving",
+        route: "oral",
+      },
+      {
+        title: "HRV Check-In",
+        description:
+          "Take a morning HRV reading before getting out of bed (use WHOOP, Oura, or HRV4Training). Cold and heat stress should improve parasympathetic tone over weeks. If HRV drops significantly for 2+ days, scale back intensity or take a rest day. HRV trending up = adaptation is working.",
+        frequency: "daily",
+        startDay: 1,
+        endDay: 60,
+        timeOfDay: "morning",
+        dosageAmount: null,
+        dosageUnit: null,
+        route: null,
+      },
+    ],
+    tags: ["cold exposure", "sauna", "heat stress", "dopamine", "brown fat", "HRV", "longevity", "recovery", "growth hormone"],
+    summary: "8-week cold plunge + sauna protocol — Søberg method, 4x/week cold, 3x/week heat, end on cold",
+  },
 ];
