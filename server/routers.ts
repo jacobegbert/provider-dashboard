@@ -3254,7 +3254,6 @@ export const appRouter = router({
         const user = await db.getUserByEmail(input.email);
         if (!user) return { success: true };
 
-        const { randomBytes, createHash } = await import("crypto");
         const token = randomBytes(32).toString("hex");
         const tokenHash = createHash("sha256").update(token).digest("hex");
         const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
@@ -3284,7 +3283,6 @@ export const appRouter = router({
     resetPassword: publicProcedure
       .input(z.object({ token: z.string().min(1), password: z.string().min(6) }))
       .mutation(async ({ input }) => {
-        const { createHash } = await import("crypto");
         const tokenHash = createHash("sha256").update(input.token).digest("hex");
 
         const database = await getDb();
