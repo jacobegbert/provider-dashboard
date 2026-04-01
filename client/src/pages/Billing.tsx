@@ -46,8 +46,10 @@ function statusBadge(status: InvoiceStatus) {
   );
 }
 
-function formatCents(cents: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
+function formatCents(cents: number | string | null | undefined) {
+  const n = Number(cents);
+  if (isNaN(n)) return "$0.00";
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n / 100);
 }
 
 function formatDate(d: string | null | undefined) {
