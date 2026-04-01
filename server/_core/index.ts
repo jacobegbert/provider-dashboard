@@ -32,7 +32,11 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "50mb" }));
+  // Skip JSON parsing for Stripe webhook (needs raw body for signature verification)
+  app.use((req, res, next) => {
+    if (req.path === "/api/stripe/webhook") return next();
+    express.json({ limit: "50mb" })(req, res, next);
+  });
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   // tRPC API
   app.use(

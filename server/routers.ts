@@ -5,7 +5,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, ownerProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { createHash, timingSafeEqual } from "crypto";
+import { createHash, randomBytes, timingSafeEqual } from "crypto";
 import * as db from "./db";
 import { messages } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -21,7 +21,7 @@ import { createDatabaseBackup, listBackups, addToManifest, getBackupDownloadUrl,
 import { notifyOwner } from "./_core/notification";
 import { generateIntakePdf } from "./intakePdfGenerator";
 import Stripe from "stripe";
-import { invoices, stripeCustomers } from "../drizzle/schema";
+import { invoices, stripeCustomers, patientPlans } from "../drizzle/schema";
 import { getDb } from "./db";
 import { sql as drizzleSql } from "drizzle-orm";
 
@@ -465,7 +465,7 @@ const protocolRouter = router({
               protocolName: protocol?.name || "Your protocol",
               changeDescription: "Your provider has updated the steps and details of this protocol. Please review the latest version in your portal.",
               portalUrl: "https://www.blacklabelmedicine.com/patient/protocols",
-            }).catch((err) => { console.error("[Notify] Protocol update notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_update", entityId: 0, metadata: { error: err?.message || String(err), type: "protocol_update" } }).catch(() => {}); });
+            }).catch((err) => { console.error("[Notify] Protocol update notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_update", entityId: 0, details: { error: err?.message || String(err), type: "protocol_update" } }).catch(() => {}); });
           }
         }
       } catch (e) {
@@ -791,7 +791,7 @@ const assignmentRouter = router({
           protocolDescription: protocol?.description || undefined,
           stepCount: steps.length,
           portalUrl,
-        }).catch((err) => { console.error("[Notify] Protocol assigned notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, metadata: { error: err?.message || String(err), type: "protocol_assigned" } }).catch(() => {}); });
+        }).catch((err) => { console.error("[Notify] Protocol assigned notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, details: { error: err?.message || String(err), type: "protocol_assigned" } }).catch(() => {}); });
       }
       await db.logAudit({
         userId: ctx.user.id,
@@ -860,7 +860,7 @@ const assignmentRouter = router({
             protocolDescription: protocol?.description || undefined,
             stepCount: steps.length,
             portalUrl,
-          }).catch((err) => { console.error("[Notify] Bulk assign notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, metadata: { error: err?.message || String(err), type: "bulk_assign" } }).catch(() => {}); });
+          }).catch((err) => { console.error("[Notify] Bulk assign notification failed:", err?.message || err); db.logAudit({ userId: 0, action: "notification.failed", entityType: "protocol_assignment", entityId: 0, details: { error: err?.message || String(err), type: "bulk_assign" } }).catch(() => {}); });
         }
         await db.logAudit({
           userId: ctx.user.id,
@@ -1480,6 +1480,11 @@ const notificationRouter = router({
   markRead: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
+      // Verify the notification belongs to the current user
+      const notif = await db.getNotificationById(input.id);
+      if (!notif || notif.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Cannot modify another user's notification" });
+      }
       await db.markNotificationRead(input.id);
       await db.logAudit({
         userId: ctx.user.id,
@@ -1501,6 +1506,11 @@ const notificationRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
+      // Verify the notification belongs to the current user
+      const notif = await db.getNotificationById(input.id);
+      if (!notif || notif.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Cannot delete another user's notification" });
+      }
       await db.deleteNotification(input.id);
       await db.logAudit({
         userId: ctx.user.id,
@@ -2958,12 +2968,185 @@ const billingRouter = router({
   }),
 });
 
+// ─────────────────────────────────────────────
+// PLANS ROUTER — membership / care plan tracking
+// ─────────────────────────────────────────────
+
+/** Returns end date given a start date and plan type */
+function calcEndDate(startDate: Date, planType: string, durationMonths?: number | null): Date | null {
+  if (planType === "ongoing") return null;
+  const months =
+    planType === "annual" ? 12 :
+    planType === "biannual" ? 6 :
+    planType === "quarterly" ? 3 :
+    planType === "monthly" ? 1 :
+    planType === "custom" ? (durationMonths ?? 1) : 12;
+  const end = new Date(startDate);
+  end.setMonth(end.getMonth() + months);
+  return end;
+}
+
+const plansRouter = router({
+  /** List all patient plans (admin). Optionally filter to renewals only. */
+  list: adminProcedure
+    .input(z.object({ renewalWindowDays: z.number().optional() }).optional())
+    .query(async ({ input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      const rows = await database
+        .select({
+          plan: patientPlans,
+          patientName: drizzleSql<string>`p.name`,
+          patientEmail: drizzleSql<string>`p.email`,
+        })
+        .from(patientPlans)
+        .leftJoin(drizzleSql`patients p`, drizzleSql`p.id = ${patientPlans.patientId}`)
+        .orderBy(drizzleSql`${patientPlans.endDate} ASC`);
+
+      const now = new Date();
+      const windowDays = input?.renewalWindowDays ?? 0;
+      const cutoff = windowDays > 0 ? new Date(now.getTime() + windowDays * 86400_000) : null;
+
+      return rows
+        .filter(r => {
+          if (!cutoff) return true;
+          if (!r.plan.endDate) return false; // ongoing — never expires
+          return r.plan.endDate <= cutoff && r.plan.status === "active";
+        })
+        .map(r => ({
+          ...r.plan,
+          patientName: r.patientName,
+          patientEmail: r.patientEmail,
+          daysUntilExpiry: r.plan.endDate
+            ? Math.ceil((r.plan.endDate.getTime() - now.getTime()) / 86400_000)
+            : null,
+        }));
+    }),
+
+  /** Get the current plan for a specific patient */
+  getForPatient: adminProcedure
+    .input(z.object({ patientId: z.number() }))
+    .query(async ({ input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      const [plan] = await database
+        .select()
+        .from(patientPlans)
+        .where(eq(patientPlans.patientId, input.patientId))
+        .orderBy(drizzleSql`${patientPlans.createdAt} DESC`)
+        .limit(1);
+      return plan ?? null;
+    }),
+
+  /** Create or update a plan for a patient */
+  upsert: adminProcedure
+    .input(z.object({
+      id: z.number().optional(),
+      patientId: z.number(),
+      planType: z.enum(["annual", "biannual", "quarterly", "monthly", "custom", "ongoing"]),
+      startDate: z.string(), // ISO string
+      durationMonths: z.number().optional(),
+      status: z.enum(["active", "expired", "cancelled", "paused", "pending_renewal"]).optional(),
+      notes: z.string().optional(),
+      priceCents: z.number().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      const startDate = new Date(input.startDate);
+      const endDate = calcEndDate(startDate, input.planType, input.durationMonths);
+
+      if (input.id) {
+        await database
+          .update(patientPlans)
+          .set({
+            planType: input.planType,
+            startDate,
+            endDate,
+            durationMonths: input.durationMonths ?? null,
+            status: input.status ?? "active",
+            notes: input.notes ?? null,
+            priceCents: input.priceCents ?? null,
+            renewalReminderSent: false,
+          })
+          .where(eq(patientPlans.id, input.id));
+        return { id: input.id };
+      } else {
+        const [result] = await database.insert(patientPlans).values({
+          patientId: input.patientId,
+          planType: input.planType,
+          startDate,
+          endDate,
+          durationMonths: input.durationMonths ?? null,
+          status: input.status ?? "active",
+          notes: input.notes ?? null,
+          priceCents: input.priceCents ?? null,
+        });
+        return { id: (result as any).insertId };
+      }
+    }),
+
+  /** Update just the status */
+  updateStatus: adminProcedure
+    .input(z.object({
+      id: z.number(),
+      status: z.enum(["active", "expired", "cancelled", "paused", "pending_renewal"]),
+    }))
+    .mutation(async ({ input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      await database
+        .update(patientPlans)
+        .set({ status: input.status })
+        .where(eq(patientPlans.id, input.id));
+      return { success: true };
+    }),
+
+  /** Delete a plan */
+  delete: adminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      await database.delete(patientPlans).where(eq(patientPlans.id, input.id));
+      return { success: true };
+    }),
+
+  /** Plans renewing within the next 30 days — used for dashboard alert */
+  renewalAlerts: adminProcedure.query(async () => {
+    const database = await getDb();
+    if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+    const now = new Date();
+    const in30 = new Date(now.getTime() + 30 * 86400_000);
+    const rows = await database
+      .select({
+        plan: patientPlans,
+        patientName: drizzleSql<string>`p.name`,
+      })
+      .from(patientPlans)
+      .leftJoin(drizzleSql`patients p`, drizzleSql`p.id = ${patientPlans.patientId}`)
+      .where(drizzleSql`
+        ${patientPlans.status} = 'active'
+        AND ${patientPlans.endDate} IS NOT NULL
+        AND ${patientPlans.endDate} <= ${in30}
+        AND ${patientPlans.endDate} >= ${now}
+      `)
+      .orderBy(drizzleSql`${patientPlans.endDate} ASC`);
+
+    return rows.map(r => ({
+      ...r.plan,
+      patientName: r.patientName,
+      daysUntilExpiry: Math.ceil((r.plan.endDate!.getTime() - now.getTime()) / 86400_000),
+    }));
+  }),
+});
+
 export const appRouter = router({
   system: systemRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     /** Diagnostic endpoint — shows what the server sees for the current session */
-    debug: protectedProcedure.query(async ({ ctx }) => {
+    debug: adminProcedure.query(async ({ ctx }) => {
       const ownerEmail = process.env.OWNER_EMAIL ?? "(not set)";
       let resolvedOwnerId: number | null = null;
       let ownerLookupResult: string = "";
@@ -3003,9 +3186,20 @@ export const appRouter = router({
         if (!user || !user.passwordHash) {
           throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or password" });
         }
-        // Verify password using SHA-256 HMAC stored hash (bcrypt-free, no native deps)
-        const inputHash = createHash("sha256").update(input.password).digest("hex");
-        const storedHash = Buffer.from(user.passwordHash, "hex");
+        // Verify password — supports both legacy (unsalted SHA-256) and salted format
+        // Salted format: 32-char hex salt + SHA-256(salt + password) hex digest = 96 chars
+        // Legacy format: plain SHA-256 hex digest = 64 chars
+        const stored = user.passwordHash!;
+        let inputHash: string;
+        if (stored.length > 64) {
+          // Salted hash
+          const salt = stored.substring(0, 32);
+          inputHash = salt + createHash("sha256").update(salt + input.password).digest("hex");
+        } else {
+          // Legacy unsalted hash
+          inputHash = createHash("sha256").update(input.password).digest("hex");
+        }
+        const storedHash = Buffer.from(stored, "hex");
         const inputHashBuf = Buffer.from(inputHash, "hex");
         const match = storedHash.length === inputHashBuf.length &&
           timingSafeEqual(storedHash, inputHashBuf);
@@ -3049,6 +3243,7 @@ export const appRouter = router({
   staff: staffRouter,
   intake: intakeRouter,
   billing: billingRouter,
+  plans: plansRouter,
 });
 
 export type AppRouter = typeof appRouter;

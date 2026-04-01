@@ -115,9 +115,18 @@ export async function getUserByEmail(email: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-export async function setUserPassword(openId: string, passwordHash: string) {
+/** Hash a password with a random 16-byte salt. Returns 96-char hex string (32 salt + 64 digest). */
+export function hashPassword(password: string): string {
+  const { createHash, randomBytes } = require("crypto");
+  const salt = randomBytes(16).toString("hex"); // 32 hex chars
+  const digest = createHash("sha256").update(salt + password).digest("hex");
+  return salt + digest;
+}
+
+export async function setUserPassword(openId: string, password: string) {
   const db = await getDb();
   if (!db) return;
+  const passwordHash = hashPassword(password);
   await db.update(users).set({ passwordHash }).where(eq(users.openId, openId));
 }
 
@@ -200,7 +209,7 @@ export async function listPatients(providerId: number) {
 export async function getPatient(id: number) {
   const db = await getDb();
   if (!db) return undefined;
-  const result = await db.select().from(patients).where(eq(patients.id, id)).limit(1);
+  const result = await db.select().from(patients).where(and(eq(patients.id, id), isNull(patients.deletedAt))).limit(1);
   return result[0];
 }
 
@@ -231,29 +240,31 @@ export async function restorePatient(id: number) {
   await db.update(patients).set({ deletedAt: null }).where(eq(patients.id, id));
 }
 
-/** Permanently delete a patient and all related records */
+/** Permanently delete a patient and all related records (transactional) */
 export async function permanentlyDeletePatient(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  // Delete child records first
-  await db.delete(resourceShares).where(eq(resourceShares.patientId, id));
-  await db.delete(biomarkerEntries).where(eq(biomarkerEntries.patientId, id));
-  await db.delete(biomarkerCustomMetrics).where(eq(biomarkerCustomMetrics.patientId, id));
-  await db.delete(documents).where(eq(documents.patientId, id));
-  await db.delete(clientNotes).where(eq(clientNotes.patientId, id));
-  await db.delete(clientTasks).where(eq(clientTasks.patientId, id));
-  await db.delete(messages).where(eq(messages.patientId, id));
-  await db.delete(appointments).where(eq(appointments.patientId, id));
-  await db.delete(patientInvites).where(eq(patientInvites.patientId, id));
-  // Delete assignment steps and task completions via assignments
-  const patientAssignments = await db.select().from(protocolAssignments).where(eq(protocolAssignments.patientId, id));
-  for (const a of patientAssignments) {
-    await db.delete(taskCompletions).where(eq(taskCompletions.assignmentId, a.id));
-    await db.delete(assignmentSteps).where(eq(assignmentSteps.assignmentId, a.id));
-  }
-  await db.delete(protocolAssignments).where(eq(protocolAssignments.patientId, id));
-  // Finally delete the patient
-  await db.delete(patients).where(eq(patients.id, id));
+  await db.transaction(async (tx) => {
+    // Delete child records first
+    await tx.delete(resourceShares).where(eq(resourceShares.patientId, id));
+    await tx.delete(biomarkerEntries).where(eq(biomarkerEntries.patientId, id));
+    await tx.delete(biomarkerCustomMetrics).where(eq(biomarkerCustomMetrics.patientId, id));
+    await tx.delete(documents).where(eq(documents.patientId, id));
+    await tx.delete(clientNotes).where(eq(clientNotes.patientId, id));
+    await tx.delete(clientTasks).where(eq(clientTasks.patientId, id));
+    await tx.delete(messages).where(eq(messages.patientId, id));
+    await tx.delete(appointments).where(eq(appointments.patientId, id));
+    await tx.delete(patientInvites).where(eq(patientInvites.patientId, id));
+    // Delete assignment steps and task completions via assignments
+    const patientAssignments = await tx.select().from(protocolAssignments).where(eq(protocolAssignments.patientId, id));
+    for (const a of patientAssignments) {
+      await tx.delete(taskCompletions).where(eq(taskCompletions.assignmentId, a.id));
+      await tx.delete(assignmentSteps).where(eq(assignmentSteps.assignmentId, a.id));
+    }
+    await tx.delete(protocolAssignments).where(eq(protocolAssignments.patientId, id));
+    // Finally delete the patient
+    await tx.delete(patients).where(eq(patients.id, id));
+  });
 }
 
 /** List soft-deleted patients for the Trash view */
@@ -694,6 +705,13 @@ export async function createNotification(data: InsertNotification) {
   }
 
   return { id: notifId };
+}
+
+export async function getNotificationById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(notifications).where(eq(notifications.id, id)).limit(1);
+  return result[0];
 }
 
 export async function markNotificationRead(id: number) {

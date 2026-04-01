@@ -695,3 +695,32 @@ export const invoices = mysqlTable("invoices", {
 });
 export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoice = typeof invoices.$inferInsert;
+
+// ─────────────────────────────────────────────
+// 27. PATIENT PLANS (membership / care plans)
+// ─────────────────────────────────────────────
+export const patientPlans = mysqlTable("patient_plans", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull(),
+  /** Plan duration type */
+  planType: mysqlEnum("planType", ["annual", "biannual", "quarterly", "monthly", "custom", "ongoing"]).notNull().default("annual"),
+  /** Provider-entered start date */
+  startDate: timestamp("startDate").notNull(),
+  /** Auto-calculated end date (null for ongoing) */
+  endDate: timestamp("endDate"),
+  /** For custom plans: number of months */
+  durationMonths: int("durationMonths"),
+  /** Current lifecycle status */
+  status: mysqlEnum("status", ["active", "expired", "cancelled", "paused", "pending_renewal"]).notNull().default("active"),
+  /** Provider notes about this plan */
+  notes: text("notes"),
+  /** Price in cents (for reference — actual billing is in invoices table) */
+  priceCents: int("priceCents"),
+  /** Whether a renewal reminder has been sent */
+  renewalReminderSent: boolean("renewalReminderSent").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PatientPlan = typeof patientPlans.$inferSelect;
+export type InsertPatientPlan = typeof patientPlans.$inferInsert;

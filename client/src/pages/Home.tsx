@@ -17,6 +17,8 @@ import {
   ClipboardList,
   Loader2,
   Inbox,
+  Bell,
+  CalendarDays,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,11 +74,13 @@ export default function Home() {
   const patientsQuery = trpc.patient.list.useQuery();
   const appointmentsQuery = trpc.appointment.listForProvider.useQuery();
   const conversationsQuery = trpc.message.conversations.useQuery();
+  const renewalAlertsQuery = trpc.plans.renewalAlerts.useQuery();
 
   const stats = statsQuery.data;
   const allPatients = patientsQuery.data || [];
   const allAppointmentsRaw = appointmentsQuery.data || [];
   const conversations = conversationsQuery.data || [];
+  const renewalAlerts = renewalAlertsQuery.data || [];
 
   // Derived data
   const attentionPatients = allPatients.filter(
@@ -340,6 +344,43 @@ export default function Home() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Renewal Alerts */}
+      {renewalAlerts.length > 0 && (
+        <Card className="border-amber-500/20 bg-amber-500/5">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="font-heading text-base font-semibold flex items-center gap-2">
+                <Bell className="h-4 w-4 text-amber-400" />
+                Plan Renewals
+              </CardTitle>
+              <Link href="/provider/plans">
+                <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-amber-400 hover:text-amber-300">
+                  View all <ArrowRight className="h-3 w-3" />
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 space-y-2">
+            {renewalAlerts.slice(0, 4).map((alert) => (
+              <div key={alert.id} className="flex items-center justify-between rounded-lg bg-amber-500/8 border border-amber-500/15 px-3 py-2.5">
+                <div className="flex items-center gap-2.5">
+                  <CalendarDays className="h-4 w-4 text-amber-400 shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium">{alert.patientName ?? `Patient #${alert.patientId}`}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {alert.endDate ? `Plan ends ${new Date(alert.endDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}` : "Ongoing plan"}
+                    </p>
+                  </div>
+                </div>
+                <Badge className={`text-xs border-0 ${(alert.daysUntilExpiry ?? Infinity) <= 7 ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}>
+                  {alert.daysUntilExpiry != null ? `${alert.daysUntilExpiry}d left` : "Ongoing"}
+                </Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Quick Actions */}
       <Card className="border-border/50 bg-card">

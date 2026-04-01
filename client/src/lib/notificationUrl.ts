@@ -11,20 +11,22 @@ export function getNotificationFallbackUrl(
   relatedEntityType?: string | null,
   relatedEntityId?: number | null
 ): string | null {
+  const isPatient = window.location.pathname.startsWith("/patient");
+
   // Direct mapping for entity types that don't need a DB lookup
-  if (relatedEntityType === "appointment") return "/provider/schedule";
+  if (relatedEntityType === "appointment") return isPatient ? "/patient/schedule" : "/provider/schedule";
   if (relatedEntityType === "assignment") return "/patient/protocols";
   if (relatedEntityType === "clientTask") return "/patient/protocols";
 
   // Fallback based on notification type
   switch (type) {
     case "message":
-      return "/provider/messages";
+      return isPatient ? "/patient/messages" : "/provider/messages";
     case "appointment_reminder":
-      return "/provider/schedule";
+      return isPatient ? "/patient/schedule" : "/provider/schedule";
     case "task_overdue":
     case "task_reminder":
-      return "/provider/clients";
+      return isPatient ? "/patient/protocols" : "/provider/clients";
     case "compliance_alert":
       return "/provider/attention";
     default:

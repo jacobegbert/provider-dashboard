@@ -71,7 +71,7 @@ export default function Billing() {
   const summaryQuery = trpc.billing.summary.useQuery();
   const invoicesQuery = trpc.billing.listInvoices.useQuery({});
   const patientsQuery = trpc.patient.list.useQuery();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const createInvoiceMutation = trpc.billing.createInvoice.useMutation({
     onSuccess: () => {

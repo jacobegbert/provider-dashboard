@@ -78,6 +78,7 @@ export default function PatientMessages() {
       patientId,
       receiverId: providerUserId,
       content: newMessage.trim(),
+      origin: window.location.origin,
     });
   };
 

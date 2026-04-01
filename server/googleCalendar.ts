@@ -3,12 +3,23 @@
  * Handles OAuth token management and calendar event CRUD
  */
 import { google } from "googleapis";
+import { createHash, randomBytes } from "crypto";
 import { ENV } from "./_core/env";
 import { getDb } from "./db";
 import { googleTokens, appointments } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
+
+// In-memory nonce store for CSRF protection on OAuth callbacks.
+// Nonces expire after 10 minutes.
+const pendingNonces = new Map<string, { userId: number; redirectUri: string; expiresAt: number }>();
+setInterval(() => {
+  const now = Date.now();
+  pendingNonces.forEach((data, nonce) => {
+    if (data.expiresAt < now) pendingNonces.delete(nonce);
+  });
+}, 60_000);
 
 function createOAuth2Client(redirectUri?: string) {
   return new google.auth.OAuth2(
@@ -18,20 +29,32 @@ function createOAuth2Client(redirectUri?: string) {
   );
 }
 
-/** Generate the Google OAuth consent URL */
+/** Generate the Google OAuth consent URL with CSRF nonce */
 export function getGoogleAuthUrl(redirectUri: string, userId: number) {
+  const nonce = randomBytes(16).toString("hex");
+  pendingNonces.set(nonce, { userId, redirectUri, expiresAt: Date.now() + 10 * 60_000 });
   const client = createOAuth2Client(redirectUri);
   return client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
     prompt: "consent",
-    state: JSON.stringify({ userId, redirectUri }),
+    state: JSON.stringify({ nonce, userId, redirectUri }),
   });
 }
 
 /** Exchange authorization code for tokens and store them */
 export async function handleGoogleCallback(code: string, state: string) {
-  const { userId, redirectUri } = JSON.parse(state);
+  const parsed = JSON.parse(state);
+  const { nonce, userId, redirectUri } = parsed;
+  // Verify CSRF nonce
+  if (!nonce || !pendingNonces.has(nonce)) {
+    throw new Error("Invalid or expired OAuth state — please try connecting again");
+  }
+  const stored = pendingNonces.get(nonce)!;
+  pendingNonces.delete(nonce);
+  if (stored.userId !== userId) {
+    throw new Error("OAuth state mismatch — possible CSRF attack");
+  }
   const client = createOAuth2Client(redirectUri);
 
   const { tokens } = await client.getToken(code);

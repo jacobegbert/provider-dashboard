@@ -21,6 +21,7 @@ import {
   Brain,
   BookOpen,
   CreditCard,
+  CalendarDays,
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 import { Badge } from "@/components/ui/badge";
@@ -28,11 +29,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [location, navigate] = useLocation();
 
+  const { user } = useAuth();
   // Real-time SSE notifications
   useRealtimeNotifications(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,6 +78,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return count;
   }, [attentionQueueQuery.data, dismissedQuery.data]);
 
+  // Renewal alerts badge
+  const renewalAlertsQuery = trpc.plans.renewalAlerts.useQuery(undefined, { refetchInterval: 60_000 });
+  const renewalBadge = renewalAlertsQuery.data?.length || 0;
+
   // Search patients
   const patientsQuery = trpc.patient.list.useQuery();
   const patients = patientsQuery.data || [];
@@ -109,6 +116,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { path: "/provider/resources", label: "Resources", icon: BookOpen },
     { path: "/provider/ai-advisor", label: "AI Advisor", icon: Brain },
     { path: "/provider/billing", label: "Billing", icon: CreditCard },
+    { path: "/provider/plans", label: "Plans", icon: CalendarDays, badge: renewalBadge || undefined },
   ];
 
   return (
@@ -280,9 +288,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <NotificationBell />
             <div className="flex items-center gap-2.5 rounded-lg bg-card border border-border px-3 py-1.5 shadow-sm">
               <div className="h-7 w-7 rounded-full bg-gold/15 flex items-center justify-center border border-gold/25">
-                <span className="text-xs font-semibold text-gold" style={{ fontFamily: "'Cormorant Garamond', serif" }}>JE</span>
+                <span className="text-xs font-semibold text-gold" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{user?.name?.split(" ").map(n => n[0]).join("").toUpperCase() || "?"}</span>
               </div>
-              <span className="text-sm font-medium text-foreground">Dr. Egbert</span>
+              <span className="text-sm font-medium text-foreground">{user?.name || "Provider"}</span>
             </div>
           </div>
         </header>

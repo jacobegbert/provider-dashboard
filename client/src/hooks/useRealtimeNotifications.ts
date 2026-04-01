@@ -25,15 +25,19 @@ interface SSENotification {
  * This is a lightweight mirror of the server-side resolveUrl logic
  * so we can navigate immediately without an extra round-trip.
  */
+/**
+ * Resolve a client-side navigation path for a notification.
+ * Context-aware: uses current path to determine if user is on patient or provider portal.
+ */
 function resolveClientUrl(n: SSENotification): string | null {
   const { relatedEntityType, type } = n;
-  if (relatedEntityType === "appointment") return "/provider/schedule";
+  const isPatient = window.location.pathname.startsWith("/patient");
+
+  if (relatedEntityType === "appointment") return isPatient ? "/patient/schedule" : "/provider/schedule";
   if (relatedEntityType === "assignment" || relatedEntityType === "clientTask") return "/patient/protocols";
-  // For messages, we can't resolve the patientId client-side without a query,
-  // so fall back to the generic messages page.
-  if (relatedEntityType === "message" || type === "message") return "/provider/messages";
-  if (type === "appointment_reminder") return "/provider/schedule";
-  if (type === "task_reminder" || type === "task_overdue") return "/provider/clients";
+  if (relatedEntityType === "message" || type === "message") return isPatient ? "/patient/messages" : "/provider/messages";
+  if (type === "appointment_reminder") return isPatient ? "/patient/schedule" : "/provider/schedule";
+  if (type === "task_reminder" || type === "task_overdue") return isPatient ? "/patient/protocols" : "/provider/clients";
   if (type === "compliance_alert") return "/provider/attention";
   if (type === "protocol_assigned") return "/patient/protocols";
   return null;

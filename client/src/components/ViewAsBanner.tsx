@@ -6,9 +6,11 @@
 import { useViewAs } from "@/contexts/ViewAsContext";
 import { Eye, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function ViewAsBanner() {
   const { isImpersonating } = useViewAs();
+  const [, setLocation] = useLocation();
 
   if (!isImpersonating) return null;
 
@@ -22,7 +24,7 @@ export default function ViewAsBanner() {
         size="sm"
         variant="ghost"
         className="h-7 text-xs text-white hover:bg-white/20 gap-1.5"
-        onClick={() => window.close()}
+        onClick={() => setLocation("/provider/clients")}
       >
         <ArrowLeft className="h-3 w-3" />
         Close Preview

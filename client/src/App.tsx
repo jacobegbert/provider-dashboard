@@ -47,6 +47,7 @@ import PublicLanding from "./pages/PublicLanding";
 import Debug from "./pages/Debug";
 import Billing from "./pages/Billing";
 import PatientBilling from "./pages/patient/PatientBilling";
+import Plans from "./pages/Plans";
 import Login from "./pages/Login";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
@@ -97,6 +98,7 @@ function ProviderPages() {
           <Route path="/provider/resources" component={Resources} />
           <Route path="/provider/ai-advisor" component={AIAdvisor} />
           <Route path="/provider/billing" component={Billing} />
+          <Route path="/provider/plans" component={Plans} />
           <Route path="/provider/settings" component={Settings} />
           <Route component={NotFound} />
         </Switch>
@@ -104,8 +106,31 @@ function ProviderPages() {
     </AdminGuard>
   );
 }
+/**
+ * PatientGuard — prevents unauthenticated users from accessing patient routes.
+ * While auth is loading, shows a spinner. If not authenticated, redirects to login.
+ */
+function PatientGuard({ children }: { children: React.ReactNode }) {
+  const { loading, isAuthenticated } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Redirect to={`/login?returnTo=${encodeURIComponent("/patient")}`} />;
+  }
+
+  return <>{children}</>;
+}
+
 function PatientPages() {
   return (
+    <PatientGuard>
     <ViewAsProvider>
     <PatientLayout>
       <Switch>
@@ -131,6 +156,7 @@ function PatientPages() {
       </Switch>
     </PatientLayout>
     </ViewAsProvider>
+    </PatientGuard>
   );
 }
 
