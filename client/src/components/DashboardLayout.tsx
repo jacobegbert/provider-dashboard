@@ -20,6 +20,7 @@ import {
   X,
   Brain,
   BookOpen,
+  CreditCard,
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +108,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { path: "/provider/analytics", label: "Analytics", icon: BarChart3 },
     { path: "/provider/resources", label: "Resources", icon: BookOpen },
     { path: "/provider/ai-advisor", label: "AI Advisor", icon: Brain },
+    { path: "/provider/billing", label: "Billing", icon: CreditCard },
   ];
 
   return (

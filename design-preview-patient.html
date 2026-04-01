@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Label Medicine — Patient Portal Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ivory:      #F5F0E6;
+    --ivory-2:    #EDE8DC;
+    --white:      #FFFFFF;
+    --gold:       #C4993A;
+    --gold-lt:    #D4AF5A;
+    --gold-dim:   rgba(196,153,58,0.10);
+    --gold-dim2:  rgba(196,153,58,0.18);
+    --text:       #1A1916;
+    --text-2:     #3A3730;
+    --muted:      #7A776E;
+    --border:     #DDD9CE;
+    --green:      #2A6B48;
+    --green-lt:   #EBF4EE;
+    --amber:      #B8621A;
+    --amber-lt:   #FDF0E7;
+    --blue:       #2A5280;
+    --blue-lt:    #EAF0F8;
+    --card-sh:    0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04);
+    --sidebar-w:  220px;
+  }
+
+  html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--ivory); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+  .layout { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ─── PATIENT SIDEBAR ─── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--ivory-2);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .sidebar-top {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-lockup { display: flex; align-items: center; gap: 9px; }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--text);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-weight: 600; color: var(--gold);
+    letter-spacing: -0.3px; flex-shrink: 0;
+  }
+  .logo-text-name { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.01em; }
+  .logo-text-sub  { font-size: 9.5px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1px; }
+
+  .patient-greeting {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .greeting-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .greeting-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 500; color: var(--text);
+    letter-spacing: -0.2px; margin-top: 2px; line-height: 1.2;
+  }
+  .greeting-tier {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 6px;
+    background: var(--text);
+    color: var(--gold-lt);
+    font-size: 9.5px; font-weight: 500;
+    padding: 2px 8px; border-radius: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  .sidebar-nav { padding: 10px 10px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7.5px 10px; border-radius: 6px;
+    cursor: pointer; color: var(--muted);
+    font-size: 13px; font-weight: 450;
+    margin-bottom: 1px; text-decoration: none;
+    transition: all 0.12s;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+  .nav-item.active { color: var(--text); background: var(--white); font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .nav-icon { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; background: var(--gold); color: var(--text); font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
+  .nav-new { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+  .sidebar-footer {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .compliance-summary { padding: 10px 12px; background: var(--white); border-radius: 7px; border: 1px solid var(--border); }
+  .compliance-label { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+  .compliance-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; color: var(--green);
+    line-height: 1; letter-spacing: -0.5px;
+  }
+  .compliance-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+  .compliance-bar-track { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; }
+  .compliance-bar-fill { height: 100%; border-radius: 2px; background: var(--green); }
+
+  /* ─── MAIN ─── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+  .topbar {
+    height: 52px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 22px; gap: 10px;
+    flex-shrink: 0;
+  }
+  .topbar-date { font-size: 12px; color: var(--muted); }
+  .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--muted);
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--ivory); }
+  .notif-dot { position: absolute; top: 5px; right: 5px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); border: 1.5px solid white; }
+
+  .content { flex: 1; overflow-y: auto; padding: 22px 24px; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--card-sh);
+    overflow: hidden;
+  }
+  .card-header { padding: 14px 16px 0; display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 500; color: var(--text); letter-spacing: -0.1px; }
+  .card-sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .card-body { padding: 12px 16px 16px; }
+  .card-link { font-size: 12px; color: var(--gold); font-weight: 500; text-decoration: none; }
+
+  /* ─── GRID ─── */
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .grid-2-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .grid-1 { margin-bottom: 16px; }
+
+  /* ─── TODAY'S HERO ─── */
+  .today-hero {
+    background: var(--text);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+  }
+  .today-hero::before {
+    content: '';
+    position: absolute; top: -30px; right: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,153,58,0.12) 0%, transparent 70%);
+  }
+  .today-hero-left { position: relative; z-index: 1; }
+  .today-hero-label { font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .today-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; color: white;
+    letter-spacing: -0.2px; line-height: 1.2;
+  }
+  .today-hero-title em { color: var(--gold-lt); font-style: italic; }
+  .today-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.45); margin-top: 5px; }
+  .today-hero-right { position: relative; z-index: 1; text-align: right; }
+  .today-hero-number { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 600; color: var(--gold-lt); line-height: 1; }
+  .today-hero-number-label { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+  /* ─── MINI STAT ─── */
+  .mini-stat { padding: 14px 16px; }
+  .mini-stat-icon { width: 30px; height: 30px; border-radius: 7px; background: var(--gold-dim); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .mini-stat-value { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; letter-spacing: -0.5px; }
+  .mini-stat-label { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+  /* ─── TASK LIST ─── */
+  .task-item {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px; cursor: pointer;
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .task-check.done { background: var(--green); border-color: var(--green); }
+  .task-check.done svg { display: block; }
+  .task-check svg { display: none; }
+  .task-info { flex: 1; }
+  .task-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .task-name.done { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+  .task-meta { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .task-tag { font-size: 10.5px; color: var(--gold); background: var(--gold-dim); padding: 1.5px 7px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
+
+  /* ─── APPOINTMENT CARD ─── */
+  .appt-banner {
+    background: linear-gradient(135deg, var(--ivory) 0%, #EDE8DC 100%);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--card-sh);
+    margin-bottom: 16px;
+  }
+  .appt-date-block {
+    background: var(--text);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 56px;
+    flex-shrink: 0;
+  }
+  .appt-month { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-lt); }
+  .appt-day { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: white; line-height: 1; }
+  .appt-info-main { flex: 1; }
+  .appt-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--text); }
+  .appt-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .appt-detail span { color: var(--text); font-weight: 500; }
+  .appt-actions { display: flex; flex-direction: column; gap: 6px; }
+  .btn-sm {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    padding: 5px 12px; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none;
+    white-space: nowrap;
+  }
+  .btn-gold { background: var(--gold); color: var(--text); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-outline:hover { color: var(--text); background: var(--ivory); }
+
+  /* ─── BIOMARKER ITEMS ─── */
+  .biomarker-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .biomarker-item:last-child { border-bottom: none; }
+  .biomarker-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .biomarker-info { flex: 1; }
+  .biomarker-name { font-size: 13px; font-weight: 450; color: var(--text); }
+  .biomarker-date { font-size: 11px; color: var(--muted); }
+  .biomarker-value { text-align: right; }
+  .biomarker-num { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--text); line-height: 1; }
+  .biomarker-unit { font-size: 10.5px; color: var(--muted); }
+  .biomarker-status { font-size: 10px; font-weight: 500; padding: 1.5px 6px; border-radius: 8px; }
+  .status-optimal { background: var(--green-lt); color: var(--green); }
+  .status-review  { background: var(--amber-lt); color: var(--amber); }
+
+  /* ─── MESSAGE PREVIEW ─── */
+  .message-preview {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 12px 16px;
+    background: var(--ivory);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .message-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-weight: 600; color: var(--gold-lt);
+    flex-shrink: 0;
+  }
+  .message-body { flex: 1; }
+  .message-sender { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .message-time { font-size: 11px; color: var(--muted); float: right; }
+  .message-preview-text { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .message-unread { display: inline-block; background: var(--gold); width: 7px; height: 7px; border-radius: 50%; margin-left: 5px; vertical-align: middle; }
+
+  /* ─── PROTOCOL PROGRESS ─── */
+  .protocol-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .protocol-item:last-child { border-bottom: none; }
+  .protocol-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .protocol-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .protocol-days { font-size: 11px; color: var(--muted); }
+  .progress-track { height: 4px; background: var(--border); border-radius: 2px; }
+  .progress-fill { height: 100%; border-radius: 2px; }
+  .protocol-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+  .protocol-compliance { font-size: 11px; color: var(--muted); }
+  .protocol-badge { font-size: 10px; font-weight: 500; padding: 1.5px 7px; border-radius: 10px; background: var(--green-lt); color: var(--green); }
+
+  /* ─── AI WELLNESS ─── */
+  .ai-card {
+    background: linear-gradient(135deg, var(--text) 0%, #2A2420 100%);
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--card-sh);
+    cursor: pointer;
+  }
+  .ai-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: var(--gold-dim2);
+    border: 1px solid rgba(196,153,58,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ai-text { flex: 1; }
+  .ai-title { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 500; color: white; letter-spacing: -0.1px; }
+  .ai-sub { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+  .ai-arrow { color: rgba(255,255,255,0.25); }
+
+  /* scrollbar */
+  .content::-webkit-scrollbar { width: 4px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* design header */
+  .design-header { background: var(--text); color: white; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .design-header-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; letter-spacing: -0.3px; }
+  .design-header-title strong { color: var(--gold-lt); }
+  .design-header-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+  .design-tag { font-size: 10.5px; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); letter-spacing: 0.08em; text-transform: uppercase; }
+  .design-header-tags { display: flex; gap: 7px; }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="design-header">
+  <div>
+    <div class="design-header-title"><strong>Black Label Medicine</strong> — Patient Portal</div>
+    <div class="design-header-sub">Patient experience · Warm, personal, luxury wellness companion</div>
+  </div>
+  <div class="design-header-tags">
+    <span class="design-tag">Warm Ivory</span>
+    <span class="design-tag">Editorial Serif</span>
+    <span class="design-tag">Personal</span>
+    <span class="design-tag">Concierge</span>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="layout" style="height: calc(100vh - 60px); max-height: 820px;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo-lockup">
+        <div class="logo-mark">BL</div>
+        <div>
+          <div class="logo-text-name">Black Label</div>
+          <div class="logo-text-sub">Medicine</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="patient-greeting">
+      <div class="greeting-label">Welcome back</div>
+      <div class="greeting-name">Marcus<br>Williams</div>
+      <div class="greeting-tier">
+        <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Elite Member
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-item active">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        My Dashboard
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
+        My Protocols
+        <span class="nav-badge">2</span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        My Vitals
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Appointments
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span class="nav-new"></span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Resources
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+        Wellness AI
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="compliance-summary">
+        <div class="compliance-label">This week's compliance</div>
+        <div class="compliance-value">92%</div>
+        <div class="compliance-sub">23 of 25 tasks complete</div>
+        <div class="compliance-bar-track"><div class="compliance-bar-fill" style="width:92%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div style="font-size:12.5px; color:var(--muted);">Tuesday, March 31, 2026</div>
+      <div class="topbar-actions">
+        <div class="icon-btn">
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </div>
+        <div style="width:28px; height:28px; border-radius:50%; background:var(--text); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:12px; font-weight:600; color:var(--gold-lt); cursor:pointer;">MW</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- TODAY HERO -->
+      <div class="today-hero">
+        <div class="today-hero-left">
+          <div class="today-hero-label">Today's Focus</div>
+          <div class="today-hero-title">Testosterone <em>&amp;</em> Recovery Protocol</div>
+          <div class="today-hero-sub">Day 47 of 90 · On track</div>
+        </div>
+        <div class="today-hero-right">
+          <div class="today-hero-number">8</div>
+          <div class="today-hero-number-label">tasks today</div>
+        </div>
+      </div>
+
+      <!-- 3 MINI STATS -->
+      <div class="grid-3">
+        <div class="card">
+          <div class="mini-stat">
+            <div class="mini-stat-icon">
+              <svg width="14" height="14" fill="none" stroke="#C4993A" viewBox="0 0 24 24" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="mini-stat-value">92%</div>
+            <div class="mini-stat-label">Weekly compliance</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="mini-stat">
+            <div class="mini-stat-icon">
+              <svg width="14" height="14" fill="none" stroke="#C4993A" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+            </div>
+            <div class="mini-stat-value">4d</div>
+            <div class="mini-stat-label">Until next appt</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="mini-stat">
+            <div class="mini-stat-icon">
+              <svg width="14" height="14" fill="none" stroke="#C4993A" viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="mini-stat-value">47</div>
+            <div class="mini-stat-label">Protocol days in</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS + RIGHT COL -->
+      <div class="grid-2">
+
+        <!-- TODAY'S TASKS -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Today's Tasks</div>
+              <div class="card-sub">5 of 8 complete</div>
+            </div>
+            <a href="#" class="card-link">View all</a>
+          </div>
+          <div class="card-body">
+            <div class="task-item">
+              <div class="task-check done"><svg width="10" height="10" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="task-info">
+                <div class="task-name done">Testosterone Cypionate injection</div>
+                <div class="task-meta">100mg · SubQ · Completed 7:14am</div>
+              </div>
+              <span class="task-tag">Protocol</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check done"><svg width="10" height="10" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="task-info">
+                <div class="task-name done">Morning supplement stack</div>
+                <div class="task-meta">Zinc, Magnesium, Vitamin D3 · Completed 7:30am</div>
+              </div>
+              <span class="task-tag">Protocol</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check done"><svg width="10" height="10" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="task-info">
+                <div class="task-name done">30 min zone 2 cardio</div>
+                <div class="task-meta">Heart rate 120–140 bpm · Completed 8:15am</div>
+              </div>
+              <span class="task-tag">Exercise</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check"></div>
+              <div class="task-info">
+                <div class="task-name">Log morning weight + body fat</div>
+                <div class="task-meta">Vitals tracking · Due before noon</div>
+              </div>
+              <span class="task-tag">Vitals</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check"></div>
+              <div class="task-info">
+                <div class="task-name">BPC-157 injection</div>
+                <div class="task-meta">250mcg · SubQ abdomen · Due evening</div>
+              </div>
+              <span class="task-tag">Protocol</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check"></div>
+              <div class="task-info">
+                <div class="task-name">Evening supplement stack</div>
+                <div class="task-meta">Ashwagandha, Omega-3, Melatonin · Due 9pm</div>
+              </div>
+              <span class="task-tag">Protocol</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COL -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+
+          <!-- MESSAGE -->
+          <div class="card">
+            <div class="card-header" style="margin-bottom:10px;">
+              <div class="card-title">From Dr. Egbert</div>
+              <span style="font-size:11px; color:var(--muted);">2h ago</span>
+            </div>
+            <div class="card-body" style="padding-top:0;">
+              <div class="message-preview">
+                <div class="message-avatar">JE</div>
+                <div class="message-body">
+                  <div class="message-sender">Dr. Jacob Egbert <span class="message-unread"></span></div>
+                  <div class="message-preview-text">"Your latest testosterone levels are looking excellent — total T at 842 ng/dL. Let's discuss the next phase of your recovery protocol at our appointment Friday."</div>
+                </div>
+              </div>
+              <button class="btn-sm btn-gold" style="margin-top:10px; width:100%; justify-content:center;">Reply to Dr. Egbert</button>
+            </div>
+          </div>
+
+          <!-- BIOMARKERS -->
+          <div class="card" style="flex:1;">
+            <div class="card-header" style="margin-bottom:4px;">
+              <div class="card-title">Recent Vitals</div>
+              <a href="#" class="card-link">Log new</a>
+            </div>
+            <div class="card-body">
+              <div class="biomarker-item">
+                <div class="biomarker-dot" style="background:var(--green);"></div>
+                <div class="biomarker-info">
+                  <div class="biomarker-name">Total Testosterone</div>
+                  <div class="biomarker-date">Mar 28</div>
+                </div>
+                <div class="biomarker-value">
+                  <div class="biomarker-num">842</div>
+                  <div class="biomarker-unit">ng/dL</div>
+                </div>
+                <span class="biomarker-status status-optimal">Optimal</span>
+              </div>
+              <div class="biomarker-item">
+                <div class="biomarker-dot" style="background:var(--green);"></div>
+                <div class="biomarker-info">
+                  <div class="biomarker-name">Body Weight</div>
+                  <div class="biomarker-date">Today</div>
+                </div>
+                <div class="biomarker-value">
+                  <div class="biomarker-num">187</div>
+                  <div class="biomarker-unit">lbs</div>
+                </div>
+                <span class="biomarker-status status-optimal">On track</span>
+              </div>
+              <div class="biomarker-item">
+                <div class="biomarker-dot" style="background:var(--amber);"></div>
+                <div class="biomarker-info">
+                  <div class="biomarker-name">Fasting Glucose</div>
+                  <div class="biomarker-date">Mar 25</div>
+                </div>
+                <div class="biomarker-value">
+                  <div class="biomarker-num">104</div>
+                  <div class="biomarker-unit">mg/dL</div>
+                </div>
+                <span class="biomarker-status status-review">Review</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- NEXT APPOINTMENT -->
+      <div class="appt-banner">
+        <div class="appt-date-block">
+          <div class="appt-month">Apr</div>
+          <div class="appt-day">4</div>
+        </div>
+        <div class="appt-info-main">
+          <div class="appt-title">Follow-up with Dr. Egbert</div>
+          <div class="appt-detail" style="margin-top:5px;">
+            <span>Friday</span> at <span>10:30 AM</span> · 45 min · Protocol review &amp; lab discussion
+          </div>
+        </div>
+        <div class="appt-actions">
+          <button class="btn-sm btn-gold">+ Add to calendar</button>
+          <button class="btn-sm btn-outline">Reschedule</button>
+        </div>
+      </div>
+
+      <!-- PROTOCOLS + AI -->
+      <div class="grid-2-equal">
+
+        <!-- ACTIVE PROTOCOLS -->
+        <div class="card">
+          <div class="card-header" style="margin-bottom:4px;">
+            <div class="card-title">Active Protocols</div>
+            <a href="#" class="card-link">View all</a>
+          </div>
+          <div class="card-body">
+            <div class="protocol-item">
+              <div class="protocol-header">
+                <div class="protocol-name">Testosterone Protocol</div>
+                <div class="protocol-days">Day 47 / 90</div>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:52%; background:var(--gold);"></div></div>
+              <div class="protocol-meta">
+                <div class="protocol-compliance">92% compliance</div>
+                <span class="protocol-badge">Active</span>
+              </div>
+            </div>
+            <div class="protocol-item">
+              <div class="protocol-header">
+                <div class="protocol-name">Recovery &amp; Peptides</div>
+                <div class="protocol-days">Day 12 / 30</div>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:40%; background:var(--blue);"></div></div>
+              <div class="protocol-meta">
+                <div class="protocol-compliance">88% compliance</div>
+                <span class="protocol-badge" style="background:var(--blue-lt); color:var(--blue);">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI WELLNESS -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="ai-card">
+            <div class="ai-icon">
+              <svg width="20" height="20" fill="none" stroke="#C4993A" viewBox="0 0 24 24" stroke-width="1.7"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M20 2v4h-4"/></svg>
+            </div>
+            <div class="ai-text">
+              <div class="ai-title">Wellness Assistant</div>
+              <div class="ai-sub">Ask about your protocol, labs, or health goals</div>
+            </div>
+            <svg class="ai-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+
+          <div class="card" style="flex:1; padding:14px 16px;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:14px; font-style:italic; color:var(--muted); line-height:1.6; margin-bottom:12px;">
+              "Consistency is the foundation of optimization. Every completed task compounds."
+            </div>
+            <div style="font-size:11px; color:var(--muted); text-align:right;">— Dr. Jacob Egbert</div>
+            <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+              <div style="font-size:12px; font-weight:500; color:var(--text); margin-bottom:6px;">Your intake form</div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden;">
+                  <div style="width:33%; height:100%; background:var(--gold); border-radius:2px;"></div>
+                </div>
+                <span style="font-size:11px; color:var(--muted);">4 / 12 sections</span>
+              </div>
+              <button class="btn-sm btn-outline" style="margin-top:8px; width:100%; justify-content:center; font-size:11.5px;">Continue intake →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- DESIGN NOTES -->
+<div style="background:white; padding:32px; border-top:1px solid #DDD9CE;">
+  <div style="max-width:860px; margin:0 auto;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:#1A1916; margin-bottom:18px;">Patient Portal Design Principles</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">🤝 Personal, not clinical</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">Warm ivory background, soft borders, editorial serif fonts. Feels like a private wellness journal, not a hospital portal.</div>
+      </div>
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">✅ Task-first layout</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">The "Today's Focus" hero and task list are front and center — compliance starts with clarity. Patients know exactly what to do each day.</div>
+      </div>
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">🌟 Tier recognition</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">Elite tier is shown in the sidebar with a gold star badge on a dark chip. Patients feel the exclusivity of their membership.</div>
+      </div>
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">💬 Dr. connection is prominent</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">The message from Dr. Egbert appears directly on the dashboard with a "Reply" CTA. The relationship with the provider is central.</div>
+      </div>
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">📊 Compliance made motivating</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">The sidebar shows live compliance % with a mini progress bar. It's a quiet motivator rather than a judgment. Green = momentum.</div>
+      </div>
+      <div style="padding:14px; background:#F5F0E6; border-radius:8px;">
+        <div style="font-size:12px; font-weight:600; color:#1A1916; margin-bottom:5px;">🖤 Dark hero sections</div>
+        <div style="font-size:12px; color:#7A776E; line-height:1.55;">The dark today-hero and AI card create visual anchors in the warm palette. Dark + gold reads as "premium and focused" — draws the eye.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

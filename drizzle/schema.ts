@@ -655,3 +655,43 @@ export const intakeForms = mysqlTable("intake_forms", {
 
 export type IntakeForm = typeof intakeForms.$inferSelect;
 export type InsertIntakeForm = typeof intakeForms.$inferInsert;
+
+// ─────────────────────────────────────────────
+// 25. STRIPE CUSTOMERS (patient → Stripe mapping)
+// ─────────────────────────────────────────────
+export const stripeCustomers = mysqlTable("stripe_customers", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().unique(),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 64 }).notNull().unique(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type StripeCustomer = typeof stripeCustomers.$inferSelect;
+
+// ─────────────────────────────────────────────
+// 26. INVOICES (one-time & membership charges)
+// ─────────────────────────────────────────────
+export const invoices = mysqlTable("invoices", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull(),
+  providerId: int("providerId").notNull(),
+  /** Stripe Payment Intent or Invoice ID */
+  stripeInvoiceId: varchar("stripeInvoiceId", { length: 128 }),
+  stripePaymentIntentId: varchar("stripePaymentIntentId", { length: 128 }),
+  stripeCheckoutSessionId: varchar("stripeCheckoutSessionId", { length: 128 }),
+  /** Stripe Subscription ID (for recurring memberships) */
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 128 }),
+  /** Amount in cents (e.g. 50000 = $500.00) */
+  amountCents: int("amountCents").notNull(),
+  currency: varchar("currency", { length: 8 }).default("usd").notNull(),
+  status: mysqlEnum("status", ["draft", "open", "paid", "void", "uncollectible"]).default("draft").notNull(),
+  type: mysqlEnum("type", ["one_time", "membership"]).default("one_time").notNull(),
+  description: varchar("description", { length: 512 }).notNull(),
+  dueDate: timestamp("dueDate"),
+  paidAt: timestamp("paidAt"),
+  /** Stripe-hosted invoice URL for patient payment */
+  hostedInvoiceUrl: text("hostedInvoiceUrl"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;

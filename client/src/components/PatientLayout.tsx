@@ -5,7 +5,7 @@
 // Responsive: sidebar navigation on desktop, bottom tabs on mobile
 
 import { Link, useLocation } from "wouter";
-import { Home, ClipboardList, ClipboardCheck, MessageCircle, Calendar, User, LogOut, FileText, Sparkles, Activity, Loader2, BookOpen, ScrollText } from "lucide-react";
+import { Home, ClipboardList, ClipboardCheck, MessageCircle, Calendar, User, LogOut, FileText, Sparkles, Activity, Loader2, BookOpen, ScrollText, CreditCard } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
@@ -23,6 +23,7 @@ const tabs = [
   { path: "/patient/service-agreement", label: "Service Agreement", icon: ScrollText },
   { path: "/patient/resources", label: "Resources", icon: BookOpen },
   { path: "/patient/wellness-ai", label: "Wellness AI", icon: Sparkles },
+  { path: "/patient/billing", label: "Billing", icon: CreditCard },
   { path: "/patient/profile", label: "Profile", icon: User },
 ];
 

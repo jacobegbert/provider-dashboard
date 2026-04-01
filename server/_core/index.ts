@@ -168,6 +168,69 @@ async function startServer() {
   const { incomingSmsHandler } = await import("../twilioWebhook");
   app.post("/api/twilio/incoming-sms", incomingSmsHandler);
 
+  // ─── STRIPE WEBHOOK ──────────────────────────
+  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? "";
+    const stripeKey = process.env.STRIPE_SECRET_KEY ?? "";
+    if (!stripeKey || !webhookSecret) {
+      res.status(400).send("Stripe not configured");
+      return;
+    }
+    try {
+      const { default: Stripe } = await import("stripe");
+      const stripe = new Stripe(stripeKey, { apiVersion: "2024-06-20" as any });
+      const event = stripe.webhooks.constructEvent(req.body, sig as string, webhookSecret);
+      const { getDb } = await import("../db");
+      const { sql } = await import("drizzle-orm");
+      const database = await getDb();
+
+      if (event.type === "invoice.payment_succeeded") {
+        const inv = event.data.object as any;
+        if (database) {
+          await database.execute(sql`
+            UPDATE invoices SET status = 'paid', paidAt = NOW()
+            WHERE stripeInvoiceId = ${inv.id}
+          `);
+          // Update subscription expiry if applicable
+          if (inv.subscription) {
+            await database.execute(sql`
+              UPDATE patients p
+              INNER JOIN stripe_customers sc ON sc.patientId = p.id
+              INNER JOIN invoices i ON i.patientId = p.id
+              SET p.subscriptionExpiresAt = FROM_UNIXTIME(${inv.lines?.data?.[0]?.period?.end ?? 0})
+              WHERE i.stripeInvoiceId = ${inv.id}
+            `);
+          }
+        }
+      } else if (event.type === "invoice.payment_failed") {
+        const inv = event.data.object as any;
+        if (database) {
+          await database.execute(sql`
+            UPDATE invoices SET status = 'open'
+            WHERE stripeInvoiceId = ${inv.id}
+          `);
+        }
+      } else if (event.type === "customer.subscription.deleted") {
+        const sub = event.data.object as any;
+        const customerId = sub.customer;
+        if (database) {
+          await database.execute(sql`
+            UPDATE patients p
+            INNER JOIN stripe_customers sc ON sc.patientId = p.id
+            SET p.status = 'inactive'
+            WHERE sc.stripeCustomerId = ${customerId}
+          `);
+        }
+      }
+
+      res.json({ received: true });
+    } catch (err: any) {
+      console.error("[Stripe Webhook] Error:", err.message);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  });
+
   // ─── GOOGLE CALENDAR OAUTH CALLBACK ──────────
   app.get("/api/google/callback", async (req, res) => {
     try {

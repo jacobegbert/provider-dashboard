@@ -20,6 +20,10 @@ import {
 import { createDatabaseBackup, listBackups, addToManifest, getBackupDownloadUrl, restoreDatabaseBackup } from "./backup";
 import { notifyOwner } from "./_core/notification";
 import { generateIntakePdf } from "./intakePdfGenerator";
+import Stripe from "stripe";
+import { invoices, stripeCustomers } from "../drizzle/schema";
+import { getDb } from "./db";
+import { sql as drizzleSql } from "drizzle-orm";
 
 /**
  * Ensures the current user has access to the given patient's data.
@@ -2740,6 +2744,220 @@ const intakeRouter = router({
     }),
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// BILLING ROUTER (Stripe)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY ?? "";
+  if (!key) return null;
+  return new Stripe(key, { apiVersion: "2024-06-20" as any });
+}
+
+const billingRouter = router({
+  /** List all invoices for the provider's patients */
+  listInvoices: adminProcedure
+    .input(z.object({ patientId: z.number().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const database = await getDb();
+      if (!database) return [];
+      const rows = await database.execute(drizzleSql`
+        SELECT i.*, p.firstName, p.lastName, p.email as patientEmail
+        FROM invoices i
+        INNER JOIN patients p ON i.patientId = p.id
+        WHERE i.providerId = ${ctx.ownerId}
+          ${input?.patientId ? drizzleSql`AND i.patientId = ${input.patientId}` : drizzleSql``}
+          AND p.deletedAt IS NULL
+        ORDER BY i.createdAt DESC
+        LIMIT 200
+      `);
+      return rows as any[];
+    }),
+
+  /** Get invoices for the currently-logged-in patient */
+  myInvoices: protectedProcedure.query(async ({ ctx }) => {
+    const patient = await resolvePatientForUser(ctx);
+    if (!patient) return [];
+    const database = await getDb();
+    if (!database) return [];
+    const rows = await database.execute(drizzleSql`
+      SELECT id, amountCents, currency, status, type, description, dueDate, paidAt, hostedInvoiceUrl, createdAt
+      FROM invoices
+      WHERE patientId = ${patient.id}
+      ORDER BY createdAt DESC
+      LIMIT 50
+    `);
+    return rows as any[];
+  }),
+
+  /** Create a one-time invoice and optionally send via Stripe */
+  createInvoice: adminProcedure
+    .input(z.object({
+      patientId: z.number(),
+      amountCents: z.number().min(50),
+      description: z.string().min(1),
+      dueDate: z.string().optional(),
+      sendNow: z.boolean().default(false),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+      const patient = await db.getPatient(input.patientId);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "Patient not found" });
+
+      const stripe = getStripe();
+      let stripeInvoiceId: string | undefined;
+      let hostedUrl: string | undefined;
+      let checkoutSessionId: string | undefined;
+
+      if (stripe && input.sendNow && patient.email) {
+        // Ensure Stripe customer exists
+        let stripeCustomerId: string;
+        const existing = await database.execute(drizzleSql`SELECT stripeCustomerId FROM stripe_customers WHERE patientId = ${patient.id} LIMIT 1`);
+        if ((existing as any[]).length > 0) {
+          stripeCustomerId = (existing as any[])[0].stripeCustomerId;
+        } else {
+          const customer = await stripe.customers.create({
+            email: patient.email,
+            name: `${patient.firstName} ${patient.lastName}`,
+            metadata: { patientId: String(patient.id) },
+          });
+          stripeCustomerId = customer.id;
+          await database.execute(drizzleSql`INSERT INTO stripe_customers (patientId, stripeCustomerId) VALUES (${patient.id}, ${stripeCustomerId})`);
+        }
+
+        // Create Stripe invoice
+        const inv = await stripe.invoices.create({
+          customer: stripeCustomerId,
+          collection_method: "send_invoice",
+          days_until_due: 7,
+          description: input.description,
+        });
+        await stripe.invoiceItems.create({
+          customer: stripeCustomerId,
+          invoice: inv.id,
+          amount: input.amountCents,
+          currency: "usd",
+          description: input.description,
+        });
+        const finalized = await stripe.invoices.finalizeInvoice(inv.id);
+        await stripe.invoices.sendInvoice(finalized.id);
+        stripeInvoiceId = finalized.id;
+        hostedUrl = finalized.hosted_invoice_url ?? undefined;
+      }
+
+      await database.execute(drizzleSql`
+        INSERT INTO invoices (patientId, providerId, stripeInvoiceId, stripeCheckoutSessionId, amountCents, currency, status, type, description, dueDate, hostedInvoiceUrl)
+        VALUES (
+          ${input.patientId},
+          ${ctx.ownerId},
+          ${stripeInvoiceId ?? null},
+          ${checkoutSessionId ?? null},
+          ${input.amountCents},
+          'usd',
+          ${input.sendNow && stripe ? 'open' : 'draft'},
+          'one_time',
+          ${input.description},
+          ${input.dueDate ? new Date(input.dueDate) : null},
+          ${hostedUrl ?? null}
+        )
+      `);
+
+      return { success: true, hostedInvoiceUrl: hostedUrl };
+    }),
+
+  /** Mark an invoice as paid manually */
+  markPaid: adminProcedure
+    .input(z.object({ invoiceId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+      await database.execute(drizzleSql`
+        UPDATE invoices SET status = 'paid', paidAt = NOW()
+        WHERE id = ${input.invoiceId} AND providerId = ${ctx.ownerId}
+      `);
+      return { success: true };
+    }),
+
+  /** Void an invoice */
+  voidInvoice: adminProcedure
+    .input(z.object({ invoiceId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+      await database.execute(drizzleSql`
+        UPDATE invoices SET status = 'void'
+        WHERE id = ${input.invoiceId} AND providerId = ${ctx.ownerId}
+      `);
+      return { success: true };
+    }),
+
+  /** Create a Stripe Checkout session for membership subscription */
+  createMembershipCheckout: adminProcedure
+    .input(z.object({
+      patientId: z.number(),
+      tier: z.enum(["standard", "premium", "elite"]),
+      priceId: z.string(), // Stripe Price ID
+      successUrl: z.string(),
+      cancelUrl: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const stripe = getStripe();
+      if (!stripe) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Stripe not configured" });
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+      const patient = await db.getPatient(input.patientId);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "Patient not found" });
+
+      let stripeCustomerId: string;
+      const existing = await database.execute(drizzleSql`SELECT stripeCustomerId FROM stripe_customers WHERE patientId = ${patient.id} LIMIT 1`);
+      if ((existing as any[]).length > 0) {
+        stripeCustomerId = (existing as any[])[0].stripeCustomerId;
+      } else {
+        const customer = await stripe.customers.create({
+          email: patient.email ?? undefined,
+          name: `${patient.firstName} ${patient.lastName}`,
+          metadata: { patientId: String(patient.id) },
+        });
+        stripeCustomerId = customer.id;
+        await database.execute(drizzleSql`INSERT INTO stripe_customers (patientId, stripeCustomerId) VALUES (${patient.id}, ${stripeCustomerId})`);
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        customer: stripeCustomerId,
+        mode: "subscription",
+        line_items: [{ price: input.priceId, quantity: 1 }],
+        success_url: input.successUrl,
+        cancel_url: input.cancelUrl,
+        metadata: { patientId: String(input.patientId), tier: input.tier, providerId: String(ctx.ownerId) },
+      });
+
+      return { checkoutUrl: session.url };
+    }),
+
+  /** Billing summary stats */
+  summary: adminProcedure.query(async ({ ctx }) => {
+    const database = await getDb();
+    if (!database) return { totalRevenue: 0, outstanding: 0, invoiceCount: 0, paidCount: 0 };
+    const rows = await database.execute(drizzleSql`
+      SELECT
+        SUM(CASE WHEN status = 'paid' THEN amountCents ELSE 0 END) as totalRevenue,
+        SUM(CASE WHEN status = 'open' THEN amountCents ELSE 0 END) as outstanding,
+        COUNT(*) as invoiceCount,
+        SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END) as paidCount
+      FROM invoices
+      WHERE providerId = ${ctx.ownerId}
+    `);
+    const r = (rows as any[])[0] ?? {};
+    return {
+      totalRevenue: Number(r.totalRevenue ?? 0),
+      outstanding: Number(r.outstanding ?? 0),
+      invoiceCount: Number(r.invoiceCount ?? 0),
+      paidCount: Number(r.paidCount ?? 0),
+    };
+  }),
+});
+
 export const appRouter = router({
   system: systemRouter,
   auth: router({
@@ -2830,6 +3048,7 @@ export const appRouter = router({
   backup: backupRouter,
   staff: staffRouter,
   intake: intakeRouter,
+  billing: billingRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -12,6 +12,9 @@ export const ENV = {
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
   googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? "",
+  // Stripe
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
   // Email & SMS
   resendApiKey: process.env.RESEND_API_KEY ?? "",
   fromEmail: process.env.FROM_EMAIL ?? "notifications@blacklabelmedicine.com",

@@ -45,6 +45,8 @@ import Terms from "./pages/Terms";
 import SmsConsent from "./pages/SmsConsent";
 import PublicLanding from "./pages/PublicLanding";
 import Debug from "./pages/Debug";
+import Billing from "./pages/Billing";
+import PatientBilling from "./pages/patient/PatientBilling";
 import Login from "./pages/Login";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
@@ -94,6 +96,7 @@ function ProviderPages() {
           <Route path="/provider/notifications" component={Notifications} />
           <Route path="/provider/resources" component={Resources} />
           <Route path="/provider/ai-advisor" component={AIAdvisor} />
+          <Route path="/provider/billing" component={Billing} />
           <Route path="/provider/settings" component={Settings} />
           <Route component={NotFound} />
         </Switch>
@@ -122,6 +125,7 @@ function PatientPages() {
         <Route path="/patient/biomarker-guide" component={PatientBiomarkerGuide} />
         <Route path="/patient/protocol-guide" component={PatientProtocolGuide} />
         <Route path="/patient/vo2max-guide" component={PatientVO2MaxGuide} />
+        <Route path="/patient/billing" component={PatientBilling} />
         <Route path="/patient/profile" component={PatientProfile} />
         <Route component={NotFound} />
       </Switch>
