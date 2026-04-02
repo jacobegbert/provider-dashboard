@@ -925,9 +925,9 @@ export async function logAudit(data: InsertAuditLogEntry) {
 
 export async function getAttentionQueue(providerId: number) {
   const db = await getDb();
-  if (!db) return { overduePatients: [], lowCompliance: [], unreadMessages: [], upcomingAppointments: [], newPatients: [] };
+  if (!db) return { overduePatients: [], lowCompliance: [], unreadMessages: [], newPatients: [], incompleteIntake: [], pendingInvites: [] };
 
-  // 1. Patients with status "attention" or unread messages (exclude soft-deleted)
+  // 1. All non-deleted patients for this provider
   const allPatients = await db.select().from(patients).where(and(eq(patients.providerId, providerId), isNull(patients.deletedAt)));
 
   // 2. Active assignments with low compliance
@@ -938,40 +938,59 @@ export async function getAttentionQueue(providerId: number) {
   const conversations = await listConversationsForProvider(providerId);
   const unreadMessages = conversations.filter((c) => c.unreadCount > 0);
 
-  // 4. Upcoming appointments (next 7 days)
   const now = new Date();
-  const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-  // Auto-complete any past "scheduled" appointments first
-  await autoCompletePastAppointments(providerId);
-  const upcoming = await db
-    .select({ appointment: appointments, patient: patients })
-    .from(appointments)
-    .innerJoin(patients, eq(appointments.patientId, patients.id))
-    .where(
-      and(
-        eq(appointments.providerId, providerId),
-        eq(appointments.status, "scheduled"),
-        gte(appointments.scheduledAt, now),
-        lte(appointments.scheduledAt, weekFromNow)
-      )
-    )
-    .orderBy(asc(appointments.scheduledAt));
 
-  // 5. New patients
+  // 4. New patients
   const newPatients = allPatients.filter((p) => p.status === "new");
 
-  // 6. Patients needing attention (no interaction in 3+ days)
-  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+  // 5. Patients needing attention (no interaction in 14+ days)
+  const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
   const overduePatients = allPatients.filter(
-    (p) => p.status === "active" && p.lastProviderInteraction && new Date(p.lastProviderInteraction) < threeDaysAgo
+    (p) => p.status === "active" && p.lastProviderInteraction && new Date(p.lastProviderInteraction) < fourteenDaysAgo
   );
+
+  // 6. Intake form not completed — active patients without a completed intake
+  const activePatientIds = allPatients.filter((p) => p.status === "active" || p.status === "new").map((p) => p.id);
+  let incompleteIntake: typeof allPatients = [];
+  if (activePatientIds.length > 0) {
+    const intakeRows = await db
+      .select({ patientId: intakeForms.patientId, status: intakeForms.status })
+      .from(intakeForms)
+      .where(inArray(intakeForms.patientId, activePatientIds));
+    const completedPatientIds = new Set(intakeRows.filter((r) => r.status === "completed").map((r) => r.patientId));
+    const startedPatientIds = new Set(intakeRows.map((r) => r.patientId));
+    // Patients who haven't completed intake (either never started or still in progress)
+    incompleteIntake = allPatients.filter(
+      (p) => (p.status === "active" || p.status === "new") && !completedPatientIds.has(p.id)
+    );
+  }
+
+  // 7. Pending invites — invites sent but not accepted (patient hasn't logged in)
+  const allInvites = await db
+    .select()
+    .from(patientInvites)
+    .where(
+      and(
+        isNull(patientInvites.usedAt),
+        gt(patientInvites.expiresAt, now)
+      )
+    );
+  // Map invite to patient data for display
+  const invitePatientIds = new Set(allInvites.map((inv) => inv.patientId));
+  const pendingInvites = allPatients
+    .filter((p) => invitePatientIds.has(p.id))
+    .map((p) => {
+      const invite = allInvites.find((inv) => inv.patientId === p.id)!;
+      return { ...p, inviteCreatedAt: invite.createdAt, inviteExpiresAt: invite.expiresAt };
+    });
 
   return {
     overduePatients,
     lowCompliance,
     unreadMessages,
-    upcomingAppointments: upcoming,
     newPatients,
+    incompleteIntake,
+    pendingInvites,
   };
 }
 

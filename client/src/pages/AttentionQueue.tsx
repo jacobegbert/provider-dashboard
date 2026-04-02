@@ -11,7 +11,9 @@ import {
   CheckCircle,
   ChevronRight,
   Clock,
+  ClipboardX,
   Loader2,
+  Mail,
   MessageSquare,
   RefreshCw,
   Undo2,
@@ -25,7 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 type PriorityLevel = "critical" | "high" | "medium" | "low";
-type Category = "overdue" | "message" | "appointment" | "new";
+type Category = "overdue" | "message" | "new" | "intake" | "invite";
 
 interface AttentionItem {
   id: string;
@@ -51,8 +53,9 @@ const priorityConfig: Record<PriorityLevel, { color: string; bg: string; label: 
 const categoryIcons: Record<Category, typeof AlertTriangle> = {
   overdue: Clock,
   message: MessageSquare,
-  appointment: Clock,
   new: Zap,
+  intake: ClipboardX,
+  invite: Mail,
 };
 
 function getInitials(first: string, last: string) {
@@ -313,21 +316,43 @@ export default function AttentionQueue() {
       });
     }
 
-    // Upcoming appointments
-    for (const row of queueData.upcomingAppointments) {
-      items.push({
-        id: `apt-${row.appointment.id}`,
-        patientName: `${row.patient.firstName} ${row.patient.lastName}`,
-        initials: getInitials(row.patient.firstName, row.patient.lastName),
-        patientId: row.patient.id,
-        priority: row.appointment.type === "urgent" ? "critical" : "low",
-        reason: `${row.appointment.type.replace("_", " ")} appointment`,
-        detail: `${row.appointment.title} · ${new Date(row.appointment.scheduledAt).toLocaleDateString()} at ${new Date(row.appointment.scheduledAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })} · ${row.appointment.durationMinutes || 30}min`,
-        category: "appointment",
-        timeInfo: new Date(row.appointment.scheduledAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
-        actionLabel: "View",
-        actionHref: "/provider/schedule",
-      });
+    // Incomplete intake forms
+    if (queueData.incompleteIntake) {
+      for (const patient of queueData.incompleteIntake) {
+        items.push({
+          id: `intake-${patient.id}`,
+          patientName: `${patient.firstName} ${patient.lastName}`,
+          initials: getInitials(patient.firstName, patient.lastName),
+          patientId: patient.id,
+          priority: "medium",
+          reason: "Intake form not completed",
+          detail: `${patient.subscriptionTier || "standard"} tier · Joined ${new Date(patient.createdAt).toLocaleDateString()}`,
+          category: "intake",
+          timeInfo: timeAgo(patient.createdAt),
+          actionLabel: "View Client",
+          actionHref: `/provider/clients?selected=${patient.id}`,
+        });
+      }
+    }
+
+    // Pending invites (sent but not accepted)
+    if (queueData.pendingInvites) {
+      for (const patient of queueData.pendingInvites) {
+        const inviteAge = (patient as any).inviteCreatedAt ? timeAgo((patient as any).inviteCreatedAt) : "Unknown";
+        items.push({
+          id: `invite-${patient.id}`,
+          patientName: `${patient.firstName} ${patient.lastName}`,
+          initials: getInitials(patient.firstName, patient.lastName),
+          patientId: patient.id,
+          priority: "low",
+          reason: "Invite sent — awaiting response",
+          detail: `Invite sent ${inviteAge} · Has not logged in yet`,
+          category: "invite",
+          timeInfo: inviteAge,
+          actionLabel: "View Client",
+          actionHref: `/provider/clients?selected=${patient.id}`,
+        });
+      }
     }
 
     // Sort by priority
@@ -353,8 +378,9 @@ export default function AttentionQueue() {
     all: visibleItems.length,
     overdue: visibleItems.filter((i) => i.category === "overdue").length,
     message: visibleItems.filter((i) => i.category === "message").length,
-    appointment: visibleItems.filter((i) => i.category === "appointment").length,
     new: visibleItems.filter((i) => i.category === "new").length,
+    intake: visibleItems.filter((i) => i.category === "intake").length,
+    invite: visibleItems.filter((i) => i.category === "invite").length,
   };
 
   return (
@@ -404,13 +430,12 @@ export default function AttentionQueue() {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Total Patients", value: stats?.totalPatients ?? 0 },
-          { label: "Active", value: stats?.activePatients ?? 0 },
+          { label: "Total Clients", value: stats?.totalPatients ?? 0 },
           { label: "Active Clients", value: stats?.activePatients ?? 0 },
           { label: "Unread Messages", value: stats?.totalUnread ?? 0 },
-          { label: "Upcoming Appts", value: stats?.upcomingAppointments ?? 0 },
+          { label: "Needs Attention", value: categoryCounts.all },
         ].map((stat) => (
           <Card key={stat.label} className="border-border/60 shadow-sm">
             <CardContent className="p-3 text-center">
@@ -427,8 +452,9 @@ export default function AttentionQueue() {
           <TabsTrigger value="all" className="text-xs">All ({categoryCounts.all})</TabsTrigger>
           <TabsTrigger value="overdue" className="text-xs">Overdue ({categoryCounts.overdue})</TabsTrigger>
           <TabsTrigger value="message" className="text-xs">Messages ({categoryCounts.message})</TabsTrigger>
-          <TabsTrigger value="appointment" className="text-xs">Appointments ({categoryCounts.appointment})</TabsTrigger>
           <TabsTrigger value="new" className="text-xs">New ({categoryCounts.new})</TabsTrigger>
+          <TabsTrigger value="intake" className="text-xs">Intake ({categoryCounts.intake})</TabsTrigger>
+          <TabsTrigger value="invite" className="text-xs">Invites ({categoryCounts.invite})</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-4">
