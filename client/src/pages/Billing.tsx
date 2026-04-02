@@ -249,10 +249,9 @@ export default function Billing() {
                               target="_blank"
                               rel="noopener noreferrer"
                               title="View Stripe invoice"
+                              className="p-1.5 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-foreground inline-flex"
                             >
-                              <button className="p-1.5 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
-                                <Eye className="h-3.5 w-3.5" />
-                              </button>
+                              <Eye className="h-3.5 w-3.5" />
                             </a>
                           )}
                           {inv.status === "open" && (

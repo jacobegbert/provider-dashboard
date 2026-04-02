@@ -25,7 +25,7 @@ export default function Messages() {
     const params = new URLSearchParams(searchParams);
     const p = params.get("patient");
     return p ? parseInt(p) : null;
-  }, []);
+  }, [searchParams]);
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(initialPatientId);
   const [search, setSearch] = useState("");
   const [newMessage, setNewMessage] = useState("");

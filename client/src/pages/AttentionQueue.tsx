@@ -408,7 +408,7 @@ export default function AttentionQueue() {
         {[
           { label: "Total Patients", value: stats?.totalPatients ?? 0 },
           { label: "Active", value: stats?.activePatients ?? 0 },
-          { label: "Active Protocols", value: stats?.activePatients ?? 0 },
+          { label: "Active Clients", value: stats?.activePatients ?? 0 },
           { label: "Unread Messages", value: stats?.totalUnread ?? 0 },
           { label: "Upcoming Appts", value: stats?.upcomingAppointments ?? 0 },
         ].map((stat) => (

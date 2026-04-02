@@ -47,7 +47,7 @@ function loadChecked(): Set<string> {
 }
 
 function saveChecked(set: Set<string>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(set)));
 }
 
 /* ─── checklist definition ─── */
@@ -172,7 +172,7 @@ export default function PatientOnboarding() {
 
   /* ─── auto-detection overrides ─── */
   const smsEnabled = myRecord?.smsOptIn === true;
-  const intakeSubmitted = intakeQuery.data?.status === "completed" || intakeQuery.data?.status === "submitted" || !!intakeQuery.data?.submittedAt;
+  const intakeSubmitted = intakeQuery.data?.status === "completed" || !!intakeQuery.data?.submittedAt;
 
   const isChecked = useCallback(
     (item: ChecklistItem): boolean => {
@@ -310,7 +310,7 @@ export default function PatientOnboarding() {
                         {/* Action link */}
                         {item.linkTo && (
                           <Link
-                            to={item.linkTo}
+                            href={item.linkTo}
                             className="inline-flex items-center gap-1 text-xs text-gold hover:text-gold-light mt-2 font-medium tracking-wide transition-colors"
                           >
                             {item.linkLabel || "Go"}
@@ -348,7 +348,7 @@ export default function PatientOnboarding() {
         <div className="text-center py-6">
           <p className="text-xs text-muted-foreground/70 leading-relaxed max-w-md mx-auto">
             Questions about any step? Reach out via{" "}
-            <Link to="/patient/messages" className="text-gold hover:underline">
+            <Link href="/patient/messages" className="text-gold hover:underline">
               Messages
             </Link>{" "}
             or text Samantha at (435) 938-8657.

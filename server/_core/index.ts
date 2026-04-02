@@ -130,6 +130,12 @@ async function startServer() {
       // Decode base64 file data
       const buffer = Buffer.from(fileData, "base64");
 
+      // Authoritative size check on actual decoded buffer (not client-supplied value)
+      if (buffer.length > MAX_FILE_SIZE) {
+        res.status(400).json({ error: "File too large. Maximum size is 16MB." });
+        return;
+      }
+
       // Generate unique S3 key
       const randomSuffix = Math.random().toString(36).substring(2, 10);
       const sanitizedName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");

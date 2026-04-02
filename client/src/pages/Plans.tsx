@@ -354,7 +354,7 @@ export default function Plans() {
                 </SelectTrigger>
                 <SelectContent>
                   {(patients as any[]).map((p: any) => (
-                    <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>
+                    <SelectItem key={p.id} value={String(p.id)}>{p.firstName} {p.lastName}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

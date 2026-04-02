@@ -647,7 +647,7 @@ const protocolRouter = router({
       if (!protocol) throw new TRPCError({ code: "NOT_FOUND", message: "Protocol not found" });
       if (!protocol.isArchived) throw new TRPCError({ code: "BAD_REQUEST", message: "Only archived protocols can be deleted" });
       await db.deleteProtocol(input.id);
-      await db.logAudit({ userId: ctx.user.id, action: "protocol.delete", details: `Deleted archived protocol: ${protocol.name}` });
+      await db.logAudit({ userId: ctx.user.id, action: "protocol.delete", entityType: "protocol", entityId: input.id, details: { name: protocol.name, action: "permanent_delete" } });
       return { success: true };
     }),
 
@@ -1758,9 +1758,10 @@ const clientNoteRouter = router({
 // ─── CLIENT TASKS ROUTER ─────────────────
 
 const clientTaskRouter = router({
-  list: adminProcedure
+  list: protectedProcedure
     .input(z.object({ patientId: z.number() }))
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
+      await ensurePatientAccess(ctx, input.patientId);
       return db.listTasksForPatient(input.patientId);
     }),
 
@@ -3037,7 +3038,7 @@ const plansRouter = router({
       const rows = await database
         .select({
           plan: patientPlans,
-          patientName: drizzleSql<string>`p.name`,
+          patientName: drizzleSql<string>`CONCAT(p.firstName, ' ', p.lastName)`,
           patientEmail: drizzleSql<string>`p.email`,
         })
         .from(patientPlans)
@@ -3162,7 +3163,7 @@ const plansRouter = router({
     const rows = await database
       .select({
         plan: patientPlans,
-        patientName: drizzleSql<string>`p.name`,
+        patientName: drizzleSql<string>`CONCAT(p.firstName, ' ', p.lastName)`,
       })
       .from(patientPlans)
       .leftJoin(drizzleSql`patients p`, drizzleSql`p.id = ${patientPlans.patientId}`)

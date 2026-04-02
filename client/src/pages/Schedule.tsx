@@ -295,7 +295,7 @@ export default function Schedule() {
   const renderAppointmentCard = (apt: any, compact = false) => {
     const style = typeStyles[apt.type] || typeStyles.check_in;
     return (
-      <div key={apt.id} className={`p-3 rounded-xl border-l-3 ${style.border} bg-muted/40 hover:bg-muted/60 transition-colors`}>
+      <div key={apt.id} className={`p-3 rounded-xl border-l-4 ${style.border} bg-muted/40 hover:bg-muted/60 transition-colors`}>
         <div className="flex items-center gap-2 mb-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gold/15 text-[10px] font-semibold font-heading text-gold">
             {getInitials(apt)}
