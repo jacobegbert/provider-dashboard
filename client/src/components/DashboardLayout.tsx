@@ -255,7 +255,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         onClick={() => {
                           setSearchQuery("");
                           setSearchOpen(false);
-                          navigate("/provider/clients");
+                          navigate(`/provider/clients?selected=${patient.id}`);
                         }}
                       >
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold/10 text-gold text-xs font-semibold font-heading border border-gold/15">

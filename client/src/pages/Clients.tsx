@@ -176,8 +176,15 @@ export default function Clients() {
     const params = new URLSearchParams(searchParams);
     const sel = params.get("selected");
     return sel ? parseInt(sel) : null;
-  }, []);
+  }, [searchParams]);
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(initialSelectedId);
+
+  // React to URL ?selected= changes (e.g. from global search)
+  useEffect(() => {
+    if (initialSelectedId !== null) {
+      setSelectedPatientId(initialSelectedId);
+    }
+  }, [initialSelectedId]);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showStatusDialog, setShowStatusDialog] = useState(false);
