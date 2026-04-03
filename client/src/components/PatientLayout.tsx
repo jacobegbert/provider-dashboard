@@ -53,6 +53,17 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
   // Gender-based theming: The Row quiet luxury for female patients, masculine (steel blue) is default
   const isFeminine = myRecord?.sex === "female";
 
+  // Hide "Getting Started" 7 days after completion
+  const hideOnboarding = (() => {
+    if (!myRecord?.onboardingCompletedAt) return false;
+    const completed = new Date(myRecord.onboardingCompletedAt);
+    const sevenDaysLater = new Date(completed.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return new Date() > sevenDaysLater;
+  })();
+  const filteredTabs = hideOnboarding
+    ? tabs.filter((t) => t.path !== "/patient/onboarding")
+    : tabs;
+
   const isMessagesPage = location === "/patient/messages";
   const isActive = (path: string) => {
     if (path === "/patient") return location === "/patient";
@@ -98,7 +109,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
 
           {/* Nav links — thin, minimal, editorial */}
           <nav className="flex-1 px-4 space-y-0.5 overflow-y-auto">
-            {tabs.map((tab) => {
+            {filteredTabs.map((tab) => {
               const active = isActive(tab.path);
               const Icon = tab.icon;
               return (
@@ -164,7 +175,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
         {/* Bottom tab bar — thin, understated */}
         <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border/30 z-40">
           <div className="flex items-center overflow-x-auto scrollbar-hide py-2 px-1 gap-0.5" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {tabs.map((tab) => {
+            {filteredTabs.map((tab) => {
               const active = isActive(tab.path);
               const Icon = tab.icon;
               return (

@@ -279,6 +279,34 @@ const patientRouter = router({
       });
       return { success: true, smsOptIn: input.optIn };
     }),
+
+  /** Mark onboarding as complete — sets timestamp and notifies provider */
+  completeOnboarding: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      const patient = await resolvePatientForUser(ctx);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "No patient record found" });
+      // Don't re-complete
+      if (patient.onboardingCompletedAt) return { success: true, alreadyCompleted: true };
+      const database = await getDb();
+      if (!database) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+      await database
+        .update(patients)
+        .set({ onboardingCompletedAt: new Date() })
+        .where(eq(patients.id, patient.id));
+      // Notify the provider (admin user)
+      const admin = await db.getUserByRole("admin");
+      if (admin) {
+        await db.createNotification({
+          userId: admin.id,
+          title: "Getting Started Completed",
+          body: `${patient.firstName} ${patient.lastName} has completed all Getting Started tasks.`,
+          type: "milestone_reached",
+          relatedEntityType: "patient",
+          relatedEntityId: patient.id,
+        });
+      }
+      return { success: true, alreadyCompleted: false };
+    }),
 });
 
 const protocolRouter = router({

@@ -90,6 +90,8 @@ export const patients = mysqlTable("patients", {
   avatarUrl: text("avatarUrl"),
   lastProviderInteraction: timestamp("lastProviderInteraction"),
   nextRequiredAction: text("nextRequiredAction"),
+  /** Timestamp when the patient completed all Getting Started tasks */
+  onboardingCompletedAt: timestamp("onboardingCompletedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   /** Soft delete — null means active, timestamp means deleted */

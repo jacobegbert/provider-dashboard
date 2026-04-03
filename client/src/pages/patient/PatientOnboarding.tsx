@@ -23,7 +23,7 @@ import {
   Smartphone,
   ExternalLink,
 } from "lucide-react";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 /* ─── animation ─── */
 const fadeUp = {
@@ -190,6 +190,21 @@ export default function PatientOnboarding() {
 
   const progressPct = Math.round((completedCount / CHECKLIST.length) * 100);
   const firstName = myRecord?.firstName || user?.name?.split(" ")[0] || "there";
+
+  /* ─── auto-complete onboarding when all items checked ─── */
+  const completeOnboarding = trpc.patient.completeOnboarding.useMutation();
+  const completedRef = useRef(false);
+  useEffect(() => {
+    if (
+      progressPct === 100 &&
+      !completedRef.current &&
+      myRecord &&
+      !myRecord.onboardingCompletedAt
+    ) {
+      completedRef.current = true;
+      completeOnboarding.mutate();
+    }
+  }, [progressPct, myRecord]);
 
   if (myRecordQuery.isLoading) {
     return (
