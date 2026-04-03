@@ -216,7 +216,7 @@ export default function PatientSchedule() {
       .filter((row: any) => {
         // Only show active assignments that were assigned before or on the selected date
         if (row.assignment.status !== "active") return false;
-        const assignedDate = getLocalDateStr(new Date(row.assignment.assignedAt));
+        const assignedDate = getLocalDateStr(new Date(row.assignment.startDate));
         return assignedDate <= selectedDate;
       })
       .map((row: any) => {
