@@ -241,6 +241,66 @@ async function startServer() {
     }
   });
 
+  // ─── INTERNAL STATS API (for CELLRX dashboard) ──────────
+  app.get("/api/internal/stats", async (req, res) => {
+    try {
+      const { ENV } = await import("./env");
+      const apiKey = req.headers.authorization?.replace("Bearer ", "");
+      if (!ENV.internalApiKey || !apiKey || apiKey !== ENV.internalApiKey) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+      }
+
+      const { getUserByEmail, getProviderStats, getAttentionQueue, getDb } = await import("../db");
+      const { invoices } = await import("../../drizzle/schema");
+      const { eq, and, gte, sql } = await import("drizzle-orm");
+
+      // Resolve practice owner
+      const owner = await getUserByEmail(ENV.ownerEmail);
+      if (!owner) {
+        res.status(500).json({ error: "Owner not found" });
+        return;
+      }
+
+      const [stats, attention] = await Promise.all([
+        getProviderStats(owner.id),
+        getAttentionQueue(owner.id),
+      ]);
+
+      // Calculate MRR from paid membership invoices this month
+      let mrr = 0;
+      const db = await getDb();
+      if (db) {
+        const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        const mrrResult = await db
+          .select({ total: sql<number>`COALESCE(SUM(${invoices.amountCents}), 0)` })
+          .from(invoices)
+          .where(
+            and(
+              eq(invoices.providerId, owner.id),
+              eq(invoices.type, "membership"),
+              eq(invoices.status, "paid"),
+              gte(invoices.paidAt, monthStart),
+            ),
+          );
+        mrr = Math.round((mrrResult[0]?.total ?? 0) / 100); // cents to dollars
+      }
+
+      res.json({
+        totalPatients: stats.totalPatients,
+        activePatients: stats.activePatients,
+        totalUnread: stats.totalUnread,
+        avgCompliance: stats.avgCompliance,
+        upcomingAppointments: stats.upcomingAppointments,
+        pendingIntakes: attention.incompleteIntake?.length ?? 0,
+        mrr,
+      });
+    } catch (error: any) {
+      console.error("[Internal Stats] Error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   // ─── GOOGLE CALENDAR OAUTH CALLBACK ──────────
   app.get("/api/google/callback", async (req, res) => {
     try {
