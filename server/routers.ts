@@ -3285,6 +3285,66 @@ export const appRouter = router({
         await db.upsertUser({ openId: user.openId, lastSignedIn: new Date() });
         return { success: true, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
       }),
+    /** Patient signup — requires a valid invite token */
+    signup: publicProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        email: z.string().email(),
+        password: z.string().min(6),
+        inviteToken: z.string().min(1),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        // Validate invite token
+        const invite = await db.getInviteByToken(input.inviteToken);
+        if (!invite) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid invite link" });
+        if (invite.usedAt) throw new TRPCError({ code: "BAD_REQUEST", message: "This invite has already been used" });
+        if (new Date(invite.expiresAt) < new Date()) throw new TRPCError({ code: "BAD_REQUEST", message: "This invite has expired" });
+
+        // Check email not already taken
+        const existing = await db.getUserByEmail(input.email);
+        if (existing) throw new TRPCError({ code: "CONFLICT", message: "An account with this email already exists. Please sign in instead." });
+
+        // Create user with salted password hash
+        const salt = randomBytes(16).toString("hex");
+        const passwordHash = salt + createHash("sha256").update(salt + input.password).digest("hex");
+        const openId = crypto.randomUUID();
+
+        await db.upsertUser({
+          openId,
+          name: input.name,
+          email: input.email,
+          role: "user",
+          passwordHash,
+          lastSignedIn: new Date(),
+        });
+
+        // Fetch the created user to get the id
+        const newUser = await db.getUserByEmail(input.email);
+        if (!newUser) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to create account" });
+
+        // Link patient record to this user
+        await db.linkPatientToUser(invite.patientId, newUser.id);
+
+        // Mark invite as used
+        await db.markInviteUsed(input.inviteToken, newUser.id);
+
+        await db.logAudit({
+          userId: newUser.id,
+          action: "patient.signup",
+          entityType: "patient",
+          entityId: invite.patientId,
+        });
+
+        // Set session cookie so they're logged in immediately
+        const sessionToken = await sdk.createSessionToken(newUser.openId, {
+          name: newUser.name || "",
+          expiresInMs: ONE_YEAR_MS,
+        });
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
+
+        return { success: true, user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role }, patientId: invite.patientId };
+      }),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
