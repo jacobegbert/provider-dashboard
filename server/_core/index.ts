@@ -1,3 +1,5 @@
+// Set NODE_ENV before dotenv loads (dotenv won't override existing vars)
+if (!process.env.NODE_ENV) process.env.NODE_ENV = "development";
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
