@@ -255,10 +255,19 @@ export default function PatientHome() {
         ))}
       </motion.div>
 
-      {/* 30-day adherence widget */}
+      {/* 30-day adherence widget — clickable to detail page */}
       {patientId && assignments.length > 0 && (
         <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible">
-          <AdherenceWidget patientId={patientId} variant="patient" />
+          <Link href="/patient/adherence">
+            <div className="cursor-pointer group">
+              <AdherenceWidget patientId={patientId} variant="patient" />
+              <div className="flex items-center justify-end mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] text-muted-foreground tracking-wider uppercase flex items-center gap-1">
+                  View details <ArrowRight className="w-3 h-3" strokeWidth={1.4} />
+                </span>
+              </div>
+            </div>
+          </Link>
         </motion.div>
       )}
 

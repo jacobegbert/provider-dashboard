@@ -1061,9 +1061,24 @@ const assignmentRouter = router({
       const activeAssignments = assignmentRows.filter((r: any) => r.assignment.status === "active");
       if (activeAssignments.length === 0) return null;
 
-      // Get all assignment steps
+      // Map protocol category → adherence group
+      const categoryToGroup: Record<string, string> = {
+        peptides: "peptides",
+        hormone: "peptides",
+        supplement: "supplements",
+        nutrition: "supplements",
+        exercise: "lifestyle",
+        sleep: "lifestyle",
+        stress: "lifestyle",
+        lifestyle: "lifestyle",
+        lab_work: "lifestyle",
+        other: "lifestyle",
+      };
+
+      // Get all assignment steps, attaching the derived group from the protocol category
       const allSteps: (any & { assignmentId: number })[] = [];
       for (const row of activeAssignments) {
+        const derivedGroup = categoryToGroup[row.protocol.category] || "lifestyle";
         let steps = await db.listAssignmentSteps(row.assignment.id);
         if (steps.length === 0) {
           steps = (await db.listProtocolSteps(row.protocol.id)).map((s: any) => ({
@@ -1073,7 +1088,8 @@ const assignmentRouter = router({
           }));
         }
         for (const s of steps) {
-          allSteps.push({ ...s, assignmentId: row.assignment.id });
+          // Use per-step stepGroup if set, otherwise derive from protocol category
+          allSteps.push({ ...s, assignmentId: row.assignment.id, stepGroup: s.stepGroup || derivedGroup });
         }
       }
 

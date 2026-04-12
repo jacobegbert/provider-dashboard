@@ -37,6 +37,7 @@ import PatientIntake from "./pages/patient/PatientIntake";
 import PatientServiceAgreement from "./pages/patient/PatientServiceAgreement";
 import PatientOnboarding from "./pages/patient/PatientOnboarding";
 import PatientTasks from "./pages/patient/PatientTasks";
+import PatientAdherence from "./pages/patient/PatientAdherence";
 import PatientBiomarkerGuide from "./pages/patient/PatientBiomarkerGuide";
 import PatientProtocolGuide from "./pages/patient/PatientProtocolGuide";
 import PatientVO2MaxGuide from "./pages/patient/PatientVO2MaxGuide";
@@ -145,6 +146,7 @@ function PatientPages() {
         <Route path="/patient/messages" component={PatientMessages} />
         <Route path="/patient/schedule" component={PatientSchedule} />
         <Route path="/patient/vitals" component={PatientVitals} />
+        <Route path="/patient/adherence" component={PatientAdherence} />
         <Route path="/patient/resources" component={PatientResources} />
         <Route path="/patient/wellness-ai" component={PatientWellnessAI} />
         <Route path="/patient/notifications" component={PatientNotifications} />
