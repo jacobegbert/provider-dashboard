@@ -2036,6 +2036,47 @@ const clientTaskRouter = router({
       });
     }),
 
+  /** Patient-facing: mark a task as completed */
+  complete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const patient = await resolvePatientForUser(ctx);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "No patient record found" });
+      // Verify the task belongs to this patient
+      const task = await db.getClientTask(input.id);
+      if (!task || task.patientId !== patient.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Task not found" });
+      }
+      await db.updateClientTask(input.id, { status: "completed", completedAt: new Date() } as any);
+      await db.logAudit({
+        userId: ctx.user.id,
+        action: "clientTask.complete",
+        entityType: "clientTask",
+        entityId: input.id,
+      });
+      return { success: true };
+    }),
+
+  /** Patient-facing: reopen a completed task */
+  uncomplete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const patient = await resolvePatientForUser(ctx);
+      if (!patient) throw new TRPCError({ code: "NOT_FOUND", message: "No patient record found" });
+      const task = await db.getClientTask(input.id);
+      if (!task || task.patientId !== patient.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Task not found" });
+      }
+      await db.updateClientTask(input.id, { status: "pending", completedAt: null } as any);
+      await db.logAudit({
+        userId: ctx.user.id,
+        action: "clientTask.uncomplete",
+        entityType: "clientTask",
+        entityId: input.id,
+      });
+      return { success: true };
+    }),
+
   delete: adminProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {

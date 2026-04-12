@@ -877,6 +877,13 @@ export async function listTasksForPatient(patientId: number) {
   return db.select().from(clientTasks).where(eq(clientTasks.patientId, patientId)).orderBy(desc(clientTasks.createdAt));
 }
 
+export async function getClientTask(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(clientTasks).where(eq(clientTasks.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
 export async function createClientTask(data: InsertClientTask) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");

@@ -445,7 +445,11 @@ export default function PatientHome() {
         <motion.div custom={7} variants={fadeUp} initial="hidden" animate="visible">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-heading text-lg md:text-xl text-foreground">My Tasks</h2>
-            <span className="text-[11px] text-muted-foreground tracking-wider uppercase">{completedTasks}/{totalTasks} done</span>
+            <Link href="/patient/tasks">
+              <span className="text-xs text-muted-foreground font-medium flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors tracking-wider uppercase">
+                View all <ArrowRight className="w-3 h-3" strokeWidth={1.4} />
+              </span>
+            </Link>
           </div>
           {tasks.length === 0 ? (
             <div className="bg-card rounded-sm p-8 border border-border/40 text-center">
@@ -454,35 +458,37 @@ export default function PatientHome() {
           ) : (
             <div className="space-y-2">
               {tasks.slice(0, 8).map((task: any) => (
-                <div
-                  key={task.id}
-                  className={`flex items-center gap-3 p-3.5 md:p-4 rounded-sm border transition-all duration-300 ${
-                    task.status === "completed"
-                      ? "bg-muted/30 border-border/30"
-                      : "bg-card border-border/40"
-                  }`}
-                >
-                  {task.status === "completed" ? (
-                    <CheckCircle2 className="w-4 h-4 text-muted-foreground shrink-0" strokeWidth={1.4} />
-                  ) : (
-                    <Circle className="w-4 h-4 text-border shrink-0" strokeWidth={1.4} />
-                  )}
-                  <div className="flex-1">
-                    <p className={`text-sm font-normal ${
-                      task.status === "completed" ? "text-muted-foreground line-through" : "text-foreground"
-                    }`}>
-                      {task.title}
-                    </p>
-                    {task.dueDate && (
-                      <p className="text-[11px] text-muted-foreground mt-0.5">
-                        Due: {new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                      </p>
+                <Link key={task.id} href="/patient/tasks">
+                  <div
+                    className={`flex items-center gap-3 p-3.5 md:p-4 rounded-sm border transition-all duration-300 cursor-pointer ${
+                      task.status === "completed"
+                        ? "bg-muted/30 border-border/30 hover:border-border/50"
+                        : "bg-card border-border/40 hover:border-border"
+                    }`}
+                  >
+                    {task.status === "completed" ? (
+                      <CheckCircle2 className="w-4 h-4 text-muted-foreground shrink-0" strokeWidth={1.4} />
+                    ) : (
+                      <Circle className="w-4 h-4 text-border shrink-0" strokeWidth={1.4} />
                     )}
+                    <div className="flex-1">
+                      <p className={`text-sm font-normal ${
+                        task.status === "completed" ? "text-muted-foreground line-through" : "text-foreground"
+                      }`}>
+                        {task.title}
+                      </p>
+                      {task.dueDate && (
+                        <p className="text-[11px] text-muted-foreground mt-0.5">
+                          Due: {new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </p>
+                      )}
+                    </div>
+                    {task.priority === "urgent" && (
+                      <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">Urgent</span>
+                    )}
+                    <ArrowRight className="w-3.5 h-3.5 text-muted-foreground/30 shrink-0" strokeWidth={1.4} />
                   </div>
-                  {task.priority === "urgent" && (
-                    <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">Urgent</span>
-                  )}
-                </div>
+                </Link>
               ))}
             </div>
           )}
