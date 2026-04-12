@@ -117,6 +117,7 @@ export default function Protocols() {
   const [editProtocolId, setEditProtocolId] = useState<number | null>(null);
   const [showDelete, setShowDelete] = useState<number | null>(null);
   const [viewProtocolId, setViewProtocolId] = useState<number | null>(null);
+  const [activeClientsProtocolId, setActiveClientsProtocolId] = useState<number | null>(null);
 
   // Unified form for create and edit
   const [form, setForm] = useState<ProtocolFormData>({ ...emptyForm });
@@ -142,6 +143,12 @@ export default function Protocols() {
   const viewProtocolQuery = trpc.protocol.get.useQuery(
     { id: viewProtocolId! },
     { enabled: viewProtocolId !== null }
+  );
+
+  // Fetch patients assigned to a protocol (for "X active" dialog)
+  const activeClientsQuery = trpc.assignment.listPatientsForProtocol.useQuery(
+    { protocolId: activeClientsProtocolId! },
+    { enabled: activeClientsProtocolId !== null }
   );
 
   // Populate form when edit data arrives
@@ -438,9 +445,15 @@ export default function Protocols() {
                   </span>
                 )}
                 {protocol.activeAssignments != null && protocol.activeAssignments > 0 && (
-                  <span className="flex items-center gap-1.5 text-xs text-gold">
+                  <button
+                    className="flex items-center gap-1.5 text-xs text-gold hover:text-gold/80 hover:underline transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveClientsProtocolId(protocol.id);
+                    }}
+                  >
                     <Users className="h-3.5 w-3.5" /> {protocol.activeAssignments} active
-                  </span>
+                  </button>
                 )}
               </div>
 
@@ -1249,6 +1262,53 @@ export default function Protocols() {
       </Dialog>
 
       {/* ── Assign to Client Dialog ────────────── */}
+      {/* Active Clients Dialog */}
+      <Dialog open={activeClientsProtocolId !== null} onOpenChange={() => setActiveClientsProtocolId(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-heading">Active Clients</DialogTitle>
+            <DialogDescription>
+              {allProtocols.find((p: any) => p.id === activeClientsProtocolId)?.name || "Protocol"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-1 max-h-[50vh] overflow-y-auto">
+            {activeClientsQuery.isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              </div>
+            ) : activeClientsQuery.data && activeClientsQuery.data.length > 0 ? (
+              activeClientsQuery.data.map((client: any) => (
+                <button
+                  key={client.assignmentId}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left group"
+                  onClick={() => {
+                    setActiveClientsProtocolId(null);
+                    window.open(`/patient/adherence?viewAs=${client.patientId}`, "_blank");
+                  }}
+                >
+                  <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
+                    <span className="text-gold text-[10px] font-semibold">
+                      {(client.firstName?.[0] || "")}{(client.lastName?.[0] || "")}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground">{client.firstName} {client.lastName}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      Since {new Date(client.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </p>
+                  </div>
+                  <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                    View adherence →
+                  </span>
+                </button>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-6">No active assignments</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={showAssign !== null} onOpenChange={() => setShowAssign(null)}>
         <DialogContent>
           <DialogHeader>

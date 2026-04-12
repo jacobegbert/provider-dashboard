@@ -799,6 +799,29 @@ const assignmentRouter = router({
     return db.listActiveAssignmentsForProvider(ctx.ownerId);
   }),
 
+  /** List patients assigned to a specific protocol (active assignments) */
+  listPatientsForProtocol: adminProcedure
+    .input(z.object({ protocolId: z.number() }))
+    .query(async ({ input }) => {
+      const assignments = await db.listAssignmentsForProtocol(input.protocolId);
+      const active = assignments.filter((a: any) => a.status === "active");
+      const results = await Promise.all(
+        active.map(async (a: any) => {
+          const patient = await db.getPatient(a.patientId);
+          return patient
+            ? {
+                assignmentId: a.id,
+                patientId: a.patientId,
+                firstName: patient.firstName,
+                lastName: patient.lastName,
+                startDate: a.startDate,
+              }
+            : null;
+        })
+      );
+      return results.filter(Boolean);
+    }),
+
   create: adminProcedure
     .input(
       z.object({
