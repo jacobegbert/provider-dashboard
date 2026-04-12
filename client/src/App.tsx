@@ -55,6 +55,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
+import InstallPrompt from "./components/InstallPrompt";
 
 /**
  * RoleGuard — prevents non-admin users from accessing provider routes.
@@ -204,6 +205,7 @@ function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
+          <InstallPrompt />
           <AppRouter />
         </TooltipProvider>
       </ThemeProvider>
