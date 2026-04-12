@@ -4,6 +4,7 @@
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { CheckCircle2, Circle, Calendar, TrendingUp, ClipboardCheck, ArrowRight, Sparkles, Loader2, FileText, ChevronRight, Clock, CheckCheck } from "lucide-react";
+import AdherenceWidget from "@/components/AdherenceWidget";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -253,6 +254,13 @@ export default function PatientHome() {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* 30-day adherence widget */}
+      {patientId && assignments.length > 0 && (
+        <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible">
+          <AdherenceWidget patientId={patientId} variant="patient" />
+        </motion.div>
+      )}
 
       {/* Desktop: two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">

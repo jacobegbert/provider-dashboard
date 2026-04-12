@@ -365,6 +365,7 @@ const protocolRouter = router({
             dosageAmount: z.string().optional().nullable(),
             dosageUnit: z.string().optional().nullable(),
             route: z.string().optional().nullable(),
+            stepGroup: z.enum(["peptides", "supplements", "lifestyle"]).optional().nullable(),
           })
         ).optional(),
       })
@@ -1045,6 +1046,179 @@ const assignmentRouter = router({
         entityType: "assignment",
         entityId: input.id,
       });
+    }),
+
+  /** 30-day rolling adherence stats — broken down by week and step group */
+  adherenceStats: protectedProcedure
+    .input(z.object({ patientId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      await ensurePatientAccess(ctx, input.patientId);
+      const database = await getDb();
+      if (!database) return null;
+
+      // Get all active assignments for this patient
+      const assignmentRows = await db.listAssignmentsForPatient(input.patientId);
+      const activeAssignments = assignmentRows.filter((r: any) => r.assignment.status === "active");
+      if (activeAssignments.length === 0) return null;
+
+      // Get all assignment steps
+      const allSteps: (any & { assignmentId: number })[] = [];
+      for (const row of activeAssignments) {
+        let steps = await db.listAssignmentSteps(row.assignment.id);
+        if (steps.length === 0) {
+          steps = (await db.listProtocolSteps(row.protocol.id)).map((s: any) => ({
+            ...s,
+            assignmentId: row.assignment.id,
+            sourceStepId: s.id,
+          }));
+        }
+        for (const s of steps) {
+          allSteps.push({ ...s, assignmentId: row.assignment.id });
+        }
+      }
+
+      // Build 30-day date range
+      const today = new Date();
+      const dates: string[] = [];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        dates.push(`${y}-${m}-${day}`);
+      }
+
+      // Get completions for the 30-day range
+      const completions = await db.listCompletionsByDateRange(
+        input.patientId,
+        dates[0],
+        dates[dates.length - 1]
+      );
+      const completionMap = new Map<string, Set<number>>();
+      for (const c of completions) {
+        const key = c.taskDate;
+        if (!completionMap.has(key)) completionMap.set(key, new Set());
+        completionMap.get(key)!.add(c.stepId);
+      }
+
+      // Day-of-week helper
+      const shortDays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+      // Determine if a step is expected on a given date
+      function isStepExpected(step: any, dateStr: string, assignment: any): boolean {
+        const d = new Date(dateStr + "T12:00:00");
+        const dow = d.getDay();
+        // Check assignment date bounds
+        const start = new Date(assignment.startDate);
+        start.setHours(0, 0, 0, 0);
+        if (d < start) return false;
+        if (assignment.endDate) {
+          const end = new Date(assignment.endDate);
+          end.setHours(23, 59, 59, 999);
+          if (d > end) return false;
+        }
+
+        const freq = step.frequency;
+        if (freq === "daily") return true;
+        if (freq === "weekly") return dow === 1; // Monday
+        if (freq === "custom" && step.customDays) {
+          const days = typeof step.customDays === "string"
+            ? JSON.parse(step.customDays)
+            : step.customDays;
+          return days.some((cd: string) => cd.toLowerCase() === shortDays[dow]);
+        }
+        if (freq === "once") return false; // one-time steps don't recur
+        if (freq === "as_needed") return false;
+        return true; // biweekly, monthly — treat as expected for now
+      }
+
+      // Calculate stats
+      const overall = { completed: 0, expected: 0 };
+      const weeks = [
+        { label: "Wk 1", completed: 0, expected: 0, pct: 0 },
+        { label: "Wk 2", completed: 0, expected: 0, pct: 0 },
+        { label: "Wk 3", completed: 0, expected: 0, pct: 0 },
+        { label: "Wk 4", completed: 0, expected: 0, pct: 0 },
+      ];
+      const groups: Record<string, { completed: number; expected: number }> = {
+        peptides: { completed: 0, expected: 0 },
+        supplements: { completed: 0, expected: 0 },
+        lifestyle: { completed: 0, expected: 0 },
+      };
+      // Per-step tracking for flagging (last 14 days)
+      const stepTrack = new Map<number, { title: string; group: string | null; completed: number; expected: number }>();
+
+      for (let i = 0; i < dates.length; i++) {
+        const dateStr = dates[i];
+        const weekIdx = Math.floor(i / 7); // 0-3 (last 2 days go into week 3)
+        const wk = weeks[Math.min(weekIdx, 3)];
+        const doneSet = completionMap.get(dateStr) || new Set();
+        const isLast14 = i >= 16;
+
+        for (const step of allSteps) {
+          const assignment = activeAssignments.find((r: any) => r.assignment.id === step.assignmentId);
+          if (!assignment) continue;
+          if (!isStepExpected(step, dateStr, assignment.assignment)) continue;
+
+          overall.expected++;
+          wk.expected++;
+          const grp = step.stepGroup || "lifestyle";
+          if (groups[grp]) groups[grp].expected++;
+
+          if (doneSet.has(step.id) || doneSet.has(step.sourceStepId)) {
+            overall.completed++;
+            wk.completed++;
+            if (groups[grp]) groups[grp].completed++;
+          }
+
+          // Track per-step for last 14 days
+          if (isLast14) {
+            if (!stepTrack.has(step.id)) {
+              stepTrack.set(step.id, { title: step.title, group: step.stepGroup, completed: 0, expected: 0 });
+            }
+            const t = stepTrack.get(step.id)!;
+            t.expected++;
+            if (doneSet.has(step.id) || doneSet.has(step.sourceStepId)) t.completed++;
+          }
+        }
+      }
+
+      // Calculate percentages
+      for (const wk of weeks) {
+        wk.pct = wk.expected > 0 ? Math.round((wk.completed / wk.expected) * 100) : 0;
+      }
+
+      const categoryBreakdown = Object.entries(groups).map(([name, g]) => ({
+        name,
+        completed: g.completed,
+        expected: g.expected,
+        pct: g.expected > 0 ? Math.round((g.completed / g.expected) * 100) : 0,
+      })).filter(c => c.expected > 0);
+
+      // Flag items with < 70% adherence in last 14 days
+      const flagged = Array.from(stepTrack.values())
+        .filter(t => t.expected >= 3 && (t.completed / t.expected) < 0.7)
+        .map(t => ({
+          title: t.title,
+          group: t.group,
+          pct: Math.round((t.completed / t.expected) * 100),
+          missed: t.expected - t.completed,
+          outOf: t.expected,
+        }))
+        .sort((a, b) => a.pct - b.pct)
+        .slice(0, 5);
+
+      return {
+        overall: {
+          completed: overall.completed,
+          expected: overall.expected,
+          pct: overall.expected > 0 ? Math.round((overall.completed / overall.expected) * 100) : 0,
+        },
+        weeks,
+        categories: categoryBreakdown,
+        flagged,
+      };
     }),
 
   /** Weekly compliance trends — last 12 weeks of task completion activity across all patients */

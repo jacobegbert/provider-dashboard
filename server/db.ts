@@ -486,6 +486,7 @@ export async function duplicateStepsToAssignment(protocolId: number, assignmentI
       dosageAmount: step.dosageAmount,
       dosageUnit: step.dosageUnit,
       route: step.route,
+      stepGroup: step.stepGroup,
     });
     createdIds.push(result.id);
   }

@@ -166,6 +166,8 @@ export const protocolSteps = mysqlTable("protocol_steps", {
   dosageUnit: varchar("dosageUnit", { length: 32 }),
   /** Administration route (e.g., "oral", "subcutaneous", "intramuscular", "topical") */
   route: varchar("route", { length: 64 }),
+  /** Step group for adherence tracking breakdown */
+  stepGroup: mysqlEnum("stepGroup", ["peptides", "supplements", "lifestyle"]),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -499,6 +501,8 @@ export const assignmentSteps = mysqlTable("assignment_steps", {
   dosageUnit: varchar("dosageUnit", { length: 32 }),
   /** Administration route (e.g., "oral", "subcutaneous", "intramuscular", "topical") */
   route: varchar("route", { length: 64 }),
+  /** Step group for adherence tracking breakdown */
+  stepGroup: mysqlEnum("stepGroup", ["peptides", "supplements", "lifestyle"]),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

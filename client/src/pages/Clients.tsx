@@ -25,6 +25,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import IntakeViewer from "@/components/IntakeViewer";
+import AdherenceWidget from "@/components/AdherenceWidget";
 
 type Patient = {
   id: number;
@@ -1509,6 +1510,12 @@ export default function Clients() {
                     </Button>
                   </div>
                 </div>
+                {/* Adherence stats */}
+                {selectedPatient && (assignmentsQuery.data ?? []).some((r: any) => r.assignment.status === "active") && (
+                  <div className="mb-3">
+                    <AdherenceWidget patientId={selectedPatient.id} variant="provider" />
+                  </div>
+                )}
                 {assignmentsQuery.isLoading ? (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
