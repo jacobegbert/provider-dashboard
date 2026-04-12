@@ -1986,7 +1986,7 @@ const clientTaskRouter = router({
         priority: input.priority,
         dueDate: input.dueDate,
       });
-      // Notify patient about new task
+      // Notify patient about new task (in-app + email + SMS)
       const patient = await db.getPatient(input.patientId);
       if (patient?.userId) {
         await db.createNotificationWithEmail(
@@ -1998,8 +1998,23 @@ const clientTaskRouter = router({
             relatedEntityType: "clientTask",
             relatedEntityId: result.id,
           },
-          { sendEmail: false }
+          { sendEmail: true }
         );
+      }
+      // Send SMS notification
+      if (patient) {
+        const providerProfile = await db.getProviderProfile(ctx.ownerId);
+        const providerName = providerProfile?.practiceName || ctx.user.name || "Your provider";
+        const taskBody = `You have a new task: "${input.title}"${input.dueDate ? ` — due ${input.dueDate.toLocaleDateString()}` : ""}. View at app.blacklabelmedicine.com/patient/tasks`;
+        const { notifyPatientGeneric } = await import("./patientNotify");
+        notifyPatientGeneric({
+          email: null, // already sent via createNotificationWithEmail
+          phone: patient.phone || null,
+          smsOptIn: patient.smsOptIn,
+          title: "New Task Assigned",
+          body: taskBody,
+          portalUrl: "https://app.blacklabelmedicine.com/patient/tasks",
+        }).catch((err) => console.error("[Notify] Task SMS failed:", err?.message || err));
       }
       await db.logAudit({
         userId: ctx.user.id,
