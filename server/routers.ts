@@ -822,6 +822,22 @@ const assignmentRouter = router({
       return results.filter(Boolean);
     }),
 
+  /** All active assignments enriched with patient + protocol info, for the Patient Plans view */
+  listAllActive: adminProcedure.query(async ({ ctx }) => {
+    const rows = await db.listActiveAssignmentsForProvider(ctx.ownerId);
+    return rows.map((row: any) => ({
+      assignmentId: row.assignment.id,
+      patientId: row.patient.id,
+      protocolId: row.protocol.id,
+      protocolName: row.protocol.name,
+      protocolCategory: row.protocol.category,
+      firstName: row.patient.firstName,
+      lastName: row.patient.lastName,
+      startDate: row.assignment.startDate,
+      endDate: row.assignment.endDate,
+    }));
+  }),
+
   create: adminProcedure
     .input(
       z.object({

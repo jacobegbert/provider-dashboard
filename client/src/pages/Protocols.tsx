@@ -8,7 +8,7 @@ import { useLocation } from "wouter";
 import {
   ClipboardList, Search, Plus, Users, Clock, ChevronDown, ChevronUp,
   Apple, Dumbbell, Pill, Brain, Heart, FlaskConical, Moon, Beaker, Syringe,
-  Edit, Archive, X, ArchiveRestore, Infinity, Loader2, Copy, BookOpen, Download, Check, ArrowLeft, Flag, Trash2,
+  Edit, Archive, X, ArchiveRestore, Infinity, Loader2, Copy, BookOpen, Download, Check, ArrowLeft, Flag, Trash2, ArrowRight, Activity,
 } from "lucide-react";
 import { PROTOCOL_TEMPLATES, type ProtocolTemplate } from "@shared/protocolTemplates";
 import { Card, CardContent } from "@/components/ui/card";
@@ -110,6 +110,7 @@ export default function Protocols() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [showArchived, setShowArchived] = useState(false);
   const [, navigate] = useLocation();
+  const [activeTab, setActiveTab] = useState<"library" | "patients">("library");
 
   // Dialogs
   const [showCreate, setShowCreate] = useState(false);
@@ -150,6 +151,11 @@ export default function Protocols() {
     { protocolId: activeClientsProtocolId! },
     { enabled: activeClientsProtocolId !== null }
   );
+
+  // All active assignments for Patient Plans view
+  const allActiveQuery = trpc.assignment.listAllActive.useQuery(undefined, {
+    enabled: activeTab === "patients",
+  });
 
   // Populate form when edit data arrives
   useEffect(() => {
@@ -556,6 +562,31 @@ export default function Protocols() {
         </div>
       </div>
 
+      {/* Tab toggle: Library vs Patient Plans */}
+      <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-0.5 mb-5 w-fit">
+        <button
+          onClick={() => setActiveTab("library")}
+          className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+            activeTab === "library"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Protocol Library
+        </button>
+        <button
+          onClick={() => setActiveTab("patients")}
+          className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-1.5 ${
+            activeTab === "patients"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Users className="h-3.5 w-3.5" /> Patient Plans
+        </button>
+      </div>
+
+      {activeTab === "library" && <>
       {/* Search & Category Filter */}
       <div className="flex items-center gap-3 mb-6 flex-wrap">
         <div className="relative flex-1 max-w-md">
@@ -952,6 +983,16 @@ export default function Protocols() {
             </div>
           )}
         </div>
+      )}
+      </>}
+
+      {/* ── Patient Plans Tab ── */}
+      {activeTab === "patients" && (
+        <PatientPlans
+          data={allActiveQuery.data || []}
+          isLoading={allActiveQuery.isLoading}
+          onViewProtocol={(id) => setViewProtocolId(id)}
+        />
       )}
 
       {/* ── Unified Create / Edit Protocol Dialog ── */}
@@ -1497,6 +1538,135 @@ function PatientCreatedProtocols({ onEdit }: { onEdit: (protocol: any) => void }
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── Patient Plans — protocols grouped by patient ────────────── */
+function PatientPlans({
+  data,
+  isLoading,
+  onViewProtocol,
+}: {
+  data: any[];
+  isLoading: boolean;
+  onViewProtocol: (id: number) => void;
+}) {
+  // Group assignments by patient
+  const byPatient = useMemo(() => {
+    const map = new Map<number, { firstName: string; lastName: string; patientId: number; protocols: any[] }>();
+    for (const row of data) {
+      if (!map.has(row.patientId)) {
+        map.set(row.patientId, {
+          firstName: row.firstName,
+          lastName: row.lastName,
+          patientId: row.patientId,
+          protocols: [],
+        });
+      }
+      map.get(row.patientId)!.protocols.push(row);
+    }
+    // Sort by patient last name
+    return Array.from(map.values()).sort((a, b) => a.lastName.localeCompare(b.lastName));
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-6 w-6 animate-spin text-gold" />
+      </div>
+    );
+  }
+
+  if (byPatient.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <Users className="h-12 w-12 text-muted-foreground/20 mx-auto mb-3" />
+        <p className="text-muted-foreground">No active patient plans</p>
+        <p className="text-xs text-muted-foreground/60 mt-1">Assign protocols to patients to see them here</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {byPatient.map((patient) => {
+        const initials = `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}`.toUpperCase();
+        return (
+          <div key={patient.patientId} className="bg-card rounded-lg border border-border/60 overflow-hidden">
+            {/* Patient header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border/40 bg-muted/20">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
+                  <span className="text-gold text-[11px] font-semibold">{initials}</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-base font-semibold text-foreground">
+                    {patient.firstName} {patient.lastName}
+                  </h3>
+                  <p className="text-[10px] text-muted-foreground tracking-wider uppercase">
+                    {patient.protocols.length} active protocol{patient.protocols.length !== 1 ? "s" : ""}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs h-7 gap-1.5"
+                  onClick={() => window.open(`/patient/adherence?viewAs=${patient.patientId}`, "_blank")}
+                >
+                  <Activity className="h-3 w-3" /> View Adherence
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs h-7 gap-1.5"
+                  onClick={() => window.open(`/patient?viewAs=${patient.patientId}`, "_blank")}
+                >
+                  Preview Portal <ArrowRight className="h-3 w-3" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Protocols list */}
+            <div className="divide-y divide-border/30">
+              {patient.protocols.map((proto: any) => {
+                const Icon = categoryIcons[proto.protocolCategory] || ClipboardList;
+                const style = categoryStyles[proto.protocolCategory] || categoryStyles.other;
+                return (
+                  <button
+                    key={proto.assignmentId}
+                    className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-muted/30 transition-colors text-left"
+                    onClick={() => onViewProtocol(proto.protocolId)}
+                  >
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${style.split(" ")[0]} ${style.split(" ")[1]}`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{proto.protocolName}</p>
+                      <div className="flex items-center gap-3 mt-0.5">
+                        <Badge variant="outline" className={`text-[9px] px-1.5 py-0 h-4 capitalize ${style}`}>
+                          {proto.protocolCategory.replace("_", " ")}
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground">
+                          Started {new Date(proto.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                        </span>
+                        {proto.endDate && (
+                          <span className="text-[10px] text-muted-foreground">
+                            → {new Date(proto.endDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground/40 -rotate-90" />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
