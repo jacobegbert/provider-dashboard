@@ -586,7 +586,7 @@ export default function Protocols() {
         </button>
       </div>
 
-      {activeTab === "library" && <>
+      {activeTab === "library" && <div>
       {/* Search & Category Filter */}
       <div className="flex items-center gap-3 mb-6 flex-wrap">
         <div className="relative flex-1 max-w-md">
@@ -984,7 +984,7 @@ export default function Protocols() {
           )}
         </div>
       )}
-      </>}
+      </div>}
 
       {/* ── Patient Plans Tab ── */}
       {activeTab === "patients" && (
