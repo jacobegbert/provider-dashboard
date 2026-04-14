@@ -18,6 +18,7 @@ import {
   Flame,
   Droplets,
   Syringe,
+  Download,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,6 +26,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { CheckCheck } from "lucide-react";
 import { useViewAs } from "@/contexts/ViewAsContext";
+import { downloadProtocolsPdf } from "@/lib/protocolPdfGenerator";
 
 const categoryConfig: Record<string, { icon: typeof Leaf; color: string; bg: string }> = {
   nutrition: { icon: Leaf, color: "text-gold", bg: "bg-gold/10" },
@@ -92,6 +94,31 @@ export default function PatientProtocols() {
 
   const isLoading = myRecordQuery.isLoading || assignmentsQuery.isLoading;
 
+  // Download all protocols as a single branded PDF
+  const handleDownloadPdf = () => {
+    const patient = myRecordQuery.data;
+    if (!patient) {
+      toast.error("Patient record not loaded yet");
+      return;
+    }
+    if (assignments.length === 0) {
+      toast.error("No protocols to download");
+      return;
+    }
+    try {
+      const fullName = `${patient.firstName ?? ""} ${patient.lastName ?? ""}`.trim() || "Patient";
+      downloadProtocolsPdf({
+        patientName: fullName,
+        patientDob: patient.dateOfBirth ?? null,
+        patientEmail: patient.email ?? null,
+        assignments: assignments as any,
+      });
+      toast.success("Protocol PDF downloaded");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to generate PDF");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full py-32">
@@ -102,9 +129,23 @@ export default function PatientProtocols() {
 
   return (
     <div className="px-5 md:px-8 py-5 md:py-8 space-y-5 md:space-y-6">
-      <div>
-        <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground">My Protocols</h1>
-        <p className="text-sm md:text-base text-muted-foreground mt-1">Your personalized health optimization plans</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground">My Protocols</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">Your personalized health optimization plans</p>
+        </div>
+        {assignments.length > 0 && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadPdf}
+            className="shrink-0 gap-1.5 text-xs md:text-sm h-9 border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
+          >
+            <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="hidden sm:inline">Download PDF</span>
+            <span className="sm:hidden">PDF</span>
+          </Button>
+        )}
       </div>
 
       {assignments.length === 0 ? (
@@ -419,6 +460,36 @@ export default function PatientProtocols() {
                           )}
                           <span className="text-[10px] md:text-xs text-muted-foreground">Duration: {durationWeeks} weeks</span>
                           <span className="text-[10px] md:text-xs text-muted-foreground capitalize">Category: {protocol.category?.replace("_", " ")}</span>
+                        </div>
+
+                        {/* Per-protocol download */}
+                        <div className="flex justify-end pt-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 px-2.5 text-xs gap-1.5 text-gold hover:text-gold hover:bg-gold/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const patient = myRecordQuery.data;
+                              if (!patient) return;
+                              try {
+                                const fullName = `${patient.firstName ?? ""} ${patient.lastName ?? ""}`.trim() || "Patient";
+                                downloadProtocolsPdf({
+                                  patientName: fullName,
+                                  patientDob: patient.dateOfBirth ?? null,
+                                  patientEmail: patient.email ?? null,
+                                  assignments: [row] as any,
+                                }, `${(patient.lastName || "Patient")}_${protocol.name.replace(/[^a-z0-9]+/gi, "_")}.pdf`);
+                                toast.success("Protocol PDF downloaded");
+                              } catch (err: any) {
+                                toast.error(err?.message || "Failed to generate PDF");
+                              }
+                            }}
+                            title="Download this protocol as PDF"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            Download PDF
+                          </Button>
                         </div>
                       </div>
                     </motion.div>

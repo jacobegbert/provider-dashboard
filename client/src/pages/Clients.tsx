@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import IntakeViewer from "@/components/IntakeViewer";
 import AdherenceWidget from "@/components/AdherenceWidget";
+import { downloadProtocolsPdf } from "@/lib/protocolPdfGenerator";
 
 type Patient = {
   id: number;
@@ -1500,6 +1501,29 @@ export default function Clients() {
                     >
                       <Plus className="h-3 w-3" /> Assign Protocol
                     </Button>
+                    {selectedPatient && (assignmentsQuery.data ?? []).length > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs h-7 gap-1"
+                        onClick={() => {
+                          try {
+                            downloadProtocolsPdf({
+                              patientName: `${selectedPatient.firstName ?? ""} ${selectedPatient.lastName ?? ""}`.trim() || "Patient",
+                              patientDob: selectedPatient.dateOfBirth ?? null,
+                              patientEmail: selectedPatient.email ?? null,
+                              assignments: (assignmentsQuery.data ?? []) as any,
+                            });
+                            toast.success("Protocol PDF downloaded");
+                          } catch (err: any) {
+                            toast.error(err?.message || "Failed to generate PDF");
+                          }
+                        }}
+                        title="Download all protocols as PDF"
+                      >
+                        <Download className="h-3 w-3" /> Download All
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
@@ -1555,6 +1579,28 @@ export default function Clients() {
                                 title="Personalize steps for this patient"
                               >
                                 <Edit3 className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-muted-foreground hover:text-gold"
+                                onClick={() => {
+                                  if (!selectedPatient) return;
+                                  try {
+                                    downloadProtocolsPdf({
+                                      patientName: `${selectedPatient.firstName ?? ""} ${selectedPatient.lastName ?? ""}`.trim() || "Patient",
+                                      patientDob: selectedPatient.dateOfBirth ?? null,
+                                      patientEmail: selectedPatient.email ?? null,
+                                      assignments: [row] as any,
+                                    }, `${(selectedPatient.lastName || "Patient")}_${row.protocol.name.replace(/[^a-z0-9]+/gi, "_")}.pdf`);
+                                    toast.success("PDF downloaded");
+                                  } catch (err: any) {
+                                    toast.error(err?.message || "Failed to generate PDF");
+                                  }
+                                }}
+                                title="Download this protocol as PDF"
+                              >
+                                <Download className="h-3 w-3" />
                               </Button>
                               <Button
                                 variant="ghost"
