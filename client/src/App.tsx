@@ -51,6 +51,7 @@ import Billing from "./pages/Billing";
 import PatientBilling from "./pages/patient/PatientBilling";
 import Plans from "./pages/Plans";
 import Login from "./pages/Login";
+import ThemeMockups from "./pages/ThemeMockups";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -193,6 +194,7 @@ function AppRouter() {
       <Route path="/sms-consent" component={SmsConsent} />
       <Route path="/debug" component={Debug} />
       <Route path="/guide" component={GoLiveGuide} />
+      <Route path="/theme-mockups" component={ThemeMockups} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
