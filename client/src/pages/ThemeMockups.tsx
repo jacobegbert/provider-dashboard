@@ -7,7 +7,7 @@
  *
  * Each theme is fully self-contained — palette + fonts hardcoded inline.
  * To "ship" one, lift its tokens into a .theme-<name> class in index.css
- * (following the existing .theme-clinical pattern) and apply it to <body>.
+ * (following the existing .theme-feminine pattern) and apply it to <body>.
  */
 import { useState } from "react";
 import { Activity, Pill, Dumbbell, ArrowRight, Check, Calendar } from "lucide-react";

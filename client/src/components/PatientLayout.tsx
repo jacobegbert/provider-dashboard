@@ -61,6 +61,9 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
     ? `${patientFirstName.charAt(0)}${patientLastName.charAt(0)}`.toUpperCase()
     : patientFullName.split(" ").map(n => n.charAt(0)).join("").toUpperCase().slice(0, 2);
 
+  // Gender-based theming: The Row quiet luxury for female patients, masculine (steel blue) is default
+  const isFeminine = myRecord?.sex === "female";
+
   // Hide "Getting Started" 7 days after completion
   const hideOnboarding = (() => {
     if (!myRecord?.onboardingCompletedAt) return false;
@@ -84,7 +87,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background ${isFeminine ? "theme-feminine" : ""}`}>
       <ViewAsBanner />
       {/* ─── Desktop: sidebar + content ─── */}
       <div className="hidden md:flex min-h-screen">

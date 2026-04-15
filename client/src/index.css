@@ -405,6 +405,164 @@
     background: linear-gradient(90deg, transparent, oklch(0.545 0.246 263 / 0.25), transparent);
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+     THE ROW — Quiet Luxury Feminine Theme
+     Inspired by The Row by Mary-Kate & Ashley Olsen
+     Editorial, timeless, understated luxury
+     Palette: Warm Ivory / Bone / Charcoal / Dusty Rose / Antique Gold
+     ═══════════════════════════════════════════════════════════════════ */
+
+  .theme-feminine {
+    /* ── Semantic tokens — The Row palette ── */
+    --background: oklch(0.967 0.007 89);            /* Warm Ivory #F6F4EF */
+    --foreground: oklch(0.301 0.000 0);             /* Charcoal #2E2E2E */
+    --card: oklch(0.937 0.010 88);                  /* Bone #EDEAE3 */
+    --card-foreground: oklch(0.301 0.000 0);        /* Charcoal */
+    --popover: oklch(0.937 0.010 88);               /* Bone */
+    --popover-foreground: oklch(0.226 0.000 0);     /* Soft Black */
+    --primary: oklch(0.301 0.000 0);                /* Charcoal — primary actions */
+    --primary-foreground: oklch(0.967 0.007 89);    /* Warm Ivory */
+    --secondary: oklch(0.937 0.010 88);             /* Bone */
+    --secondary-foreground: oklch(0.301 0.000 0);   /* Charcoal */
+    --muted: oklch(0.871 0.017 88);                 /* Soft Sand #D9D4C8 */
+    --muted-foreground: oklch(0.682 0.020 83);      /* Warm Stone #9F988B */
+    --accent: oklch(0.871 0.017 88);                /* Soft Sand */
+    --accent-foreground: oklch(0.301 0.000 0);      /* Charcoal */
+    --border: oklch(0.871 0.017 88);                /* Soft Sand — thin warm grey lines */
+    --input: oklch(0.871 0.017 88);                 /* Soft Sand */
+    --ring: oklch(0.787 0.039 83);                  /* Antique Gold ring */
+    --destructive: oklch(0.55 0.12 25);             /* Muted red */
+    --destructive-foreground: oklch(0.967 0.007 89);
+    --chart-1: oklch(0.763 0.020 83);               /* Taupe */
+    --chart-2: oklch(0.787 0.039 83);               /* Antique Gold */
+    --chart-3: oklch(0.843 0.020 33);               /* Dusty Rose */
+    --chart-4: oklch(0.629 0.030 103);              /* Faded Olive */
+    --chart-5: oklch(0.682 0.020 83);               /* Warm Stone */
+    --sidebar: oklch(0.967 0.007 89);               /* Warm Ivory */
+    --sidebar-foreground: oklch(0.301 0 0);         /* Charcoal */
+    --sidebar-primary: oklch(0.301 0.000 0);        /* Charcoal */
+    --sidebar-primary-foreground: oklch(0.967 0.007 89); /* Warm Ivory */
+    --sidebar-accent: oklch(0.937 0.010 88);         /* Bone */
+    --sidebar-accent-foreground: oklch(0.301 0.000 0); /* Charcoal */
+    --sidebar-border: oklch(0.871 0.017 88);         /* Soft Sand */
+    --sidebar-ring: oklch(0.787 0.039 83);           /* Antique Gold */
+
+    /* ── Override the indirection layer — The Row quiet luxury ── */
+    --gold-base: oklch(0.787 0.039 83);              /* Antique Gold — primary accent */
+    --gold-light: oklch(0.843 0.020 33);             /* Dusty Rose */
+    --gold-dark: oklch(0.682 0.020 83);              /* Warm Stone */
+    --gold-muted: oklch(0.763 0.020 83);             /* Taupe */
+    --terracotta-base: oklch(0.843 0.020 33);        /* Dusty Rose */
+    --terracotta-light-val: oklch(0.871 0.017 88);   /* Soft Sand */
+
+    /* ── Override @theme color tokens for Tailwind classes ── */
+    --color-gold: oklch(0.787 0.039 83);             /* Antique Gold */
+    --color-gold-light: oklch(0.843 0.020 33);       /* Dusty Rose */
+    --color-gold-dark: oklch(0.682 0.020 83);        /* Warm Stone */
+    --color-gold-muted: oklch(0.763 0.020 83);       /* Taupe */
+    --color-steel: oklch(0.763 0.020 83);            /* Taupe */
+    --color-steel-light: oklch(0.843 0.020 33);      /* Dusty Rose */
+    --color-steel-dark: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-steel-muted: oklch(0.763 0.020 83);      /* Taupe */
+    --color-brass: oklch(0.787 0.039 83);            /* Antique Gold */
+    --color-navy: oklch(0.301 0.000 0);              /* Charcoal */
+    --color-navy-light: oklch(0.400 0.005 83);       /* Warm mid-grey */
+    --color-navy-dark: oklch(0.226 0.000 0);         /* Soft Black */
+    --color-sage: oklch(0.629 0.030 103);            /* Faded Olive */
+    --color-sage-light: oklch(0.720 0.020 103);      /* Light Olive */
+    --color-sage-dark: oklch(0.540 0.030 103);       /* Dark Olive */
+    --color-terracotta: oklch(0.843 0.020 33);       /* Dusty Rose */
+    --color-terracotta-light: oklch(0.900 0.012 33); /* Pale Rose */
+    --color-charcoal: oklch(0.301 0.000 0);          /* Charcoal #2E2E2E */
+    --color-charcoal-light: oklch(0.400 0.005 83);   /* Warm mid-grey */
+    --color-charcoal-mid: oklch(0.500 0.005 83);     /* Warm grey */
+    --color-slate-cool: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-slate-warm: oklch(0.682 0.020 83);       /* Warm Stone */
+    --color-medical-white: oklch(0.967 0.007 89);    /* Warm Ivory */
+    --color-medical-gray: oklch(0.937 0.010 88);     /* Bone */
+    --color-onyx: oklch(0.226 0.000 0);              /* Soft Black */
+    --color-ivory: oklch(0.967 0.007 89);            /* Warm Ivory */
+    --color-ivory-muted: oklch(0.937 0.010 88);      /* Bone */
+
+    /* ── Typography override: editorial fonts ── */
+    font-family: "Inter", system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    --radius: 0.25rem;                               /* Very subtle corners, not bubble-like */
+  }
+
+  /* Editorial heading typography */
+  .theme-feminine h1,
+  .theme-feminine h2,
+  .theme-feminine h3,
+  .theme-feminine h4,
+  .theme-feminine h5,
+  .theme-feminine h6 {
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+  .theme-feminine .font-heading {
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+  .theme-feminine .font-body {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  /* The Row hero accent — antique gold on dark backgrounds */
+  .theme-feminine .text-hero-accent {
+    color: oklch(0.787 0.039 83);                    /* Antique Gold */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .theme-feminine .text-hero-accent\/60 {
+    color: oklch(0.787 0.039 83 / 0.6);
+  }
+
+  /* Glass card — bone tinted, matte */
+  .theme-feminine .glass-card {
+    background: oklch(0.937 0.010 88 / 0.92);
+    border-color: oklch(0.871 0.017 88 / 0.4);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Scrollbar — warm stone */
+  .theme-feminine ::-webkit-scrollbar-thumb {
+    background: oklch(0.871 0.017 88);
+  }
+  .theme-feminine ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.763 0.020 83);
+  }
+
+  /* Luxury divider — thin warm grey line */
+  .theme-feminine .luxury-divider {
+    background: linear-gradient(90deg, transparent, oklch(0.871 0.017 88 / 0.6), transparent);
+  }
+
+  /* Dusty Rose accent utilities */
+  .theme-feminine .text-warm-rose {
+    color: oklch(0.843 0.020 33);                    /* Dusty Rose */
+  }
+  .theme-feminine .bg-warm-rose {
+    background-color: oklch(0.843 0.020 33);
+  }
+
+  /* Antique Gold accent utilities */
+  .theme-feminine .text-soft-gold {
+    color: oklch(0.787 0.039 83);                    /* Antique Gold */
+  }
+  .theme-feminine .bg-soft-gold {
+    background-color: oklch(0.787 0.039 83);
+  }
+
+  /* Faded Olive — subtle accent */
+  .theme-feminine .text-sage-wellness {
+    color: oklch(0.629 0.030 103);                   /* Faded Olive */
+  }
+  .theme-feminine .bg-sage-wellness {
+    background-color: oklch(0.629 0.030 103);
+  }
+
   /* ─── Glass card utility ─── */
   .glass-card {
     background: oklch(1.00 0 0 / 0.85);
