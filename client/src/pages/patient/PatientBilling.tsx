@@ -13,9 +13,9 @@ function statusBadge(status: InvoiceStatus) {
   const map: Record<InvoiceStatus, { label: string; className: string; icon: React.ElementType }> = {
     paid: { label: "Paid", className: "bg-emerald-100 text-emerald-700", icon: CheckCircle },
     open: { label: "Payment Due", className: "bg-amber-100 text-amber-700", icon: Clock },
-    draft: { label: "Pending", className: "bg-gray-100 text-gray-600", icon: FileText },
-    void: { label: "Void", className: "bg-gray-100 text-gray-500", icon: XCircle },
-    uncollectible: { label: "Void", className: "bg-gray-100 text-gray-500", icon: XCircle },
+    draft: { label: "Pending", className: "bg-muted text-muted-foreground", icon: FileText },
+    void: { label: "Void", className: "bg-muted text-muted-foreground", icon: XCircle },
+    uncollectible: { label: "Void", className: "bg-muted text-muted-foreground", icon: XCircle },
   };
   const { label, className, icon: Icon } = map[status] ?? map.draft;
   return (

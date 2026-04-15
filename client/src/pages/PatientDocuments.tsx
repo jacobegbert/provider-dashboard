@@ -38,8 +38,8 @@ const categoryColors: Record<string, string> = {
   consent: "bg-purple-50 text-purple-700 border-purple-200",
   imaging: "bg-pink-50 text-pink-700 border-pink-200",
   prescription: "bg-red-50 text-red-700 border-red-200",
-  notes: "bg-gray-50 text-gray-600 border-gray-200",
-  other: "bg-gray-50 text-gray-600 border-gray-200",
+  notes: "bg-muted text-muted-foreground border-border",
+  other: "bg-muted text-muted-foreground border-border",
 };
 
 const ALLOWED_TYPES = [

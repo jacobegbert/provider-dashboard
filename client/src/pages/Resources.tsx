@@ -97,7 +97,7 @@ function getCategoryColor(cat: string) {
     lab_education: "bg-cyan-100 text-cyan-800 border-cyan-200",
     recovery: "bg-teal-100 text-teal-800 border-teal-200",
     mental_health: "bg-indigo-100 text-indigo-800 border-indigo-200",
-    general: "bg-stone-100 text-stone-700 border-stone-200",
+    general: "bg-muted text-foreground border-border",
   };
   return map[cat] || map.general;
 }
@@ -444,7 +444,7 @@ export default function Resources() {
                       <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">How to navigate assigned protocols, mark steps as complete, and track progress through your personalized care plan.</p>
-                    <Badge variant="outline" className="text-[10px] bg-stone-100 text-stone-700 border-stone-200 mt-2">General</Badge>
+                    <Badge variant="outline" className="text-[10px] bg-muted text-foreground border-border mt-2">General</Badge>
                   </div>
                 </div>
               </CardContent>

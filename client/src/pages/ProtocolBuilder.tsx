@@ -59,7 +59,7 @@ const CATEGORY_META: Record<string, { label: string; icon: React.ElementType; co
   stress: { label: "Stress", icon: Brain, color: "bg-amber-100 text-amber-700" },
   peptides: { label: "Peptides", icon: Syringe, color: "bg-orange-100 text-orange-700" },
   hormone: { label: "Hormone", icon: Beaker, color: "bg-rose-100 text-rose-700" },
-  other: { label: "Other", icon: ClipboardList, color: "bg-zinc-800/50 text-gray-700" },
+  other: { label: "Other", icon: ClipboardList, color: "bg-zinc-800/50 text-foreground" },
 };
 
 const FREQUENCY_LABELS: Record<string, string> = {

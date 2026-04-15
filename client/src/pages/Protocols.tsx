@@ -45,7 +45,7 @@ const categoryStyles: Record<string, string> = {
   peptides: "bg-orange-50 text-orange-700 border-orange-200",
   hormone: "bg-pink-50 text-pink-700 border-pink-200",
   lab_work: "bg-cyan-50 text-cyan-700 border-cyan-200",
-  other: "bg-zinc-800/30 text-gray-700 border-gray-200",
+  other: "bg-zinc-800/30 text-foreground border-border",
 };
 
 const CATEGORIES = [

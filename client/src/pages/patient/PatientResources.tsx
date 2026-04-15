@@ -73,7 +73,7 @@ function getCategoryColor(cat: string) {
     lab_education: "bg-cyan-100 text-cyan-800 border-cyan-200",
     recovery: "bg-teal-100 text-teal-800 border-teal-200",
     mental_health: "bg-indigo-100 text-indigo-800 border-indigo-200",
-    general: "bg-stone-100 text-stone-700 border-stone-200",
+    general: "bg-muted text-foreground border-border",
   };
   return map[cat] || map.general;
 }

@@ -452,7 +452,7 @@ export default function IntakeViewer({ patientId, patientName }: { patientId: nu
                 ? "bg-gold/10 text-gold border-gold/15"
                 : intake.status === "in_progress"
                 ? "bg-amber-50 text-amber-700 border-amber-200"
-                : "bg-zinc-800/50 text-zinc-400 border-gray-200"
+                : "bg-zinc-800/50 text-muted-foreground border-border"
             }
           >
             {intake.status === "completed" ? "Completed" : intake.status === "in_progress" ? "In Progress" : "Not Started"}

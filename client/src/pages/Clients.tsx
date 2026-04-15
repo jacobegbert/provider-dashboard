@@ -51,7 +51,7 @@ const statusStyles: Record<string, string> = {
   paused: "bg-amber-500/10 text-amber-400 border-amber-500/20",
   completed: "bg-primary/10 text-primary border-primary/20",
   new: "bg-gold/10 text-gold border-gold/20",
-  inactive: "bg-zinc-700/30 text-zinc-400 border-zinc-600/20",
+  inactive: "bg-muted text-muted-foreground border-border",
   prospective: "bg-sky-500/10 text-sky-400 border-sky-500/20",
 };
 
@@ -79,14 +79,14 @@ function formatLastActive(date: Date | string): string {
 }
 
 const priorityStyles: Record<string, string> = {
-  low: "bg-zinc-700/30 text-zinc-400 border-zinc-600/20",
+  low: "bg-muted text-muted-foreground border-border",
   medium: "bg-primary/10 text-primary border-primary/20",
   high: "bg-amber-500/10 text-amber-400 border-amber-500/20",
   urgent: "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
 const taskStatusStyles: Record<string, string> = {
-  pending: "bg-zinc-700/30 text-zinc-400",
+  pending: "bg-muted text-muted-foreground",
   in_progress: "bg-primary/10 text-primary",
   completed: "bg-gold/10 text-gold",
   cancelled: "bg-red-50 text-red-500",
@@ -102,12 +102,12 @@ const noteCategoryLabels: Record<string, string> = {
 };
 
 const noteCategoryColors: Record<string, string> = {
-  general: "bg-zinc-700/30 text-zinc-400",
+  general: "bg-muted text-muted-foreground",
   clinical: "bg-primary/10 text-primary",
   follow_up: "bg-gold/10 text-gold",
   phone_call: "bg-amber-50 text-amber-700",
   lab_review: "bg-purple-50 text-purple-600",
-  other: "bg-zinc-700/30 text-zinc-400",
+  other: "bg-muted text-muted-foreground",
 };
 
 function getInitials(firstName: string, lastName: string) {
@@ -995,7 +995,7 @@ export default function Clients() {
                     </div>
                     {(() => {
                       const intake = intakeStatusMap.get(patient.id);
-                      if (!intake) return <span className="text-[9px] text-zinc-500">No Intake</span>;
+                      if (!intake) return <span className="text-[9px] text-muted-foreground">No Intake</span>;
                       if (intake.status === "submitted") return <span className="text-[9px] text-emerald-400">Intake ✓</span>;
                       return <span className="text-[9px] text-amber-400">Intake…</span>;
                     })()}
@@ -1046,7 +1046,7 @@ export default function Clients() {
                           {(() => {
                             const intake = intakeStatusMap.get(patient.id);
                             if (!intake) return (
-                              <Badge variant="outline" className="text-[10px] bg-zinc-700/20 text-zinc-500 border-zinc-600/20">No Intake</Badge>
+                              <Badge variant="outline" className="text-[10px] bg-muted text-muted-foreground border-border">No Intake</Badge>
                             );
                             if (intake.status === "submitted" && intake.reviewedByProvider) return (
                               <Badge variant="outline" className="text-[10px] bg-gold/10 text-gold border-gold/20">Reviewed</Badge>

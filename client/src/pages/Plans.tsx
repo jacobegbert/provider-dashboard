@@ -72,7 +72,7 @@ function statusBadge(status: PlanStatus, daysUntilExpiry: number | null) {
   const map: Record<PlanStatus, { label: string; className: string; icon: React.ElementType }> = {
     active:          { label: "Active",           className: "bg-emerald-100 text-emerald-700", icon: CheckCircle },
     expired:         { label: "Expired",          className: "bg-red-100 text-red-600",        icon: XCircle     },
-    cancelled:       { label: "Cancelled",        className: "bg-gray-100 text-gray-600",      icon: XCircle     },
+    cancelled:       { label: "Cancelled",        className: "bg-muted text-muted-foreground",      icon: XCircle     },
     paused:          { label: "Paused",           className: "bg-blue-100 text-blue-600",      icon: PauseCircle },
     pending_renewal: { label: "Pending Renewal",  className: "bg-amber-100 text-amber-700",    icon: RefreshCw   },
   };
@@ -208,8 +208,8 @@ export default function Plans() {
                 <p className="text-3xl font-semibold mt-1">{renewingSoon}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">within 30 days</p>
               </div>
-              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${renewingSoon > 0 ? "bg-amber-100" : "bg-gray-100"}`}>
-                <Bell className={`h-5 w-5 ${renewingSoon > 0 ? "text-amber-600" : "text-gray-400"}`} />
+              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${renewingSoon > 0 ? "bg-amber-100" : "bg-muted"}`}>
+                <Bell className={`h-5 w-5 ${renewingSoon > 0 ? "text-amber-600" : "text-muted-foreground"}`} />
               </div>
             </div>
           </CardContent>
@@ -221,8 +221,8 @@ export default function Plans() {
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Expired / Lapsed</p>
                 <p className="text-3xl font-semibold mt-1">{expiredCount}</p>
               </div>
-              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${expiredCount > 0 ? "bg-red-100" : "bg-gray-100"}`}>
-                <AlertTriangle className={`h-5 w-5 ${expiredCount > 0 ? "text-red-500" : "text-gray-400"}`} />
+              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${expiredCount > 0 ? "bg-red-100" : "bg-muted"}`}>
+                <AlertTriangle className={`h-5 w-5 ${expiredCount > 0 ? "text-red-500" : "text-muted-foreground"}`} />
               </div>
             </div>
           </CardContent>

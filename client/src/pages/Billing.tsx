@@ -33,7 +33,7 @@ function statusBadge(status: InvoiceStatus) {
   const map: Record<InvoiceStatus, { label: string; className: string; icon: React.ElementType }> = {
     paid: { label: "Paid", className: "bg-emerald-100 text-emerald-700", icon: CheckCircle },
     open: { label: "Outstanding", className: "bg-amber-100 text-amber-700", icon: Clock },
-    draft: { label: "Draft", className: "bg-gray-100 text-gray-600", icon: FileText },
+    draft: { label: "Draft", className: "bg-muted text-muted-foreground", icon: FileText },
     void: { label: "Void", className: "bg-red-100 text-red-600", icon: XCircle },
     uncollectible: { label: "Uncollectible", className: "bg-red-100 text-red-600", icon: Ban },
   };

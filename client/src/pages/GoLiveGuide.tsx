@@ -836,7 +836,7 @@ export default function GoLiveGuide() {
                 </Card>
                 <Card className="bg-stone border-stone-dark">
                   <CardContent className="pt-6 text-center">
-                    <Globe className="h-8 w-8 text-zinc-300 mx-auto mb-3" />
+                    <Globe className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
                     <h4 className="font-heading font-semibold mb-1">Domain & Hosting</h4>
                     <p className="text-sm text-muted-foreground">
                       Use the Management UI's Settings panel, or ask me for guidance.
