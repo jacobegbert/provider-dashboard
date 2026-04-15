@@ -515,87 +515,152 @@ function ThemedSnippet({ theme }: { theme: ThemeDef }) {
    Page
    ──────────────────────────────────────────────────────────────────────── */
 export default function ThemeMockups() {
-  const [focused, setFocused] = useState<ThemeId | null>(null);
+  const [layout, setLayout] = useState<"stack" | "compare">("stack");
 
   return (
-    <div className="min-h-screen bg-[#F4F2EC] py-10 px-6">
+    <div className="min-h-screen bg-[#F4F2EC] py-8 px-4 md:px-6">
       {/* Page header */}
-      <div className="max-w-7xl mx-auto mb-10">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-mono mb-2">
-          Aesthetic Exploration
-        </div>
-        <h1 className="font-serif text-4xl text-stone-900" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-          Three template directions
-        </h1>
-        <p className="text-stone-600 text-sm mt-2 max-w-2xl">
-          The same content, three aesthetic systems. Each variation is fully self-contained — the palette,
-          typography, and shape language can be swapped by lifting its tokens into a CSS theme class
-          (the existing <code className="text-xs bg-stone-200 px-1 rounded">.theme-feminine</code> shows
-          the pattern). Click any column to focus it.
-        </p>
-      </div>
-
-      {/* Three columns */}
-      <div
-        className={`max-w-7xl mx-auto grid gap-6 ${
-          focused ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-3"
-        }`}
-      >
-        {THEMES.filter((t) => !focused || t.id === focused).map((theme) => (
-          <div key={theme.id}>
-            {/* Theme label */}
-            <button
-              onClick={() => setFocused(focused === theme.id ? null : theme.id)}
-              className="w-full text-left mb-3 group"
-            >
-              <div className="flex items-baseline justify-between">
-                <h2
-                  className="font-serif text-xl text-stone-900"
-                  style={{ fontFamily: '"Cormorant Garamond", serif' }}
-                >
-                  {theme.name}
-                </h2>
-                <div className="text-[9px] uppercase tracking-[0.18em] text-stone-500 font-mono group-hover:text-stone-900 transition-colors">
-                  {focused === theme.id ? "Show all ←" : "Focus →"}
-                </div>
-              </div>
-              <p className="text-xs text-stone-500 mt-0.5">{theme.tagline}</p>
-
-              {/* Palette swatches */}
-              <div className="flex items-center gap-1 mt-2.5">
-                {[
-                  theme.palette.bg,
-                  theme.palette.surface,
-                  theme.palette.text,
-                  theme.palette.accent,
-                ].map((color, i) => (
-                  <div
-                    key={i}
-                    className="w-5 h-5 border border-stone-300"
-                    style={{ background: color, borderRadius: "2px" }}
-                    title={color}
-                  />
-                ))}
-                <div className="text-[9px] text-stone-400 font-mono ml-2">
-                  {theme.fonts.heading.split(",")[0].replace(/"/g, "")}
-                </div>
-              </div>
-            </button>
-
-            {/* Mockup frame */}
-            <div
-              className="shadow-sm"
-              style={{
-                maxWidth: focused ? "440px" : "none",
-                margin: focused ? "0 auto" : "0",
-                minHeight: "780px",
-              }}
-            >
-              <ThemedSnippet theme={theme} />
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-mono mb-2">
+              Aesthetic Exploration
             </div>
+            <h1
+              className="font-serif text-3xl md:text-4xl text-stone-900"
+              style={{ fontFamily: '"Cormorant Garamond", serif' }}
+            >
+              Three template directions
+            </h1>
+            <p className="text-stone-600 text-sm mt-2 max-w-2xl">
+              The same content, three aesthetic systems. Scroll down to see all three at phone
+              size, or switch to the side-by-side compare view.
+            </p>
           </div>
-        ))}
+
+          {/* Layout toggle */}
+          <div className="flex items-center gap-1 bg-white border border-stone-300 rounded-lg p-0.5 shrink-0">
+            <button
+              onClick={() => setLayout("stack")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                layout === "stack"
+                  ? "bg-stone-900 text-white shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              Stacked (large)
+            </button>
+            <button
+              onClick={() => setLayout("compare")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                layout === "compare"
+                  ? "bg-stone-900 text-white shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              Side-by-side
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* ─── Stacked layout — default, each at phone-width and actually readable ─── */}
+      {layout === "stack" && (
+        <div className="max-w-6xl mx-auto space-y-16">
+          {THEMES.map((theme) => (
+            <section key={theme.id}>
+              {/* Theme label bar */}
+              <div className="mb-4 pb-4 border-b border-stone-300/70">
+                <div className="flex items-baseline justify-between flex-wrap gap-2">
+                  <h2
+                    className="font-serif text-2xl md:text-3xl text-stone-900"
+                    style={{ fontFamily: '"Cormorant Garamond", serif' }}
+                  >
+                    {theme.name}
+                  </h2>
+                  <div className="text-[10px] text-stone-500 font-mono tracking-wider uppercase">
+                    {theme.fonts.heading.split(",")[0].replace(/"/g, "")}
+                  </div>
+                </div>
+                <p className="text-sm text-stone-600 mt-1">{theme.tagline}</p>
+
+                {/* Palette swatches with hex labels */}
+                <div className="flex items-center gap-3 mt-3 flex-wrap">
+                  {[
+                    { label: "Background", color: theme.palette.bg },
+                    { label: "Surface", color: theme.palette.surface },
+                    { label: "Text", color: theme.palette.text },
+                    { label: "Accent", color: theme.palette.accent },
+                  ].map((swatch, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <div
+                        className="w-5 h-5 border border-stone-400/60 rounded-[2px]"
+                        style={{ background: swatch.color }}
+                      />
+                      <div className="text-[9px] font-mono text-stone-500 leading-tight">
+                        <div className="uppercase tracking-wider">{swatch.label}</div>
+                        <div className="text-stone-400">{swatch.color}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Phone-framed mockup — centered, ~420px wide, readable */}
+              <div className="flex justify-center py-4">
+                <div
+                  className="shadow-xl"
+                  style={{
+                    width: "100%",
+                    maxWidth: "420px",
+                    minHeight: "820px",
+                  }}
+                >
+                  <ThemedSnippet theme={theme} />
+                </div>
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+
+      {/* ─── Compare layout — three columns, desktop only ─── */}
+      {layout === "compare" && (
+        <div className="max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {THEMES.map((theme) => (
+              <div key={theme.id}>
+                <div className="mb-3">
+                  <h2
+                    className="font-serif text-xl text-stone-900"
+                    style={{ fontFamily: '"Cormorant Garamond", serif' }}
+                  >
+                    {theme.name}
+                  </h2>
+                  <p className="text-xs text-stone-500 mt-0.5">{theme.tagline}</p>
+                  <div className="flex items-center gap-1 mt-2">
+                    {[
+                      theme.palette.bg,
+                      theme.palette.surface,
+                      theme.palette.text,
+                      theme.palette.accent,
+                    ].map((color, i) => (
+                      <div
+                        key={i}
+                        className="w-4 h-4 border border-stone-300 rounded-[2px]"
+                        style={{ background: color }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="shadow-sm" style={{ minHeight: "780px" }}>
+                  <ThemedSnippet theme={theme} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Footer note */}
       <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-stone-300/60">
