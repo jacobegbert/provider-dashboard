@@ -1,8 +1,8 @@
 /**
  * PatientServiceAgreement — CellRx Concierge Service Agreement
  * Displays the Black Label Concierge Medicine Agreement
- * Design: The Row — Quiet luxury, editorial minimalism, museum-placard styling
- * Note: Styling uses semantic tokens that resolve to The Row palette via .theme-feminine CSS
+ * Note: Styling uses semantic tokens (--background, --foreground, --primary, etc.)
+ * that resolve to the active theme (Clinical Bright by default).
  */
 import { motion } from "framer-motion";
 import {

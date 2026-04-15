@@ -1,8 +1,8 @@
 /**
  * PatientBiomarkerGuide -- How to set up and use custom biomarkers
  * Step-by-step guide for patients on the Biomarker tracking feature
- * Design: The Row -- Quiet luxury, editorial minimalism
- * Note: Styling uses semantic tokens that resolve to The Row palette via .theme-feminine CSS
+ * Note: Styling uses semantic tokens (--background, --foreground, --primary, etc.)
+ * that resolve to the active theme (Clinical Bright by default).
  */
 import { motion } from "framer-motion";
 import {

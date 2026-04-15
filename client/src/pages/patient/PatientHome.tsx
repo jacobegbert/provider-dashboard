@@ -18,8 +18,7 @@ function getLocalDateStr(date: Date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
-const PATIENT_HERO_MASCULINE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663344768429/2VRczM8SEoMgkRv9pxV2Z3/hero-mountains-banner-LwuKoYLPzkmmCGpcpVvH3a.webp";
-const PATIENT_HERO_FEMININE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663344768429/2VRczM8SEoMgkRv9pxV2Z3/floral-banner-therow-VaQdNMgymgTS8As8AKAXiq.webp";
+const PATIENT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663344768429/2VRczM8SEoMgkRv9pxV2Z3/hero-mountains-banner-LwuKoYLPzkmmCGpcpVvH3a.webp";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -142,7 +141,6 @@ export default function PatientHome() {
 
   const nextAptData = upcomingAppointments[0] as any;
 
-  const isFeminine = myRecord?.sex === "female";
   const firstName = myRecord?.firstName || user?.name?.split(" ")[0] || "there";
   const now = new Date();
   const hour = now.getHours();
@@ -180,7 +178,7 @@ export default function PatientHome() {
         transition={{ duration: 0.6 }}
         className="relative overflow-hidden md:rounded-sm"
       >
-        <img src={isFeminine ? PATIENT_HERO_FEMININE : PATIENT_HERO_MASCULINE} alt="" className="w-full h-56 md:h-72 object-cover" />
+        <img src={PATIENT_HERO} alt="" className="w-full h-56 md:h-72 object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
           <p className="text-white/50 text-[11px] tracking-[0.3em] uppercase">{dateStr}</p>
