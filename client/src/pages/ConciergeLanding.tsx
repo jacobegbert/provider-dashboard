@@ -254,22 +254,22 @@ export default function ConciergeLanding() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-start gap-4 mb-10">
-              <a href="#pricing">
+              <a href="#what-you-get">
                 <Button
                   size="lg"
                   className="bg-foreground hover:bg-foreground/90 text-background font-heading font-semibold px-8 py-6 text-base"
                 >
-                  View Investment
+                  What's Included
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </a>
-              <a href="#what-you-get">
+              <a href="#pricing">
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-border text-foreground hover:bg-muted font-heading px-8 py-6 text-base"
                 >
-                  What's Included
+                  View Investment
                 </Button>
               </a>
             </div>
