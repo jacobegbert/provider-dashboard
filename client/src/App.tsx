@@ -46,6 +46,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import SmsConsent from "./pages/SmsConsent";
 import PublicLanding from "./pages/PublicLanding";
+import ConciergeLanding from "./pages/ConciergeLanding";
 import Debug from "./pages/Debug";
 import Billing from "./pages/Billing";
 import PatientBilling from "./pages/patient/PatientBilling";
@@ -191,6 +192,7 @@ function AppRouter() {
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms" component={Terms} />
       <Route path="/main" component={PublicLanding} />
+      <Route path="/concierge" component={ConciergeLanding} />
       <Route path="/sms-consent" component={SmsConsent} />
       <Route path="/debug" component={Debug} />
       <Route path="/guide" component={GoLiveGuide} />
