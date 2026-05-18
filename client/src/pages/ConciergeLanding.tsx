@@ -1,7 +1,7 @@
 /**
  * ConciergeLanding — Public-facing sales page for Black Label Concierge Medicine.
  * Accessible at /concierge without authentication. Designed to be sent to prospects.
- * Communicates the One-Year Optimization & Regenerative Care Plan in a compelling,
+ * Communicates the One-Year Optimization Plan in a compelling,
  * editorial way — pulls bio/credentials from cellrx.bio, presents services + pricing
  * with quiet-luxury aesthetic.
  */
@@ -105,23 +105,23 @@ const services = [
 const pillars = [
   {
     number: "01",
-    title: "One Physician, End to End",
-    text: "Dr. Egbert is both your physician and the medical director of the stem cell source company. No distributors. No intermediaries. Unbroken chain of custody from source to syringe.",
+    title: "Direct Physician Access",
+    text: "Reach Dr. Egbert personally — by cell phone, text, or secure message. No call centers. No gatekeepers. No 7-minute appointments. The medical relationship most patients only read about.",
   },
   {
     number: "02",
-    title: "Personally Guaranteed",
-    text: "Every biologic is vetted by Dr. Egbert personally — for purity, concentration, and provenance. You are not trusting a distributor's word. You are trusting a physician.",
+    title: "Built Around You",
+    text: "Every protocol is engineered from your labs, your physiology, and your goals. Nothing here is one-size-fits-all. Nothing here is generic.",
   },
   {
     number: "03",
-    title: "Built Around You",
-    text: "Every protocol is engineered from your labs, your goals, and your physiology. Nothing here is one-size-fits-all. Nothing here is generic.",
+    title: "Proactive, Not Reactive",
+    text: "The goal is not the absence of disease. The goal is peak vitality, clarity, and longevity — and that requires intervention before symptoms exist.",
   },
   {
     number: "04",
-    title: "Proactive, Not Reactive",
-    text: "The goal is not the absence of disease. The goal is peak vitality, clarity, and longevity — and that requires intervention before symptoms exist.",
+    title: "Continuous Optimization",
+    text: "Quarterly biomarker reviews. Ongoing dose refinement. A physician who tracks the numbers as carefully as you do — and adjusts in real time.",
   },
 ];
 
@@ -154,25 +154,25 @@ const pricingTiers = [
     label: "Elevated Individual",
     price: "$40,000",
     period: "/year",
-    description: "Includes advanced regenerative biologics.",
+    description: "Adds 20cc of advanced biologics for clients who want them.",
     elevated: true,
     features: [
       "Everything in Individual",
-      "20cc advanced biologics",
-      "Stem cells, exosomes, Wharton's jelly, or amniotic fluid",
-      "IV infusion or targeted injection",
+      "20cc advanced biologics included",
+      "Administered by IV or targeted injection",
+      "As clinically indicated",
     ],
   },
   {
     label: "Elevated Couple",
     price: "$72,000",
     period: "/year",
-    description: "Regenerative care for two.",
+    description: "Elevated tier for two.",
     elevated: true,
     features: [
       "Everything in Elevated Individual — for two",
       "20cc advanced biologics each",
-      "Coordinated regenerative protocols",
+      "Coordinated protocols",
     ],
   },
 ];
@@ -249,8 +249,8 @@ export default function ConciergeLanding() {
             <p className="text-muted-foreground text-lg leading-relaxed font-body mb-10 max-w-xl">
               A one-year partnership with Dr. Jacob Egbert, DO — built around
               your physiology, your goals, and the kind of medical relationship
-              that doesn't exist on a 7-minute schedule. Performance.
-              Regenerative. Longevity.
+              that doesn't exist on a 7-minute schedule. Performance. Clarity.
+              Longevity.
             </p>
 
             <div className="flex flex-col sm:flex-row items-start gap-4 mb-10">
@@ -294,19 +294,19 @@ export default function ConciergeLanding() {
             transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
             className="order-1 lg:order-2 relative"
           >
-            <div className="relative aspect-[4/5] max-w-md mx-auto lg:max-w-none overflow-hidden rounded-sm bg-muted">
+            <div className="relative aspect-[3/4] max-w-md mx-auto lg:max-w-none overflow-hidden rounded-sm bg-muted">
               <img
                 src={PHYSICIAN_PORTRAIT}
-                alt="Dr. Jacob Egbert, DO — Medical Director"
-                className="w-full h-full object-cover"
+                alt="Dr. Jacob Egbert, DO"
+                className="w-full h-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
                 <p className="text-[10px] tracking-[0.3em] uppercase text-background/80 font-mono mb-1">
-                  Medical Director
-                </p>
-                <p className="font-serif text-2xl text-background">
                   Dr. Jacob Egbert, DO
+                </p>
+                <p className="font-serif text-xl text-background/90">
+                  Concierge Physician
                 </p>
               </div>
             </div>
@@ -329,8 +329,8 @@ export default function ConciergeLanding() {
               The Physician
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-foreground max-w-3xl mx-auto">
-              You are not trusting a distributor's word.{" "}
-              <span className="italic">You are trusting a physician.</span>
+              A medical relationship,{" "}
+              <span className="italic">not a transaction.</span>
             </h2>
           </motion.div>
 
@@ -346,7 +346,7 @@ export default function ConciergeLanding() {
                 <img
                   src={CONSULTATION_PHOTO}
                   alt="Dr. Egbert in consultation"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
             </motion.div>
@@ -359,11 +359,11 @@ export default function ConciergeLanding() {
               className="md:col-span-3 space-y-6"
             >
               <p className="text-foreground/90 leading-[1.8] font-body">
-                Dr. Jacob Egbert is a board-certified physician and Medical
-                Director of CellRx — overseeing every biologic from procurement
-                through administration. He is one of the rare physicians who
-                personally vouches for the purity, concentration, and provenance
-                of every treatment he provides.
+                Dr. Jacob Egbert is a board-certified physician who practices
+                concierge optimization medicine — building protocols around
+                each client's labs, physiology, and goals. His focus is the
+                pursuit of peak vitality, clarity, and longevity through
+                precision medicine.
               </p>
               <p className="text-foreground/90 leading-[1.8] font-body">
                 Black Label is his concierge practice — a small, deliberately
@@ -480,8 +480,8 @@ export default function ConciergeLanding() {
               One Year. <span className="italic">Everything Included.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed font-body">
-              A complete optimization and regenerative care partnership. Not a
-              package of à la carte services — a true medical relationship.
+              A complete optimization partnership. Not a package of à la carte
+              services — a true medical relationship.
             </p>
           </motion.div>
 
@@ -554,8 +554,8 @@ export default function ConciergeLanding() {
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed font-body">
               Annual investment covers one year of comprehensive concierge care
-              and direct access. Elevated packages include 20cc of advanced
-              regenerative biologics.
+              and direct access. Elevated tiers add advanced biologics for
+              clients who want them.
             </p>
           </motion.div>
 
@@ -713,7 +713,7 @@ export default function ConciergeLanding() {
                 <TextMark />
               </div>
               <p className="text-muted-foreground text-sm leading-relaxed font-body max-w-sm">
-                Concierge optimization and regenerative medicine — by invitation.
+                Concierge optimization medicine — by invitation.
               </p>
             </div>
 
