@@ -569,14 +569,16 @@ export default function ConciergeLanding() {
                 variants={fadeUp}
                 custom={i}
                 className={`relative flex flex-col rounded-sm border p-7 transition-all duration-500 ${
+                  tier.elevated ? "pt-12 " : ""
+                }${
                   tier.elevated
                     ? "border-foreground bg-foreground text-background shadow-lg"
                     : "border-border/60 bg-card hover:border-foreground/30"
                 }`}
               >
                 {tier.elevated && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-background text-foreground text-[9px] tracking-[0.25em] uppercase font-medium px-3 py-1 rounded-sm border border-foreground">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                    <span className="inline-block whitespace-nowrap bg-background text-foreground text-[9px] tracking-[0.25em] uppercase font-medium px-3 py-1.5 rounded-sm border border-foreground shadow-sm">
                       Includes Biologics
                     </span>
                   </div>
