@@ -89,6 +89,25 @@ function createAdminContext(): TrpcContext {
   };
 }
 
+function createPatientContext(userId: number): TrpcContext {
+  const user: AuthenticatedUser = {
+    id: userId,
+    openId: "patient-open-id",
+    email: "patient@test.com",
+    name: "James Loughlin",
+    loginMethod: "google",
+    role: "patient",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    lastSignedIn: new Date(),
+  };
+  return {
+    user,
+    req: { protocol: "https", headers: {} } as TrpcContext["req"],
+    res: { clearCookie: vi.fn(), cookie: vi.fn() } as unknown as TrpcContext["res"],
+  };
+}
+
 describe("Messaging patients without user accounts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -208,6 +227,40 @@ describe("Messaging patients without user accounts", () => {
       expect.objectContaining({
         userId: 1020492,
         title: expect.stringContaining("New Message from"),
+      }),
+      expect.any(Object)
+    );
+  });
+
+  it("should create in-app notification for provider when patient sends message", async () => {
+    // Patient sends message TO provider (userId=1) — provider should always get notified
+    // even if the patient record has no userId (unlinked patient)
+    mockGetPatientReturn = {
+      id: 210001,
+      firstName: "James",
+      lastName: "Loughlin",
+      email: null,
+      phone: "8016886538",
+      userId: null, // unlinked patient
+      providerId: 1,
+      status: "active",
+    };
+
+    // Use getPatientByUserId to return the patient record for the patient context
+    (db.getPatientByUserId as any).mockResolvedValueOnce(mockGetPatientReturn);
+
+    const caller = appRouter.createCaller(createPatientContext(500));
+    await caller.message.send({
+      receiverId: 1, // provider's userId
+      patientId: 210001,
+      content: "Hi doctor, I have a question",
+    });
+
+    // Provider (userId=1) should receive in-app notification even though patient has no userId
+    expect(db.createNotificationWithEmail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 1, // provider's userId, NOT the patient's
+        title: expect.stringContaining("James Loughlin"),
       }),
       expect.any(Object)
     );

@@ -1443,11 +1443,14 @@ const messageRouter = router({
         }
 
         // Create in-app notification with sender name
-        if (patient?.userId) {
+        // When provider sends → notify patient (requires patient.userId)
+        // When patient sends → notify provider (use input.receiverId directly)
+        const notifyUserId = isProviderSending ? patient?.userId : input.receiverId;
+        if (notifyUserId) {
           try {
             await db.createNotificationWithEmail(
               {
-                userId: isProviderSending ? patient.userId : input.receiverId,
+                userId: notifyUserId,
                 title: `New Message from ${senderName}`,
                 body: `${senderName}: ${input.content.substring(0, 180)}`,
                 type: "message",
