@@ -300,14 +300,15 @@ export default function ConciergeLanding() {
                 alt="Dr. Jacob Egbert, DO"
                 className="w-full h-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <p className="text-[10px] tracking-[0.3em] uppercase text-background/80 font-mono mb-1">
-                  Dr. Jacob Egbert, DO
-                </p>
-                <p className="font-serif text-xl text-background/90">
-                  Concierge Physician
-                </p>
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="bg-foreground/85 backdrop-blur-md rounded-sm px-5 py-4 border border-background/10">
+                  <p className="text-[10px] tracking-[0.3em] uppercase text-background font-mono mb-1">
+                    Dr. Jacob Egbert, DO
+                  </p>
+                  <p className="font-serif text-xl text-background">
+                    Concierge Physician
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>
