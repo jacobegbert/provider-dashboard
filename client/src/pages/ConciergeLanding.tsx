@@ -205,7 +205,7 @@ export default function ConciergeLanding() {
               Investment
             </a>
             <a
-              href="mailto:jacob@cellrx.bio?subject=Black%20Label%20Concierge%20Inquiry"
+              href="mailto:contact@cellrx.bio?subject=Black%20Label%20Concierge%20Inquiry"
             >
               <Button
                 size="sm"
@@ -691,7 +691,7 @@ export default function ConciergeLanding() {
             longevity.
           </p>
           <div className="mt-12">
-            <a href="mailto:jacob@cellrx.bio?subject=Black%20Label%20Concierge%20Inquiry">
+            <a href="mailto:contact@cellrx.bio?subject=Black%20Label%20Concierge%20Inquiry">
               <Button
                 size="lg"
                 className="bg-foreground hover:bg-foreground/90 text-background font-heading font-semibold px-10 py-6 text-base"
@@ -745,10 +745,10 @@ export default function ConciergeLanding() {
                 <li className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-foreground/40 shrink-0" />
                   <a
-                    href="mailto:jacob@cellrx.bio"
+                    href="mailto:contact@cellrx.bio"
                     className="text-muted-foreground hover:text-foreground text-sm transition-colors font-body"
                   >
-                    jacob@cellrx.bio
+                    contact@cellrx.bio
                   </a>
                 </li>
                 <li className="flex items-center gap-2.5">
