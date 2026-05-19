@@ -701,7 +701,7 @@ export default function ConciergeLanding() {
               </Button>
             </a>
             <p className="text-xs text-muted-foreground mt-4 tracking-wider">
-              Or call directly: 435-938-8657
+              Or call/text directly: 385-707-2373
             </p>
           </div>
         </motion.div>
@@ -754,10 +754,10 @@ export default function ConciergeLanding() {
                 <li className="flex items-center gap-2.5">
                   <Phone className="w-4 h-4 text-foreground/40 shrink-0" />
                   <a
-                    href="tel:+14359388657"
+                    href="tel:+13857072373"
                     className="text-muted-foreground hover:text-foreground text-sm transition-colors font-body"
                   >
-                    435-938-8657
+                    385-707-2373
                   </a>
                 </li>
                 <li>
