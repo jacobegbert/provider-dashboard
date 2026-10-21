@@ -1,7 +1,8 @@
 import { COOKIE_NAME } from "../shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { sdk } from "./_core/sdk";
-import { publicProcedure, protectedProcedure, router, staffProcedure } from "./_core/trpc";
+import { adminProcedure, publicProcedure, protectedProcedure, router, staffProcedure } from "./_core/trpc";
+import { createCharmHub } from "./portal/charm/hub";
 import { getService, getStore } from "./portal/store";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -172,6 +173,20 @@ export const appRouter = router({
       setStatus: staffProcedure
         .input(z.object({ orderId: z.number().int().positive(), status: z.enum(["filled", "cancelled"]) }))
         .mutation(({ ctx, input }) => getService().setPharmacyStatus(ctx.user, input.orderId, input.status)),
+    }),
+    hub: router({
+      overview: adminProcedure.query(() => createCharmHub({ store: getStore() }).overview()),
+      sync: adminProcedure.mutation(({ ctx }) => createCharmHub({ store: getStore() }).sync(ctx.user)),
+      setDestination: adminProcedure
+        .input(z.object({
+          key: z.enum(["slack", "gohighlevel", "viktor", "webhook"]),
+          enabled: z.boolean(),
+          baaCovered: z.boolean(),
+        }))
+        .mutation(({ ctx, input }) => createCharmHub({ store: getStore() }).setDestination(ctx.user, {
+          ...input,
+          label: input.key,
+        })),
     }),
   }),
 });

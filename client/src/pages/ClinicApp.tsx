@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "wouter";
 import { DemoBanner, SampleTag, useSignOut, Wordmark } from "@/components/PortalChrome";
+import DataHubPage from "@/pages/DataHubPage";
 import { usePortalEvents } from "@/hooks/usePortalEvents";
 import { actionLabel, doseLine, errorText, formatTime, formatWhen, kindLabel, statusLabel } from "@/lib/format";
 import { trpc } from "@/lib/trpc";
@@ -25,6 +26,7 @@ export default function ClinicApp() {
   const params = useParams();
   const patientId = params.id ? Number(params.id) : null;
   const pharmacy = location.startsWith("/clinic/pharmacy");
+  const hub = location.startsWith("/clinic/data-hub");
   const me = trpc.auth.me.useQuery();
   const utils = trpc.useUtils();
   const signOut = useSignOut();
@@ -49,11 +51,12 @@ export default function ClinicApp() {
       <div className="clinic-frame">
         <nav className="side-nav" aria-label="Clinic">
           <div className="side-brand"><Wordmark tone="light" /></div>
-          <Link href="/clinic" aria-current={!pharmacy ? "page" : undefined}>Patients</Link>
+          <Link href="/clinic" aria-current={!pharmacy && !hub ? "page" : undefined}>Patients</Link>
           <Link href="/clinic/pharmacy" aria-current={pharmacy ? "page" : undefined}>Pharmacy queue</Link>
+          {me.data?.role === "admin" ? <Link href="/clinic/data-hub" aria-current={hub ? "page" : undefined}>Data hub</Link> : null}
         </nav>
         <main id="main">
-          {pharmacy ? <Pharmacy /> : <Patients patientId={patientId} />}
+          {hub ? <DataHubPage /> : pharmacy ? <Pharmacy /> : <Patients patientId={patientId} />}
         </main>
       </div>
     </div>

@@ -30,6 +30,11 @@ const ACTION: Record<string, string> = {
   "intake.submit": "Patient submitted intake",
   "intake.save": "Patient saved intake",
   "pharmacy.status": "Updated a mock pharmacy order",
+  "hub.sync": "Synced Charm",
+  "hub.send": "Delivered a hub payload",
+  "hub.send.suppressed": "Blocked a hub delivery",
+  "hub.send.failed": "Hub delivery failed",
+  "hub.destination": "Updated a data hub destination",
 };
 
 export function statusLabel(value: string) {

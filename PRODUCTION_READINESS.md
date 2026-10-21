@@ -12,6 +12,8 @@ Updated for the portal rebuild. The demo is safe to click through with fictional
 - String inputs have length limits. Sign-in allows 8 failures per email per 10 minutes in this process. The session cookie is httpOnly, `SameSite=Lax`, and lasts 12 hours.
 - `.env.example` has placeholders only. Demo passwords are fictional and documented on purpose. No API keys are committed.
 - Seeded protocol and peptide text is labeled as a sample template, not medical guidance.
+- The Charm hub defaults to a mock FHIR feed. Live SMART credentials and destination tokens are environment variables, and tests do not call Charm, Slack, GoHighLevel, or a webhook.
+- Each hub destination has a kill switch (`enabled`, default false) and `baaCovered` (default false). `gatePayload` strips Safe Harbor identifiers before a non-BAA adapter is invoked, and the adapter refuses a de-identified send that still has identifier fields. Outbound audit rows store the destination, status, and policy flag, not names or contact fields.
 
 ## Remaining gaps
 
@@ -30,6 +32,8 @@ Do not treat this list as optional polish if the app will hold real charts.
 11. **CSRF protection is the `SameSite` cookie plus same-origin fetches.** There is no extra CSRF token.
 12. **Security headers are minimal** (`nosniff`, `no-referrer`, `X-Frame-Options`). A production host should add a content security policy and HSTS.
 13. **Access control is application-level.** A leaked database credential bypasses it. Database users should be least-privilege, and production logs should not include chart text.
+14. **The Charm hub is not a BAA.** Flipping `baaCovered` does not create a business associate agreement. Leave the kill switch on, and leave `HUB_DELIVERY` unset, until Slack, GoHighLevel, Viktor's Slack workspace, and any webhook host are covered. Safe Harbor stripping is a code control on this fan-out. It is not a certification that the portal database, screenshots, or logs are de-identified. The portal chart itself keeps names and dates. Imported medications stay in the clinician draft until someone publishes them.
+15. **Live Charm and destination clients exist and will call the network when their env flags are set.** Review the current vendor docs before enabling them. The GoHighLevel path creates a contact and a zero-amount invoice stub only for an identified payload. Viktor is a Slack post, not a separate API. The in-process bus and login throttle still do not span more than one server.
 
 ## Before a real clinic uses it
 

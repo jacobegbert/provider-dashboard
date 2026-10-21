@@ -37,6 +37,9 @@ export default function App() {
         <Route path="/patient">
           <Guard area="patient"><PatientApp /></Guard>
         </Route>
+        <Route path="/clinic/data-hub">
+          <Guard area="clinic"><ClinicApp /></Guard>
+        </Route>
         <Route path="/clinic/pharmacy">
           <Guard area="clinic"><ClinicApp /></Guard>
         </Route>

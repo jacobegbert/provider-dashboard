@@ -4,7 +4,11 @@ import {
   auditLog,
   carePlanItems,
   carePlans,
+  charmPatientLinks,
+  charmResourceLinks,
   guidanceDrafts,
+  hubDestinations,
+  hubSends,
   intakeForms,
   labResults,
   patients,
@@ -13,13 +17,21 @@ import {
   type CarePlanItemRow,
   type CarePlanRow,
   type GuidanceDraftRow,
+  type HubDestinationRow,
+  type HubSendRow,
   type LabResultRow,
   type PharmacyOrderRow,
 } from "../../drizzle/schema";
 import type {
   AuditEntry,
   CarePlan,
+  CharmPatientLink,
+  CharmResourceLink,
+  DestinationKey,
   GuidanceDraft,
+  HubDestination,
+  HubSend,
+  HubSendStatus,
   IntakeRecord,
   LabResult,
   PharmacyOrder,
@@ -418,5 +430,109 @@ export function createDrizzleStore(db: MySql2Database): PortalStore {
           createdAt: new Date(row.createdAt),
         }));
     },
+    async updatePatient(id, patch) {
+      await db.update(patients).set(patch).where(eq(patients.id, id));
+      const patient = await this.getPatient(id);
+      if (!patient) throw new Error("Patient not found");
+      return patient;
+    },
+    async updateLab(id, patch) {
+      await db.update(labResults).set(patch).where(eq(labResults.id, id));
+      const rows = await db.select().from(labResults).where(eq(labResults.id, id)).limit(1);
+      if (!rows[0]) throw new Error("Lab not found");
+      return toLab(rows[0]);
+    },
+    async listDestinations() {
+      const rows = await db.select().from(hubDestinations);
+      return rows.map(toDestination);
+    },
+    async saveDestination(input) {
+      const existing = await db.select().from(hubDestinations).where(eq(hubDestinations.key, input.key)).limit(1);
+      if (!existing[0]) await db.insert(hubDestinations).values(input);
+      else {
+        await db.update(hubDestinations).set({
+          label: input.label,
+          enabled: input.enabled,
+          baaCovered: input.baaCovered,
+        }).where(eq(hubDestinations.key, input.key));
+      }
+      const rows = await db.select().from(hubDestinations).where(eq(hubDestinations.key, input.key)).limit(1);
+      if (!rows[0]) throw new Error("Destination was not saved");
+      return toDestination(rows[0]);
+    },
+    async listHubSends(limit) {
+      const rows = await db.select().from(hubSends).orderBy(desc(hubSends.id)).limit(limit);
+      return rows.map(toSend);
+    },
+    async insertHubSend(input) {
+      const result = await db.insert(hubSends).values({
+        destinationKey: input.destinationKey,
+        status: input.status,
+        deidentified: input.deidentified,
+        baaCovered: input.baaCovered,
+        summary: input.summary,
+        externalId: input.externalId,
+        ...(input.createdAt ? { createdAt: input.createdAt } : {}),
+      });
+      const rows = await db.select().from(hubSends).where(eq(hubSends.id, insertId(result))).limit(1);
+      if (!rows[0]) throw new Error("Hub send insert failed");
+      return toSend(rows[0]);
+    },
+    async getCharmLinkByCharmId(charmPatientId) {
+      const rows = await db.select().from(charmPatientLinks).where(eq(charmPatientLinks.charmPatientId, charmPatientId)).limit(1);
+      return rows[0] ? toCharmLink(rows[0]) : undefined;
+    },
+    async upsertCharmLink(input) {
+      const byPatient = await db.select().from(charmPatientLinks).where(eq(charmPatientLinks.patientId, input.patientId)).limit(1);
+      if (!byPatient[0]) {
+        await db.insert(charmPatientLinks).values(input);
+        return;
+      }
+      await db.update(charmPatientLinks).set({
+        charmPatientId: input.charmPatientId,
+        lastSyncedAt: input.lastSyncedAt,
+      }).where(eq(charmPatientLinks.patientId, input.patientId));
+    },
+    async getResourceLink(charmId) {
+      const rows = await db.select().from(charmResourceLinks).where(eq(charmResourceLinks.charmId, charmId)).limit(1);
+      return rows[0] ? toResourceLink(rows[0]) : undefined;
+    },
+    async insertResourceLink(input) {
+      await db.insert(charmResourceLinks).values(input);
+    },
   };
+}
+
+function toDestination(row: HubDestinationRow): HubDestination {
+  return {
+    key: row.key as DestinationKey,
+    label: row.label,
+    enabled: Boolean(row.enabled),
+    baaCovered: Boolean(row.baaCovered),
+  };
+}
+
+function toSend(row: HubSendRow): HubSend {
+  return {
+    id: row.id,
+    destinationKey: row.destinationKey as DestinationKey,
+    status: row.status as HubSendStatus,
+    deidentified: Boolean(row.deidentified),
+    baaCovered: Boolean(row.baaCovered),
+    summary: row.summary,
+    externalId: row.externalId,
+    createdAt: new Date(row.createdAt),
+  };
+}
+
+function toCharmLink(row: { patientId: number; charmPatientId: string; lastSyncedAt: Date }): CharmPatientLink {
+  return {
+    patientId: row.patientId,
+    charmPatientId: row.charmPatientId,
+    lastSyncedAt: new Date(row.lastSyncedAt),
+  };
+}
+
+function toResourceLink(row: { charmId: string; kind: CharmResourceLink["kind"]; portalId: number }): CharmResourceLink {
+  return { charmId: row.charmId, kind: row.kind, portalId: row.portalId };
 }

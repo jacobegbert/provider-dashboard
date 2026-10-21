@@ -2,12 +2,17 @@ import type { Patient, User } from "../../drizzle/schema";
 import type {
   AuditEntry,
   CarePlan,
+  CharmPatientLink,
+  CharmResourceLink,
   GuidanceDraft,
   GuidanceStatus,
+  HubDestination,
+  HubSend,
   IntakeRecord,
   LabResult,
   NewPatient,
   NewPlanItem,
+  PatientPatch,
   PharmacyOrder,
   PharmacyStatus,
   PlanItem,
@@ -32,6 +37,10 @@ export function createMemoryStore(): PortalStore {
   const orders: PharmacyOrder[] = [];
   const guidance: GuidanceDraft[] = [];
   const audits: AuditEntry[] = [];
+  const destinations: HubDestination[] = [];
+  const sends: HubSend[] = [];
+  const charmLinks: CharmPatientLink[] = [];
+  const resourceLinks: CharmResourceLink[] = [];
 
   const byId = <T extends { id: number }>(rows: T[], id: number) => rows.find((row) => row.id === id);
 
@@ -271,6 +280,66 @@ export function createMemoryStore(): PortalStore {
         .filter((entry) => entry.details?.patientId === patientId)
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, limit);
+    },
+    async updatePatient(id, patch: PatientPatch) {
+      const patient = byId(patients, id);
+      if (!patient) throw new Error("Patient not found");
+      if (patch.firstName !== undefined) patient.firstName = patch.firstName;
+      if (patch.lastName !== undefined) patient.lastName = patch.lastName;
+      if (patch.email !== undefined) patient.email = patch.email;
+      if (patch.phone !== undefined) patient.phone = patch.phone;
+      if (patch.dateOfBirth !== undefined) patient.dateOfBirth = patch.dateOfBirth;
+      if (patch.notes !== undefined) patient.notes = patch.notes;
+      patient.updatedAt = new Date();
+      return patient;
+    },
+    async updateLab(id, patch) {
+      const lab = byId(labs, id);
+      if (!lab) throw new Error("Lab not found");
+      Object.assign(lab, patch);
+      return lab;
+    },
+    async listDestinations() {
+      return destinations.map((item) => ({ ...item }));
+    },
+    async saveDestination(input) {
+      const index = destinations.findIndex((item) => item.key === input.key);
+      const next = { ...input };
+      if (index >= 0) destinations[index] = next;
+      else destinations.push(next);
+      return { ...next };
+    },
+    async listHubSends(limit) {
+      return sends
+        .slice()
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime() || b.id - a.id)
+        .slice(0, limit)
+        .map((item) => ({ ...item }));
+    },
+    async insertHubSend(input) {
+      const send: HubSend = {
+        ...input,
+        id: nextId(),
+        externalId: input.externalId ?? null,
+        createdAt: input.createdAt ?? new Date(),
+      };
+      sends.push(send);
+      return { ...send };
+    },
+    async getCharmLinkByCharmId(charmPatientId) {
+      return charmLinks.find((link) => link.charmPatientId === charmPatientId);
+    },
+    async upsertCharmLink(input) {
+      const index = charmLinks.findIndex((link) => link.patientId === input.patientId || link.charmPatientId === input.charmPatientId);
+      if (index >= 0) charmLinks[index] = input;
+      else charmLinks.push(input);
+    },
+    async getResourceLink(charmId) {
+      return resourceLinks.find((link) => link.charmId === charmId);
+    },
+    async insertResourceLink(input) {
+      if (resourceLinks.some((link) => link.charmId === input.charmId)) throw new Error("Charm resource already linked");
+      resourceLinks.push(input);
     },
   };
 }

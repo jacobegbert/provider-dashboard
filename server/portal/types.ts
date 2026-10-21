@@ -167,4 +167,51 @@ export interface PortalStore {
   updateGuidance(id: number, patch: Partial<Pick<GuidanceDraft, "status" | "reviewedBy" | "reviewedAt">>): Promise<GuidanceDraft>;
   logAudit(entry: { userId: number; action: string; entityType: string; entityId?: number | null; details?: Record<string, unknown> }): Promise<void>;
   listAudit(patientId: number, limit: number): Promise<AuditEntry[]>;
+  updatePatient(id: number, patch: PatientPatch): Promise<Patient>;
+  updateLab(id: number, patch: Partial<Omit<LabResult, "id" | "patientId">>): Promise<LabResult>;
+  listDestinations(): Promise<HubDestination[]>;
+  saveDestination(input: HubDestination): Promise<HubDestination>;
+  listHubSends(limit: number): Promise<HubSend[]>;
+  insertHubSend(input: Omit<HubSend, "id" | "createdAt"> & { createdAt?: Date }): Promise<HubSend>;
+  getCharmLinkByCharmId(charmPatientId: string): Promise<CharmPatientLink | undefined>;
+  upsertCharmLink(input: CharmPatientLink): Promise<void>;
+  getResourceLink(charmId: string): Promise<CharmResourceLink | undefined>;
+  insertResourceLink(input: CharmResourceLink): Promise<void>;
 }
+
+export type PatientPatch = Partial<Pick<Patient, "firstName" | "lastName" | "email" | "phone" | "dateOfBirth" | "notes">>;
+
+export type DestinationKey = "slack" | "gohighlevel" | "viktor" | "webhook";
+export type HubSendStatus = "sent" | "suppressed" | "failed";
+
+export type HubDestination = {
+  key: DestinationKey;
+  label: string;
+  enabled: boolean;
+  baaCovered: boolean;
+};
+
+export type HubSend = {
+  id: number;
+  destinationKey: DestinationKey;
+  status: HubSendStatus;
+  deidentified: boolean;
+  baaCovered: boolean;
+  summary: string;
+  externalId: string | null;
+  createdAt: Date;
+};
+
+export type CharmPatientLink = {
+  patientId: number;
+  charmPatientId: string;
+  lastSyncedAt: Date;
+};
+
+export type CharmResourceKind = "observation" | "diagnostic_report" | "medication";
+
+export type CharmResourceLink = {
+  charmId: string;
+  kind: CharmResourceKind;
+  portalId: number;
+};

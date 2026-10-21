@@ -857,3 +857,57 @@ export const guidanceDrafts = mysqlTable("guidance_drafts", {
 ]);
 
 export type GuidanceDraftRow = typeof guidanceDrafts.$inferSelect;
+
+// ─────────────────────────────────────────────
+// 29. CHARM DATA HUB
+// Destinations default to the kill switch (enabled = false) and to
+// baaCovered = false, so a new row cannot receive identified data.
+// ─────────────────────────────────────────────
+export const hubDestinations = mysqlTable("hub_destinations", {
+  id: int("id").autoincrement().primaryKey(),
+  key: varchar("key", { length: 32 }).notNull().unique(),
+  label: varchar("label", { length: 128 }).notNull(),
+  enabled: boolean("enabled").default(false).notNull(),
+  baaCovered: boolean("baaCovered").default(false).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type HubDestinationRow = typeof hubDestinations.$inferSelect;
+
+export const hubSends = mysqlTable("hub_sends", {
+  id: int("id").autoincrement().primaryKey(),
+  destinationKey: varchar("destinationKey", { length: 32 }).notNull(),
+  status: mysqlEnum("hubSendStatus", ["sent", "suppressed", "failed"]).notNull(),
+  deidentified: boolean("deidentified").notNull(),
+  baaCovered: boolean("baaCovered").notNull(),
+  /** Counts and policy outcome only. Do not store names or contact fields here. */
+  summary: varchar("summary", { length: 512 }).notNull(),
+  externalId: varchar("externalId", { length: 128 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => [
+  index("hub_sends_destination_idx").on(table.destinationKey, table.createdAt),
+]);
+
+export type HubSendRow = typeof hubSends.$inferSelect;
+
+export const charmPatientLinks = mysqlTable("charm_patient_links", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().unique().references(() => patients.id, { onDelete: "cascade" }),
+  charmPatientId: varchar("charmPatientId", { length: 128 }).notNull().unique(),
+  lastSyncedAt: timestamp("lastSyncedAt").notNull(),
+}, (table) => [
+  index("charm_patient_links_charm_idx").on(table.charmPatientId),
+]);
+
+export type CharmPatientLinkRow = typeof charmPatientLinks.$inferSelect;
+
+export const charmResourceLinks = mysqlTable("charm_resource_links", {
+  id: int("id").autoincrement().primaryKey(),
+  charmId: varchar("charmId", { length: 128 }).notNull().unique(),
+  kind: mysqlEnum("charmResourceKind", ["observation", "diagnostic_report", "medication"]).notNull(),
+  portalId: int("portalId").notNull(),
+}, (table) => [
+  index("charm_resource_links_kind_idx").on(table.kind, table.portalId),
+]);
+
+export type CharmResourceLinkRow = typeof charmResourceLinks.$inferSelect;

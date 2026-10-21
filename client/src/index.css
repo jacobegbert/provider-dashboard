@@ -414,6 +414,15 @@ textarea { min-height: 110px; resize: vertical; }
 .queue { width: 100%; border-collapse: collapse; font-size: 15px; }
 .queue th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 8px; }
 .queue td { padding: 12px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+.hub-list { display: grid; gap: 12px; margin-top: 28px; }
+.hub-list h2, .workspace > section > h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+.dest-card header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.dest-card h3 { font-size: 18px; font-weight: 560; }
 .activity { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 8px; }
 .activity li { font-size: 14px; }
 .back-link { display: inline-flex; margin-bottom: 8px; }
