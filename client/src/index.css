@@ -1,462 +1,432 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-heading: "Cormorant Garamond", "Outfit", Georgia, serif;
-  --font-body: "Source Sans 3", sans-serif;
-  --font-mono: "DM Mono", monospace;
-  /* The Row editorial fonts */
-  --font-editorial: "Playfair Display", Georgia, serif;
-  --font-editorial-body: "Inter", system-ui, sans-serif;
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  /* ─── The Row Quiet Luxury Palette ─── */
-  --color-row-ivory: oklch(0.967 0.007 89);       /* #F6F4EF Warm Ivory */
-  --color-row-bone: oklch(0.937 0.010 88);         /* #EDEAE3 Bone */
-  --color-row-sand: oklch(0.871 0.017 88);         /* #D9D4C8 Soft Sand */
-  --color-row-taupe: oklch(0.763 0.020 83);        /* #B8B1A4 Taupe */
-  --color-row-stone: oklch(0.682 0.020 83);        /* #9F988B Warm Stone */
-  --color-row-charcoal: oklch(0.301 0.000 0);      /* #2E2E2E Charcoal */
-  --color-row-black: oklch(0.226 0.000 0);         /* #1C1C1C Soft Black */
-  --color-row-rose: oklch(0.843 0.020 33);         /* #D8C7C3 Dusty Rose */
-  --color-row-gold: oklch(0.787 0.039 83);         /* #C6B89E Antique Gold */
-  --color-row-olive: oklch(0.629 0.030 103);       /* #8C8A75 Faded Olive */
-  /* ─── Masculine Medical Palette ─── */
-  --color-navy: oklch(0.20 0.03 245);
-  --color-navy-light: oklch(0.28 0.025 245);
-  --color-navy-dark: oklch(0.15 0.03 245);
-  --color-steel: oklch(0.52 0.10 250);
-  --color-steel-light: oklch(0.60 0.08 250);
-  --color-steel-dark: oklch(0.44 0.10 250);
-  --color-steel-muted: oklch(0.48 0.05 250);
-  --color-charcoal: oklch(0.28 0.005 260);
-  --color-charcoal-light: oklch(0.38 0.005 260);
-  --color-charcoal-mid: oklch(0.45 0.005 260);
-  --color-slate-cool: oklch(0.55 0.01 260);
-  --color-slate-warm: oklch(0.50 0.01 260);
-  --color-medical-white: oklch(0.98 0.002 260);
-  --color-medical-gray: oklch(0.95 0.003 260);
-  /* ─── Legacy gold aliases (provider dashboard) ─── */
-  --color-gold: var(--gold-base);
-  --color-gold-light: var(--gold-light);
-  --color-gold-dark: var(--gold-dark);
-  --color-gold-muted: var(--gold-muted);
-  --color-brass: oklch(0.50 0.08 250);
-  --color-sage: oklch(0.50 0.08 160);
-  --color-sage-light: oklch(0.60 0.06 160);
-  --color-sage-dark: oklch(0.40 0.08 160);
-  --color-terracotta: var(--terracotta-base);
-  --color-terracotta-light: var(--terracotta-light-val);
-  --color-onyx: oklch(0.20 0.005 260);
-  --color-ivory: oklch(0.96 0.01 85);
-  --color-ivory-muted: oklch(0.88 0.01 85);
-}
 
 :root {
-  --radius: 0.5rem;
-  /* ─── Masculine Medical Light Theme ─── */
-  /* Deep Medical Navy: #0F1F2E | Medical White: #F7F8F9 | Charcoal: #2E3135 | Slate: #6B7280 | Steel Blue: #4A6FA5 */
-  --background: oklch(0.968 0.009 85);             /* Warm cream #F7F4EE */
-  --foreground: oklch(0.20 0.03 245);
-  --card: oklch(1.00 0 0);                         /* Pure white cards */
-  --card-foreground: oklch(0.28 0.005 260);
-  --popover: oklch(1.00 0 0);
-  --popover-foreground: oklch(0.28 0.005 260);
-  --primary: oklch(0.52 0.10 250);                 /* Steel Blue #4A6FA5 */
-  --primary-foreground: oklch(1.00 0 0);
-  --secondary: oklch(0.96 0.003 260);
-  --secondary-foreground: oklch(0.28 0.005 260);
-  --muted: oklch(0.96 0.003 260);
-  --muted-foreground: oklch(0.55 0.01 260);
-  --accent: oklch(0.95 0.005 250);
-  --accent-foreground: oklch(0.52 0.10 250);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(1.00 0 0);
-  --border: oklch(0.90 0.008 80);                  /* Warm border #E6E2D8 */
-  --input: oklch(0.90 0.008 80);
-  --ring: oklch(0.52 0.10 250);                    /* Steel Blue ring */
-  --chart-1: oklch(0.52 0.10 250);                 /* Steel Blue */
-  --chart-2: oklch(0.50 0.08 160);                 /* Sage */
-  --chart-3: oklch(0.55 0.14 40);                  /* Terracotta */
-  --chart-4: oklch(0.44 0.10 250);                 /* Dark Steel */
-  --chart-5: oklch(0.60 0.08 250);                 /* Light Steel */
-  --sidebar: oklch(0.07 0.003 260);                /* Near black #0A0A0A */
-  --sidebar-foreground: oklch(0.92 0 0);           /* Near white text */
-  --sidebar-primary: oklch(0.70 0.10 72);          /* Warm gold #C4993A */
-  --sidebar-primary-foreground: oklch(0.07 0.003 260); /* Near black */
-  --sidebar-accent: oklch(0.12 0.003 260);         /* Slightly lighter dark for hovers */
-  --sidebar-accent-foreground: oklch(0.65 0.003 260); /* Muted white for inactive */
-  --sidebar-border: oklch(0.16 0.003 260);         /* Dark dividers */
-  --sidebar-ring: oklch(0.70 0.10 72);             /* Gold ring */
-
-  /* ─── Indirection layer for gold/terracotta (default = warm gold palette) ─── */
-  --gold-base: oklch(0.70 0.10 72);                /* Warm gold #C4993A */
-  --gold-light: oklch(0.78 0.09 72);               /* Lighter gold #D4AF5A */
-  --gold-dark: oklch(0.58 0.10 72);                /* Darker gold */
-  --gold-muted: oklch(0.62 0.07 72);               /* Muted gold */
-  --terracotta-base: oklch(0.55 0.14 40);          /* Terracotta accent */
-  --terracotta-light-val: oklch(0.65 0.12 40);     /* Light terracotta */
+  --paper: #f3eee6;
+  --paper-deep: #e7e0d4;
+  --card: #fbf8f3;
+  --ink: #1c1915;
+  --muted: #5c564c;
+  --line: #ddd4c6;
+  --pine: #1e3d32;
+  --pine-soft: #e5efe9;
+  --gold: #8a6a32;
+  --gold-wash: #f3ead7;
+  --clay: #8c3f36;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Outfit", "Avenir Next", sans-serif;
+  --mono: "DM Mono", ui-monospace, monospace;
+  color-scheme: light;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground font-body antialiased;
-    font-family: "Source Sans 3", sans-serif;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-weight: 500;
-  }
-  .font-serif {
-    font-family: "Cormorant Garamond", Georgia, serif;
-  }
-  .font-mono {
-    font-family: "DM Mono", monospace;
-  }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
-  }
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  background:
+    radial-gradient(900px 420px at 0% -10%, rgba(138, 106, 50, 0.16), transparent 55%),
+    var(--paper);
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 3px;
 }
 
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  background: white;
+  padding: 8px 12px;
+  z-index: 20;
+}
+.skip:focus { top: 12px; }
 
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
+.banner {
+  background: #161311;
+  color: #f6f1e8;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  letter-spacing: 0.01em;
+}
 
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.mark i {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #e6d3a4;
+  color: #1c1915;
+  font-family: var(--serif);
+  font-style: normal;
+  font-size: 22px;
+  line-height: 1;
+}
+.mark b { font-weight: 560; letter-spacing: 0.01em; }
+.mark small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.mark.light small { color: rgba(246, 241, 232, 0.62); }
+.mark.light b { color: #f6f1e8; }
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1440px;
-    }
-  }
+.btn {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0 18px;
+  background: var(--pine);
+  color: #f7f3ec;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.btn.quiet { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.gold { background: #e6d3a4; color: #1c1915; }
+.btn.tiny { min-height: 36px; padding: 0 12px; font-size: 14px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.danger { background: transparent; color: var(--clay); border-color: transparent; padding-inline: 8px; }
 
-  /* ─── Grain texture overlay ─── */
-  .grain-overlay {
-    position: relative;
-  }
-  .grain-overlay::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.02;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
-    z-index: 1;
-    mix-blend-mode: multiply;
-  }
-  .grain-overlay > * {
-    position: relative;
-    z-index: 2;
-  }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > span, .label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+input, textarea, select {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-height: 44px;
+}
+textarea { min-height: 110px; resize: vertical; }
+.grid-2 { display: grid; gap: 12px; }
+@media (min-width: 720px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
 
-  /* ─── Hero accent text (brighter blue for dark backgrounds) ─── */
-  .text-hero-accent {
-    color: oklch(0.71 0.112 254);                    /* Bright Steel Blue highlight */
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 8px rgba(111, 164, 230, 0.15);
-    font-weight: 600;
-  }
-  .text-hero-accent\/60 {
-    color: oklch(0.71 0.112 254 / 0.6);
-  }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--gold-wash);
+  color: var(--gold);
+}
+.tag.pine { background: var(--pine-soft); color: var(--pine); }
+.tag.clay { background: #f8e8e4; color: var(--clay); }
+.tag.quiet { background: transparent; border: 1px solid var(--line); color: var(--muted); }
 
-  /* ─── Steel Blue accent utilities (resolves via --gold-base indirection) ─── */
-  .text-gold {
-    color: var(--color-gold);
-  }
-  .text-gold-muted {
-    color: var(--color-gold-muted);
-  }
-  .bg-gold {
-    background-color: var(--color-gold);
-  }
-  .bg-gold\/5 {
-    background-color: color-mix(in oklch, var(--color-gold) 5%, transparent);
-  }
-  .bg-gold\/8 {
-    background-color: color-mix(in oklch, var(--color-gold) 8%, transparent);
-  }
-  .bg-gold\/10 {
-    background-color: color-mix(in oklch, var(--color-gold) 10%, transparent);
-  }
-  .bg-gold\/15 {
-    background-color: color-mix(in oklch, var(--color-gold) 15%, transparent);
-  }
-  .border-gold {
-    border-color: var(--color-gold);
-  }
-  .border-gold\/10 {
-    border-color: color-mix(in oklch, var(--color-gold) 10%, transparent);
-  }
-  .border-gold\/15 {
-    border-color: color-mix(in oklch, var(--color-gold) 15%, transparent);
-  }
-  .border-gold\/20 {
-    border-color: color-mix(in oklch, var(--color-gold) 20%, transparent);
-  }
-  .border-gold\/30 {
-    border-color: color-mix(in oklch, var(--color-gold) 30%, transparent);
-  }
+.alert {
+  background: #f8e8e4;
+  color: #6d2f28;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
 
-  /* ═══════════════════════════════════════════════════════════════════
-     THE ROW — Quiet Luxury Feminine Theme
-     Inspired by The Row by Mary-Kate & Ashley Olsen
-     Editorial, timeless, understated luxury
-     Palette: Warm Ivory / Bone / Charcoal / Dusty Rose / Antique Gold
-     ═══════════════════════════════════════════════════════════════════ */
+.login {
+  min-height: 100dvh;
+  display: grid;
+}
+@media (min-width: 900px) {
+  .login { grid-template-columns: 1.15fr 0.85fr; }
+}
+.login-story {
+  background:
+    radial-gradient(500px 280px at 80% 10%, rgba(230, 211, 164, 0.18), transparent 60%),
+    #141210;
+  color: #f6f1e8;
+  padding: 36px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  min-height: 42vh;
+}
+@media (min-width: 900px) {
+  .login-story { min-height: 100dvh; padding: 48px 56px; }
+}
+.login-story h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(56px, 7vw, 92px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  max-width: 8ch;
+}
+.login-story p { max-width: 36ch; color: rgba(246, 241, 232, 0.78); font-size: 18px; }
+.login-panel { padding: 32px 22px 48px; display: grid; align-content: center; }
+@media (min-width: 900px) { .login-panel { padding: 48px 56px; } }
+.login-panel h2 {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.stack { display: grid; gap: 14px; margin-top: 22px; }
+.demo-row { display: grid; gap: 10px; }
+@media (min-width: 640px) { .demo-row { grid-template-columns: 1fr 1fr; } }
+.demo-card {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  min-height: 88px;
+}
+.demo-card strong { display: block; font-size: 16px; }
+.demo-card span { color: var(--muted); font-size: 13px; }
+.fine { color: var(--muted); font-size: 13px; }
 
-  .theme-feminine {
-    /* ── Semantic tokens — The Row palette ── */
-    --background: oklch(0.967 0.007 89);            /* Warm Ivory #F6F4EF */
-    --foreground: oklch(0.301 0.000 0);             /* Charcoal #2E2E2E */
-    --card: oklch(0.937 0.010 88);                  /* Bone #EDEAE3 */
-    --card-foreground: oklch(0.301 0.000 0);        /* Charcoal */
-    --popover: oklch(0.937 0.010 88);               /* Bone */
-    --popover-foreground: oklch(0.226 0.000 0);     /* Soft Black */
-    --primary: oklch(0.301 0.000 0);                /* Charcoal — primary actions */
-    --primary-foreground: oklch(0.967 0.007 89);    /* Warm Ivory */
-    --secondary: oklch(0.937 0.010 88);             /* Bone */
-    --secondary-foreground: oklch(0.301 0.000 0);   /* Charcoal */
-    --muted: oklch(0.871 0.017 88);                 /* Soft Sand #D9D4C8 */
-    --muted-foreground: oklch(0.682 0.020 83);      /* Warm Stone #9F988B */
-    --accent: oklch(0.871 0.017 88);                /* Soft Sand */
-    --accent-foreground: oklch(0.301 0.000 0);      /* Charcoal */
-    --border: oklch(0.871 0.017 88);                /* Soft Sand — thin warm grey lines */
-    --input: oklch(0.871 0.017 88);                 /* Soft Sand */
-    --ring: oklch(0.787 0.039 83);                  /* Antique Gold ring */
-    --destructive: oklch(0.55 0.12 25);             /* Muted red */
-    --destructive-foreground: oklch(0.967 0.007 89);
-    --chart-1: oklch(0.763 0.020 83);               /* Taupe */
-    --chart-2: oklch(0.787 0.039 83);               /* Antique Gold */
-    --chart-3: oklch(0.843 0.020 33);               /* Dusty Rose */
-    --chart-4: oklch(0.629 0.030 103);              /* Faded Olive */
-    --chart-5: oklch(0.682 0.020 83);               /* Warm Stone */
-    --sidebar: oklch(0.967 0.007 89);               /* Warm Ivory */
-    --sidebar-foreground: oklch(0.301 0 0);         /* Charcoal */
-    --sidebar-primary: oklch(0.301 0.000 0);        /* Charcoal */
-    --sidebar-primary-foreground: oklch(0.967 0.007 89); /* Warm Ivory */
-    --sidebar-accent: oklch(0.937 0.010 88);         /* Bone */
-    --sidebar-accent-foreground: oklch(0.301 0.000 0); /* Charcoal */
-    --sidebar-border: oklch(0.871 0.017 88);         /* Soft Sand */
-    --sidebar-ring: oklch(0.787 0.039 83);           /* Antique Gold */
+.patient-shell, .clinic-shell { min-height: 100dvh; display: flex; flex-direction: column; }
+.patient-top, .clinic-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px 8px;
+}
+.who { text-align: right; }
+.who b { display: block; font-weight: 560; }
+.who span { color: var(--muted); font-size: 13px; }
+.patient-stage { flex: 1; padding: 8px 18px 24px; }
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(243, 238, 230, 0.94);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+.tabbar a {
+  flex: 1;
+  min-height: 48px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+.tabbar a[aria-current="page"] { background: white; color: var(--ink); }
 
-    /* ── Override the indirection layer — The Row quiet luxury ── */
-    --gold-base: oklch(0.787 0.039 83);              /* Antique Gold — primary accent */
-    --gold-light: oklch(0.843 0.020 33);             /* Dusty Rose */
-    --gold-dark: oklch(0.682 0.020 83);              /* Warm Stone */
-    --gold-muted: oklch(0.763 0.020 83);             /* Taupe */
-    --terracotta-base: oklch(0.843 0.020 33);        /* Dusty Rose */
-    --terracotta-light-val: oklch(0.871 0.017 88);   /* Soft Sand */
-
-    /* ── Override @theme color tokens for Tailwind classes ── */
-    --color-gold: oklch(0.787 0.039 83);             /* Antique Gold */
-    --color-gold-light: oklch(0.843 0.020 33);       /* Dusty Rose */
-    --color-gold-dark: oklch(0.682 0.020 83);        /* Warm Stone */
-    --color-gold-muted: oklch(0.763 0.020 83);       /* Taupe */
-    --color-steel: oklch(0.763 0.020 83);            /* Taupe */
-    --color-steel-light: oklch(0.843 0.020 33);      /* Dusty Rose */
-    --color-steel-dark: oklch(0.682 0.020 83);       /* Warm Stone */
-    --color-steel-muted: oklch(0.763 0.020 83);      /* Taupe */
-    --color-brass: oklch(0.787 0.039 83);            /* Antique Gold */
-    --color-navy: oklch(0.301 0.000 0);              /* Charcoal */
-    --color-navy-light: oklch(0.400 0.005 83);       /* Warm mid-grey */
-    --color-navy-dark: oklch(0.226 0.000 0);         /* Soft Black */
-    --color-sage: oklch(0.629 0.030 103);            /* Faded Olive */
-    --color-sage-light: oklch(0.720 0.020 103);      /* Light Olive */
-    --color-sage-dark: oklch(0.540 0.030 103);       /* Dark Olive */
-    --color-terracotta: oklch(0.843 0.020 33);       /* Dusty Rose */
-    --color-terracotta-light: oklch(0.900 0.012 33); /* Pale Rose */
-    --color-charcoal: oklch(0.301 0.000 0);          /* Charcoal #2E2E2E */
-    --color-charcoal-light: oklch(0.400 0.005 83);   /* Warm mid-grey */
-    --color-charcoal-mid: oklch(0.500 0.005 83);     /* Warm grey */
-    --color-slate-cool: oklch(0.682 0.020 83);       /* Warm Stone */
-    --color-slate-warm: oklch(0.682 0.020 83);       /* Warm Stone */
-    --color-medical-white: oklch(0.967 0.007 89);    /* Warm Ivory */
-    --color-medical-gray: oklch(0.937 0.010 88);     /* Bone */
-    --color-onyx: oklch(0.226 0.000 0);              /* Soft Black */
-    --color-ivory: oklch(0.967 0.007 89);            /* Warm Ivory */
-    --color-ivory-muted: oklch(0.937 0.010 88);      /* Bone */
-
-    /* ── Typography override: editorial fonts ── */
-    font-family: "Inter", system-ui, sans-serif;
-    letter-spacing: 0.01em;
-    --radius: 0.25rem;                               /* Very subtle corners, not bubble-like */
-  }
-
-  /* Editorial heading typography */
-  .theme-feminine h1,
-  .theme-feminine h2,
-  .theme-feminine h3,
-  .theme-feminine h4,
-  .theme-feminine h5,
-  .theme-feminine h6 {
-    font-family: "Playfair Display", Georgia, serif;
-    letter-spacing: -0.01em;
-  }
-  .theme-feminine .font-heading {
-    font-family: "Playfair Display", Georgia, serif;
-    letter-spacing: -0.01em;
-  }
-  .theme-feminine .font-body {
-    font-family: "Inter", system-ui, sans-serif;
-  }
-
-  /* The Row hero accent — antique gold on dark backgrounds */
-  .theme-feminine .text-hero-accent {
-    color: oklch(0.787 0.039 83);                    /* Antique Gold */
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-  }
-  .theme-feminine .text-hero-accent\/60 {
-    color: oklch(0.787 0.039 83 / 0.6);
-  }
-
-  /* Glass card — bone tinted, matte */
-  .theme-feminine .glass-card {
-    background: oklch(0.937 0.010 88 / 0.92);
-    border-color: oklch(0.871 0.017 88 / 0.4);
-    backdrop-filter: blur(8px);
-  }
-
-  /* Scrollbar — warm stone */
-  .theme-feminine ::-webkit-scrollbar-thumb {
-    background: oklch(0.871 0.017 88);
-  }
-  .theme-feminine ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.763 0.020 83);
-  }
-
-  /* Luxury divider — thin warm grey line */
-  .theme-feminine .luxury-divider {
-    background: linear-gradient(90deg, transparent, oklch(0.871 0.017 88 / 0.6), transparent);
-  }
-
-  /* Dusty Rose accent utilities */
-  .theme-feminine .text-warm-rose {
-    color: oklch(0.843 0.020 33);                    /* Dusty Rose */
-  }
-  .theme-feminine .bg-warm-rose {
-    background-color: oklch(0.843 0.020 33);
-  }
-
-  /* Antique Gold accent utilities */
-  .theme-feminine .text-soft-gold {
-    color: oklch(0.787 0.039 83);                    /* Antique Gold */
-  }
-  .theme-feminine .bg-soft-gold {
-    background-color: oklch(0.787 0.039 83);
-  }
-
-  /* Faded Olive — subtle accent */
-  .theme-feminine .text-sage-wellness {
-    color: oklch(0.629 0.030 103);                   /* Faded Olive */
-  }
-  .theme-feminine .bg-sage-wellness {
-    background-color: oklch(0.629 0.030 103);
-  }
-
-  /* ─── Glass card utility ─── */
-  .glass-card {
-    background: oklch(1.00 0 0 / 0.85);
-    backdrop-filter: blur(16px);
-    border: 1px solid oklch(0.91 0.003 260 / 0.5);
-  }
-
-  /* ─── Accent divider ─── */
-  .luxury-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, oklch(0.52 0.10 250 / 0.3), transparent);
-  }
-
-  /* Hide scrollbar for mobile bottom nav */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* ─── Custom scrollbar ─── */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
+@media (min-width: 960px) {
+  .patient-shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr; }
+  .banner { grid-column: 1 / -1; }
+  .tabbar {
+    grid-column: 1;
+    grid-row: 2;
+    position: sticky;
+    top: 0;
+    height: calc(100dvh - 42px);
+    margin-top: 0;
+    flex-direction: column;
+    align-items: stretch;
+    border-top: 0;
+    border-right: 1px solid var(--line);
+    padding: 18px 12px;
     background: transparent;
   }
-  ::-webkit-scrollbar-thumb {
-    background: oklch(0.82 0.003 260);
-    border-radius: 3px;
+  .tabbar a { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 0 12px; font-size: 15px; }
+  .patient-stage { grid-column: 2; grid-row: 2; padding: 12px 40px 64px; max-width: 1080px; }
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.display {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-size: clamp(40px, 6vw, 68px);
+  line-height: 0.95;
+  margin: 8px 0 12px;
+}
+.lede { max-width: 62ch; font-size: 18px; }
+.live-note {
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid var(--pine);
+}
+
+.plan-block { margin-top: 28px; }
+.plan-block h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+.item {
+  display: grid;
+  gap: 6px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.item header { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.item h3 { font-size: 18px; font-weight: 560; }
+.dose { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.home-grid { display: grid; gap: 18px; margin-top: 28px; }
+@media (min-width: 900px) {
+  .home-grid { grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.7fr); align-items: start; }
+}
+.side-card, .panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+}
+.side-card + .side-card, .stack-cards > * + * { margin-top: 12px; }
+.series { padding: 18px 0; border-top: 1px solid var(--line); }
+.series-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; }
+.points { display: flex; gap: 18px; margin-top: 12px; overflow-x: auto; }
+.points div { min-width: 88px; }
+.points strong { display: block; font-family: var(--serif); font-size: 28px; font-weight: 500; }
+.thread { display: grid; gap: 10px; }
+.bubble {
+  max-width: min(62ch, 100%);
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid var(--line);
+}
+.bubble.mine { margin-left: auto; background: var(--pine); color: #f7f3ec; border-color: transparent; }
+.bubble small { display: block; opacity: 0.75; font-size: 12px; margin-bottom: 4px; }
+.composer { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 16px; align-items: end; }
+
+.clinic-frame { flex: 1; display: grid; grid-template-columns: 1fr; }
+.side-brand { display: none; }
+.side-nav {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px 0;
+}
+.side-nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--muted);
+}
+.side-nav a[aria-current="page"] { background: #161311; color: #f6f1e8; }
+@media (min-width: 1080px) {
+  .clinic-frame { grid-template-columns: 240px 1fr; }
+  .side-nav {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 14px;
+    background: #161311;
+    min-height: 100%;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.65 0.005 260);
-  }
+  .side-brand { display: block; padding: 6px 12px 18px; }
+  .side-nav a { color: rgba(246, 241, 232, 0.72); }
+  .side-nav a[aria-current="page"] { background: rgba(230, 211, 164, 0.16); color: #f6f1e8; }
+  .clinic-top .mark { display: none; }
+}
+.split { display: grid; }
+@media (min-width: 1080px) {
+  .split { grid-template-columns: 300px minmax(0, 1fr); min-height: calc(100dvh - 120px); }
+}
+@media (max-width: 1079px) {
+  .split[data-pane="chart"] .roster { display: none; }
+  .split[data-pane="roster"] .workspace { display: none; }
+}
+.roster { border-right: 1px solid var(--line); }
+.roster button.row, a.row {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 16px;
+  min-height: 72px;
+  display: block;
+  text-decoration: none;
+}
+.roster button.row[aria-current="true"], .roster a.row[aria-current="page"] { background: white; }
+.roster strong { font-family: var(--serif); font-size: 26px; font-weight: 500; display: block; line-height: 1; }
+.workspace { padding: 8px 18px 96px; }
+.chart-layout { display: grid; gap: 22px; }
+@media (min-width: 1240px) {
+  .chart-layout { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+}
+.publish-bar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: #161311;
+  color: #f6f1e8;
+  margin-top: 18px;
+}
+.publish-bar p { font-size: 14px; max-width: 46ch; }
+.editor { display: grid; gap: 8px; padding: 12px 0 16px; border-top: 1px solid var(--line); }
+.editor-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.check { display: flex; gap: 8px; align-items: center; min-height: 44px; font-size: 14px; }
+.check input { width: auto; min-height: 0; }
+
+.queue { width: 100%; border-collapse: collapse; font-size: 15px; }
+.queue th { text-align: left; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 8px; }
+.queue td { padding: 12px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+.hub-list { display: grid; gap: 12px; margin-top: 28px; }
+.hub-list h2, .workspace > section > h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+.dest-card header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.dest-card h3 { font-size: 18px; font-weight: 560; }
+.activity { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 8px; }
+.activity li { font-size: 14px; }
+.back-link { display: inline-flex; margin-bottom: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
 }

@@ -8,6 +8,7 @@ import {
   boolean,
   json,
   bigint,
+  index,
 } from "drizzle-orm/mysql-core";
 
 // ─────────────────────────────────────────────
@@ -96,7 +97,10 @@ export const patients = mysqlTable("patients", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   /** Soft delete — null means active, timestamp means deleted */
   deletedAt: timestamp("deletedAt"),
-});
+}, (table) => [
+  index("patients_user_idx").on(table.userId),
+  index("patients_provider_idx").on(table.providerId),
+]);
 
 export type Patient = typeof patients.$inferSelect;
 export type InsertPatient = typeof patients.$inferInsert;
@@ -233,7 +237,10 @@ export const messages = mysqlTable("messages", {
   isRead: boolean("isRead").default(false).notNull(),
   readAt: timestamp("readAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => [
+  index("messages_patient_idx").on(table.patientId),
+  index("messages_receiver_idx").on(table.receiverId),
+]);
 
 export type Message = typeof messages.$inferSelect;
 export type InsertMessage = typeof messages.$inferInsert;
@@ -660,7 +667,11 @@ export const intakeForms = mysqlTable("intake_forms", {
   /** Overall completion status */
   status: mysqlEnum("status", ["not_started", "in_progress", "completed"]).default("not_started").notNull(),
   /** All form data stored as structured JSON */
-  formData: json("formData").$type<import("../shared/intakeFormSchema").IntakeFormData>(),
+  formData: json("formData").$type<{
+    goals?: string;
+    currentMedications?: string;
+    conditions?: string;
+  }>(),
   /** Sections that have been completed — JSON array of section keys */
   completedSections: json("completedSections").$type<string[]>(),
   /** When the form was submitted as complete */
@@ -745,3 +756,158 @@ export const patientPlans = mysqlTable("patient_plans", {
 
 export type PatientPlan = typeof patientPlans.$inferSelect;
 export type InsertPatientPlan = typeof patientPlans.$inferInsert;
+
+// ─────────────────────────────────────────────
+// 28. CARE PLANS (draft + published treatment plan)
+// One row per patient. Draft text lives on the row; patients read
+// publishedSummary / published care_plan_items only.
+// ─────────────────────────────────────────────
+export const carePlans = mysqlTable("care_plans", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().unique().references(() => patients.id, { onDelete: "cascade" }),
+  providerId: int("providerId").notNull(),
+  /** Clinician draft summary. Patients do not read this column. */
+  summary: text("summary").notNull(),
+  /** Last summary published to the patient. */
+  publishedSummary: text("publishedSummary").notNull(),
+  version: int("version").default(0).notNull(),
+  publishedAt: timestamp("publishedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [
+  index("care_plans_provider_idx").on(table.providerId),
+]);
+
+export type CarePlanRow = typeof carePlans.$inferSelect;
+export type InsertCarePlanRow = typeof carePlans.$inferInsert;
+
+export const carePlanItems = mysqlTable("care_plan_items", {
+  id: int("id").autoincrement().primaryKey(),
+  planId: int("planId").notNull().references(() => carePlans.id, { onDelete: "cascade" }),
+  patientId: int("patientId").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  phase: mysqlEnum("phase", ["draft", "published"]).notNull(),
+  /** For published copies, the draft row this snapshot came from. */
+  sourceItemId: int("sourceItemId"),
+  kind: mysqlEnum("kind", ["medication", "peptide", "regenerative", "note"]).notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  dose: varchar("dose", { length: 64 }),
+  unit: varchar("unit", { length: 32 }),
+  route: varchar("route", { length: 64 }),
+  frequency: varchar("frequency", { length: 128 }),
+  instructions: text("instructions"),
+  status: mysqlEnum("itemStatus", ["active", "paused", "clinic_managed", "completed"]).default("active").notNull(),
+  isSampleTemplate: boolean("isSampleTemplate").default(false).notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [
+  index("care_plan_items_patient_phase_idx").on(table.patientId, table.phase),
+]);
+
+export type CarePlanItemRow = typeof carePlanItems.$inferSelect;
+
+export const labResults = mysqlTable("lab_results", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 128 }).notNull(),
+  value: varchar("value", { length: 64 }).notNull(),
+  unit: varchar("unit", { length: 32 }).notNull(),
+  referenceLow: varchar("referenceLow", { length: 32 }),
+  referenceHigh: varchar("referenceHigh", { length: 32 }),
+  collectedOn: varchar("collectedOn", { length: 10 }).notNull(),
+  note: text("note"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => [
+  index("lab_results_patient_collected_idx").on(table.patientId, table.collectedOn),
+]);
+
+export type LabResultRow = typeof labResults.$inferSelect;
+
+export const pharmacyOrders = mysqlTable("pharmacy_orders", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  planItemId: int("planItemId"),
+  adapterId: varchar("adapterId", { length: 64 }).notNull(),
+  externalId: varchar("externalId", { length: 128 }),
+  changeType: mysqlEnum("changeType", ["new", "change", "discontinue"]).notNull(),
+  drugName: varchar("drugName", { length: 256 }).notNull(),
+  details: text("details").notNull(),
+  status: mysqlEnum("pharmacyStatus", ["queued", "accepted", "filled", "cancelled", "failed"]).default("queued").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [
+  index("pharmacy_orders_patient_idx").on(table.patientId),
+  index("pharmacy_orders_status_idx").on(table.status),
+]);
+
+export type PharmacyOrderRow = typeof pharmacyOrders.$inferSelect;
+
+export const guidanceDrafts = mysqlTable("guidance_drafts", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  modelId: varchar("modelId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  body: text("body").notNull(),
+  status: mysqlEnum("guidanceStatus", ["pending", "approved", "dismissed"]).default("pending").notNull(),
+  reviewedBy: int("reviewedBy"),
+  reviewedAt: timestamp("reviewedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => [
+  index("guidance_drafts_patient_idx").on(table.patientId, table.status),
+]);
+
+export type GuidanceDraftRow = typeof guidanceDrafts.$inferSelect;
+
+// ─────────────────────────────────────────────
+// 29. CHARM DATA HUB
+// Destinations default to the kill switch (enabled = false) and to
+// baaCovered = false, so a new row cannot receive identified data.
+// ─────────────────────────────────────────────
+export const hubDestinations = mysqlTable("hub_destinations", {
+  id: int("id").autoincrement().primaryKey(),
+  key: varchar("key", { length: 32 }).notNull().unique(),
+  label: varchar("label", { length: 128 }).notNull(),
+  enabled: boolean("enabled").default(false).notNull(),
+  baaCovered: boolean("baaCovered").default(false).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type HubDestinationRow = typeof hubDestinations.$inferSelect;
+
+export const hubSends = mysqlTable("hub_sends", {
+  id: int("id").autoincrement().primaryKey(),
+  destinationKey: varchar("destinationKey", { length: 32 }).notNull(),
+  status: mysqlEnum("hubSendStatus", ["sent", "suppressed", "failed"]).notNull(),
+  deidentified: boolean("deidentified").notNull(),
+  baaCovered: boolean("baaCovered").notNull(),
+  /** Counts and policy outcome only. Do not store names or contact fields here. */
+  summary: varchar("summary", { length: 512 }).notNull(),
+  externalId: varchar("externalId", { length: 128 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => [
+  index("hub_sends_destination_idx").on(table.destinationKey, table.createdAt),
+]);
+
+export type HubSendRow = typeof hubSends.$inferSelect;
+
+export const charmPatientLinks = mysqlTable("charm_patient_links", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().unique().references(() => patients.id, { onDelete: "cascade" }),
+  charmPatientId: varchar("charmPatientId", { length: 128 }).notNull().unique(),
+  lastSyncedAt: timestamp("lastSyncedAt").notNull(),
+}, (table) => [
+  index("charm_patient_links_charm_idx").on(table.charmPatientId),
+]);
+
+export type CharmPatientLinkRow = typeof charmPatientLinks.$inferSelect;
+
+export const charmResourceLinks = mysqlTable("charm_resource_links", {
+  id: int("id").autoincrement().primaryKey(),
+  charmId: varchar("charmId", { length: 128 }).notNull().unique(),
+  kind: mysqlEnum("charmResourceKind", ["observation", "diagnostic_report", "medication"]).notNull(),
+  portalId: int("portalId").notNull(),
+}, (table) => [
+  index("charm_resource_links_kind_idx").on(table.kind, table.portalId),
+]);
+
+export type CharmResourceLinkRow = typeof charmResourceLinks.$inferSelect;

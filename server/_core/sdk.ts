@@ -26,7 +26,7 @@ class SDKServer {
   }
 
   private getSessionSecret() {
-    const secret = ENV.cookieSecret;
+    const secret = process.env.JWT_SECRET || ENV.cookieSecret;
     if (!secret) throw new Error("JWT_SECRET environment variable is not set");
     return new TextEncoder().encode(secret);
   }
